@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Repair and normalize an Apple Health CDA export (export_cda.xml).
+"""Apple 건강 CDA 내보내기 파일(export_cda.xml)을 복구하고 정규화한다.
 
-The export is missing the <component><section> wrapper's opening tags
-around the document body -- only their closing tags survive at the end
-of the file -- so it fails strict XML parsing. This script patches that,
-then flattens every <observation> (heart rate / SpO2 / respiratory rate,
-etc.) into one long-format table.
+이 내보내기 파일은 본문을 감싸는 <component><section> 여는 태그가 빠져
+있고 파일 끝에 닫는 태그만 남아 있어 그대로는 XML 정합성 검사를 통과하지
+못한다. 이 스크립트는 먼저 그 누락된 태그를 보정한 뒤, 심박수/혈중산소포
+화도/호흡수 등 모든 <observation>을 한 줄씩 풀어 하나의 long-format
+테이블로 만든다.
 
-Usage:
+사용법:
     python3 scripts/parse_cda.py [--input data/export_cda.xml] [--outdir data]
 
-Outputs (written to --outdir):
-    export_cda.fixed.xml       well-formed XML (original left untouched)
-    export_cda_normalized.csv  one row per observation
+결과물 (--outdir 아래에 생성):
+    export_cda.fixed.xml       정합성이 복구된 XML (원본은 수정하지 않음)
+    export_cda_normalized.csv  observation 1건당 1행으로 정규화한 테이블
 """
 import argparse
 import json
