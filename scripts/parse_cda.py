@@ -16,6 +16,7 @@
 """
 import argparse
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -24,13 +25,42 @@ import pandas as pd
 
 NS_URI = "urn:hl7-org:v3"
 
+# "김하은의 Apple Watch" -> "김하은" 처럼 소유격 "의" 앞부분을 사람 이름으로 본다.
+# 공백이 일반 스페이스가 아니라 \xa0(non-breaking space)인 경우도 있어 \s로 함께 처리.
+PERSON_PATTERN = re.compile(r"^(.+?)의\s")
+
+
+def extract_person_candidate(source_name: str) -> str | None:
+    if not isinstance(source_name, str):
+        return None
+    m = PERSON_PATTERN.match(source_name)
+    return m.group(1) if m else None
+
+
+def resolve_document_person(source_names: pd.Series, fallback: str) -> str:
+    """문서 하나 = 환자 한 명이므로, source_name이 기기별로 달라도
+    (예: '김아연의 Apple Watch' vs 수동 입력 '건강') 문서 전체에서
+    가장 많이 등장하는 이름으로 person을 통일한다."""
+    candidates = source_names.map(extract_person_candidate).dropna()
+    if candidates.empty:
+        return fallback
+    return candidates.mode().iloc[0]
+
 
 def fix_xml(raw: str) -> str:
+    """일부 내보내기 파일은 본문을 감싸는 <component><section>의 여는 태그가
+    빠져 있어 정합성 검사를 통과하지 못한다. 이미 정상인 파일(앱 버전에 따라
+    다름)까지 건드리면 오히려 태그가 중복돼 깨지므로, 먼저 그대로 파싱을
+    시도해보고 실패할 때만 보정한다."""
+    try:
+        ET.fromstring(raw)
+        return raw  # 이미 정합성 문제 없음
+    except ET.ParseError:
+        pass
+
     marker = "</recordTarget>"
     if marker not in raw:
         raise ValueError("unexpected document: no </recordTarget> found")
-    if "<component>\n  <section>" in raw:
-        return raw  # already patched
     idx = raw.index(marker) + len(marker)
     return raw[:idx] + "\n <component>\n  <section>" + raw[idx:]
 
@@ -96,12 +126,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--input", default="data/export_cda.xml", type=Path)
     parser.add_argument("--outdir", default="data", type=Path)
+    parser.add_argument("--person-fallback", default="apple_unknown",
+                         help="source_name에서 이름을 못 뽑았을 때 쓸 person 값")
     args = parser.parse_args()
 
     raw = args.input.read_text(encoding="utf-8")
     fixed = fix_xml(raw)
 
-    fixed_path = args.outdir / "export_cda.fixed.xml"
+    stem = args.input.stem  # "export_cda" or "export_cda_ahyeon" 등 입력 파일명 기준
+    fixed_path = args.outdir / f"{stem}.fixed.xml"
     fixed_path.write_text(fixed, encoding="utf-8")
 
     root = ET.fromstring(fixed)
@@ -109,14 +142,16 @@ def main():
 
     df = pd.DataFrame(rows)
     df["timestamp"] = pd.to_datetime(df["timestamp"])
+    person = resolve_document_person(df["source_name"], args.person_fallback)
+    df.insert(0, "person", person)
     df = df.sort_values(["category", "timestamp"]).reset_index(drop=True)
 
-    csv_path = args.outdir / "export_cda_normalized.csv"
+    csv_path = args.outdir / f"{stem}_normalized.csv"
     df.to_csv(csv_path, index=False)
 
     print(f"fixed xml  -> {fixed_path}")
     print(f"normalized -> {csv_path}  ({len(df)} rows)")
-    print(df.groupby("category").size().to_string())
+    print(df.groupby(["person", "display_name"]).size().to_string())
 
 
 if __name__ == "__main__":
