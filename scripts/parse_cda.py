@@ -7,6 +7,15 @@
 화도/호흡수 등 모든 <observation>을 한 줄씩 풀어 하나의 long-format
 테이블로 만든다.
 
+정규화 규칙:
+  - 자주 쓰는 metadataEntry 키는 정식 컬럼으로 승격한다
+    (motion_context, barometric_pressure_kpa). 그 외 키만 metadata JSON에 남긴다.
+  - 혈중산소포화도(LOINC 2710-2)는 원본이 0~1 비율로 기록되므로 ×100 해서
+    실제 % 값으로 저장한다.
+  - 기존 CSV가 있으면 병합 후 (hk_type, timestamp, value) 기준으로 중복을
+    제거한다. 내보내기 기간이 겹치거나 이전 기간이 빠진 내보내기를 다시
+    파싱해도 데이터가 중복되거나 유실되지 않는다.
+
 사용법:
     python3 scripts/parse_cda.py [--input data/export_cda.xml] [--outdir data]
 
@@ -16,51 +25,42 @@
 """
 import argparse
 import json
-import re
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
 import pandas as pd
 
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+
 NS_URI = "urn:hl7-org:v3"
 
-# "김하은의 Apple Watch" -> "김하은" 처럼 소유격 "의" 앞부분을 사람 이름으로 본다.
-# 공백이 일반 스페이스가 아니라 \xa0(non-breaking space)인 경우도 있어 \s로 함께 처리.
-PERSON_PATTERN = re.compile(r"^(.+?)의\s")
+LOINC_SPO2 = "2710-2"  # 원본이 0~1 비율로 기록되는 항목 (×100 필요)
+
+# 중복 판정 키: 같은 항목이 같은 시각에 같은 값이면 동일 측정으로 본다
+DEDUP_KEYS = ["hk_type", "timestamp", "value"]
 
 
-def extract_person_candidate(source_name: str) -> str | None:
-    if not isinstance(source_name, str):
-        return None
-    m = PERSON_PATTERN.match(source_name)
-    return m.group(1) if m else None
-
-
-def resolve_document_person(source_names: pd.Series, fallback: str) -> str:
-    """문서 하나 = 환자 한 명이므로, source_name이 기기별로 달라도
-    (예: '김아연의 Apple Watch' vs 수동 입력 '건강') 문서 전체에서
-    가장 많이 등장하는 이름으로 person을 통일한다."""
-    candidates = source_names.map(extract_person_candidate).dropna()
-    if candidates.empty:
-        return fallback
-    return candidates.mode().iloc[0]
+def promote_metadata(metadata: dict) -> dict:
+    """자주 쓰는 metadataEntry 키를 정식 컬럼 값으로 변환해 돌려준다."""
+    cols = {"motion_context": None, "barometric_pressure_kpa": None}
+    ctx = metadata.pop("HKMetadataKeyHeartRateMotionContext", None)
+    if ctx is not None:
+        cols["motion_context"] = int(ctx)
+    pressure = metadata.pop("HKMetadataKeyBarometricPressure", None)
+    if pressure is not None:  # 형식: "100.719 kPa"
+        cols["barometric_pressure_kpa"] = float(pressure.split()[0])
+    return cols
 
 
 def fix_xml(raw: str) -> str:
-    """일부 내보내기 파일은 본문을 감싸는 <component><section>의 여는 태그가
-    빠져 있어 정합성 검사를 통과하지 못한다. 이미 정상인 파일(앱 버전에 따라
-    다름)까지 건드리면 오히려 태그가 중복돼 깨지므로, 먼저 그대로 파싱을
-    시도해보고 실패할 때만 보정한다."""
-    try:
-        ET.fromstring(raw)
-        return raw  # 이미 정합성 문제 없음
-    except ET.ParseError:
-        pass
-
     marker = "</recordTarget>"
     if marker not in raw:
         raise ValueError("unexpected document: no </recordTarget> found")
+    if "<component>\n  <section>" in raw:
+        return raw  # already patched
     idx = raw.index(marker) + len(marker)
     return raw[:idx] + "\n <component>\n  <section>" + raw[idx:]
 
@@ -105,13 +105,19 @@ def extract_observations(root: ET.Element) -> list[dict]:
 
             ts = parse_timestamp(eff_low.get("value")) if eff_low is not None else None
 
+            loinc = code_el.get("code") if code_el is not None else None
+            value = float(value_el.get("value")) if value_el is not None else None
+            if loinc == LOINC_SPO2 and value is not None and value <= 1:
+                value = round(value * 100, 1)
+
             rows.append({
                 "category": category,
-                "loinc_code": code_el.get("code") if code_el is not None else None,
+                "loinc_code": loinc,
                 "display_name": code_el.get("displayName") if code_el is not None else None,
                 "timestamp": ts.isoformat() if ts else None,
-                "value": float(value_el.get("value")) if value_el is not None else None,
+                "value": value,
                 "unit": value_el.get("unit") if value_el is not None else None,
+                **promote_metadata(metadata),
                 "interpretation": interp_el.get("code") if interp_el is not None else None,
                 "source_name": text_el.findtext(tag("sourceName")) if text_el is not None else None,
                 "source_version": text_el.findtext(tag("sourceVersion")) if text_el is not None else None,
@@ -126,15 +132,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--input", default="data/export_cda.xml", type=Path)
     parser.add_argument("--outdir", default="data", type=Path)
-    parser.add_argument("--person-fallback", default="apple_unknown",
-                         help="source_name에서 이름을 못 뽑았을 때 쓸 person 값")
     args = parser.parse_args()
 
     raw = args.input.read_text(encoding="utf-8")
     fixed = fix_xml(raw)
 
-    stem = args.input.stem  # "export_cda" or "export_cda_ahyeon" 등 입력 파일명 기준
-    fixed_path = args.outdir / f"{stem}.fixed.xml"
+    fixed_path = args.outdir / "export_cda.fixed.xml"
     fixed_path.write_text(fixed, encoding="utf-8")
 
     root = ET.fromstring(fixed)
@@ -142,16 +145,26 @@ def main():
 
     df = pd.DataFrame(rows)
     df["timestamp"] = pd.to_datetime(df["timestamp"])
-    person = resolve_document_person(df["source_name"], args.person_fallback)
-    df.insert(0, "person", person)
-    df = df.sort_values(["category", "timestamp"]).reset_index(drop=True)
+    df["motion_context"] = df["motion_context"].astype("Int64")
 
-    csv_path = args.outdir / f"{stem}_normalized.csv"
+    # 기존 CSV와 병합: 이전 내보내기에만 있던 기간을 보존하고,
+    # 겹치는 기간은 DEDUP_KEYS 기준으로 중복 제거한다.
+    csv_path = args.outdir / "export_cda_normalized.csv"
+    n_new, n_kept = len(df), 0
+    if csv_path.exists():
+        old = pd.read_csv(csv_path, parse_dates=["timestamp"])
+        if set(old.columns) == set(df.columns):  # 구버전 스키마면 전체 재생성
+            old["motion_context"] = old["motion_context"].astype("Int64")
+            df = pd.concat([old, df], ignore_index=True)
+            n_kept = len(old)
+
+    df = df.drop_duplicates(DEDUP_KEYS)
+    df = df.sort_values(["category", "timestamp"]).reset_index(drop=True)
     df.to_csv(csv_path, index=False)
 
     print(f"fixed xml  -> {fixed_path}")
-    print(f"normalized -> {csv_path}  ({len(df)} rows)")
-    print(df.groupby(["person", "display_name"]).size().to_string())
+    print(f"normalized -> {csv_path}  ({len(df)} rows = 기존 {n_kept} + 신규 {n_new} - 중복 {n_kept + n_new - len(df)})")
+    print(df.groupby("category").size().to_string())
 
 
 if __name__ == "__main__":
