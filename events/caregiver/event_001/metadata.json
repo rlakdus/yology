@@ -1,0 +1,11 @@
+{
+  "event_id": "event_001",
+  "title": "Hospital Visit",
+  "persona": "caregiver",
+  "emotion": "stress",
+  "description": "Stress after hospital examination",
+  "cover": "cover.jpg",
+  "start_time": "2026-08-01T14:20:00",
+  "end_time": "2026-08-01T14:35:00",
+  "vr_scene": "hospital_room"
+}
