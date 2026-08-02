@@ -1,11 +1,42 @@
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
+
+import "../styles/home.css";
+
 const Home = () => {
   return (
-    <div>
-      <h1>FeelBack</h1>
-      <p>Emotion Reconstruction System</p>
+    <>
+      <Header
+        title="FeelBack"
+        showBack={false}
+      />
 
-      <button>Start</button>
-    </div>
+      <div className="home">
+
+        <div className="home-container">
+
+          <p className="home-subtitle">
+            AI-powered Event Reconstruction
+          </p>
+
+          <p className="home-description">
+            Reconstruct situations
+            <br />
+            Understand emotions
+            <br />
+            Support better decisions
+          </p>
+
+          <Link to="/persona">
+            <button className="start-btn">
+              Start
+            </button>
+          </Link>
+
+        </div>
+
+      </div>
+    </>
   );
 };
 
