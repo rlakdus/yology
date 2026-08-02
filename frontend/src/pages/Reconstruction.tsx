@@ -3,10 +3,14 @@ import SectionTitle from "../components/SectionTitle";
 import SensorCard from "../components/SensorCard";
 import EvidenceCard from "../components/EvidenceCard";
 import ReasoningFlow from "../components/ReasoningFlow";
+import StatusBadge from "../components/StatusBadge";
+import Timeline from "../components/Timeline";
+import SummaryCard from "../components/SummaryCard";
 
 import "../styles/reconstruction.css";
 
 import {
+
   Heart,
   Activity,
   MapPin,
@@ -26,19 +30,75 @@ const Reconstruction = () => {
 
       <div className="page-container">
 
-        <img
-          src="https://placehold.co/900x350"
-          className="cover-image"
-          alt="Hospital Visit"
-        />
+        {/* Hero Cover */}
 
-        <h2>Hospital Visit</h2>
+        <div className="hero">
 
-        <p className="subtitle">
-          Family Caregiver
-        </p>
+          <img
+            src="https://placehold.co/900x350"
+            className="cover-image"
+            alt="Hospital Visit"
+          />
 
-        {/* Sensor Data */}
+          <div className="hero-overlay">
+
+            <h1 className="hero-title">
+              Hospital Visit
+            </h1>
+
+            <p className="hero-sub">
+              Family Caregiver
+            </p>
+
+            <div className="hero-info">
+
+              <StatusBadge status="High" />
+
+              <div className="badge">
+                🕒 12:15 PM
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="summary-grid">
+
+          <SummaryCard
+
+            icon={<Image size={28} />}
+
+            title="Evidence"
+
+            value="3"
+
+          />
+
+          <SummaryCard
+
+            icon={<Heart size={28} />}
+
+            title="Sensors"
+
+            value="4"
+
+          />
+
+          <SummaryCard
+
+            icon={<Brain size={28} />}
+
+            title="Confidence"
+
+            value="91%"
+
+          />
+
+        </div>
+
+        {/* Sensor */}
 
         <SectionTitle title="Sensor Data" />
 
@@ -92,38 +152,61 @@ const Reconstruction = () => {
           subtitle="Location History"
         />
 
+        <SectionTitle title="Timeline" />
+
+        <Timeline
+          items={[
+            {
+              icon: <Heart size={20} />,
+              time: "12:03",
+              title: "Heart Rate Increased",
+              description: "Heart rate rose above the normal range.",
+            },
+            {
+              icon: <MapPin size={20} />,
+              time: "12:07",
+              title: "Entered Hospital",
+              description: "GPS detected arrival at Seoul Hospital.",
+            },
+            {
+              icon: <MessageCircle size={20} />,
+              time: "12:10",
+              title: "Family Conversation",
+              description: "Caregiver exchanged messages with family.",
+            },
+            {
+              icon: <Activity size={20} />,
+              time: "12:15",
+              title: "Stress Peak",
+              description: "Stress level reached its highest point.",
+            },
+          ]}
+        />
+
         {/* AI Reasoning */}
 
         <SectionTitle title="AI Reasoning" />
 
         <ReasoningFlow
-
           steps={[
-
             {
               icon: <Heart size={24} />,
               title: "Heart Rate 118 bpm",
             },
-
             {
               icon: <MapPin size={24} />,
               title: "Hospital Location",
             },
-
             {
               icon: <MessageCircle size={24} />,
               title: "Caregiver Conversation",
             },
-
             {
               icon: <Brain size={24} />,
               title: "AI Context Analysis",
             },
-
           ]}
-
           result="Anxiety"
-
         />
 
         <button className="primary-btn">
