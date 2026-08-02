@@ -1,0 +1,31 @@
+.section-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin:42px 0 24px;
+
+}
+
+.section-title h2{
+
+    font-size:24px;
+
+    color:var(--text);
+
+    white-space:nowrap;
+
+}
+
+.section-line{
+
+    flex:1;
+
+    height:2px;
+
+    background:#E5E7EB;
+
+}

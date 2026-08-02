@@ -1,5 +1,20 @@
 import Header from "../components/Header";
+import SectionTitle from "../components/SectionTitle";
+import SensorCard from "../components/SensorCard";
+import EvidenceCard from "../components/EvidenceCard";
+import ReasoningFlow from "../components/ReasoningFlow";
+
 import "../styles/reconstruction.css";
+
+import {
+  Heart,
+  Activity,
+  MapPin,
+  Clock,
+  Image,
+  MessageCircle,
+  Brain,
+} from "lucide-react";
 
 const Reconstruction = () => {
   return (
@@ -14,7 +29,7 @@ const Reconstruction = () => {
         <img
           src="https://placehold.co/900x350"
           className="cover-image"
-          alt=""
+          alt="Hospital Visit"
         />
 
         <h2>Hospital Visit</h2>
@@ -23,88 +38,96 @@ const Reconstruction = () => {
           Family Caregiver
         </p>
 
-        <div className="section">
+        {/* Sensor Data */}
 
-          <h3>Sensor Summary</h3>
+        <SectionTitle title="Sensor Data" />
 
-          <div className="info-card">
-            ❤️ Heart Rate
-            <span>118 bpm</span>
-          </div>
+        <div className="sensor-grid">
 
-          <div className="info-card">
-            😰 Stress
-            <span>High</span>
-          </div>
+          <SensorCard
+            icon={<Heart size={24} />}
+            title="Heart Rate"
+            value="118 bpm"
+          />
 
-          <div className="info-card">
-            📍 Location
-            <span>Seoul Hospital</span>
-          </div>
+          <SensorCard
+            icon={<Activity size={24} />}
+            title="Stress"
+            value="High"
+          />
 
-        </div>
+          <SensorCard
+            icon={<MapPin size={24} />}
+            title="Location"
+            value="Seoul Hospital"
+          />
 
-        <div className="section">
-
-          <h3>Evidence</h3>
-
-          <div className="info-card">
-            📷 Waiting Room Image
-          </div>
-
-          <div className="info-card">
-            💬 Caregiver Chat
-          </div>
-
-          <div className="info-card">
-            📍 Hospital GPS
-          </div>
+          <SensorCard
+            icon={<Clock size={24} />}
+            title="Time"
+            value="12:15 PM"
+          />
 
         </div>
 
-        <div className="section">
+        {/* Evidence */}
 
-          <h3>AI Reasoning</h3>
+        <SectionTitle title="Evidence" />
 
-          <div className="reason-box">
+        <EvidenceCard
+          icon={<Image size={26} />}
+          title="Waiting Room Image"
+          subtitle="Hospital Camera"
+        />
 
-            High Heart Rate
+        <EvidenceCard
+          icon={<MessageCircle size={26} />}
+          title="Caregiver Chat"
+          subtitle="KakaoTalk Conversation"
+        />
 
-            <br />
+        <EvidenceCard
+          icon={<MapPin size={26} />}
+          title="Hospital GPS"
+          subtitle="Location History"
+        />
 
-            +
+        {/* AI Reasoning */}
 
-            <br />
+        <SectionTitle title="AI Reasoning" />
 
-            Hospital Location
+        <ReasoningFlow
 
-            <br />
+          steps={[
 
-            +
+            {
+              icon: <Heart size={24} />,
+              title: "Heart Rate 118 bpm",
+            },
 
-            <br />
+            {
+              icon: <MapPin size={24} />,
+              title: "Hospital Location",
+            },
 
-            Family Chat
+            {
+              icon: <MessageCircle size={24} />,
+              title: "Caregiver Conversation",
+            },
 
-            <br /><br />
+            {
+              icon: <Brain size={24} />,
+              title: "AI Context Analysis",
+            },
 
-            ↓
+          ]}
 
-            <br /><br />
+          result="Anxiety"
 
-            <strong>
-              Emotion Candidate :
-              Anxiety
-            </strong>
-
-          </div>
-
-        </div>
+        />
 
         <button className="primary-btn">
-
           Start VR Reconstruction
-
         </button>
 
       </div>

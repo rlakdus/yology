@@ -1,0 +1,105 @@
+.reasoning-flow{
+
+    margin-top:20px;
+
+}
+
+.flow-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.flow-card:hover{
+
+    transform:translateY(-3px);
+
+    border:2px solid var(--primary);
+
+}
+
+.flow-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:14px;
+
+    background:#EEF5FF;
+
+    color:var(--primary);
+
+}
+
+.flow-arrow{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:10px 0;
+
+    color:#7aa7ff;
+
+}
+
+.flow-result{
+
+    margin-top:20px;
+
+    background:linear-gradient(135deg,#0F6FFF,#3D8BFF);
+
+    color:white;
+
+    padding:28px;
+
+    border-radius:22px;
+
+    text-align:center;
+
+    box-shadow:0 12px 35px rgba(15,111,255,.25);
+
+}
+
+.flow-result h4{
+
+    opacity:.85;
+
+    margin-bottom:8px;
+
+}
+
+.flow-result h2{
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.flow-result p{
+
+    opacity:.9;
+
+}

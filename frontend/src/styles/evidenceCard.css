@@ -1,0 +1,99 @@
+.evidence-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 22px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 22px;
+
+  margin-bottom: 18px;
+
+  box-shadow: var(--shadow);
+
+  transition: all 0.25s ease;
+
+  cursor: pointer;
+
+}
+
+.evidence-card:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow: 0 12px 30px rgba(15, 111, 255, 0.15);
+
+  border: 2px solid var(--primary);
+
+}
+
+.evidence-icon {
+
+  width: 60px;
+
+  height: 60px;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background: #eef5ff;
+
+  color: var(--primary);
+
+  flex-shrink: 0;
+
+}
+
+.evidence-content {
+
+  flex: 1;
+
+}
+
+.evidence-content h3 {
+
+  font-size: 18px;
+
+  margin-bottom: 6px;
+
+  color: var(--text);
+
+}
+
+.evidence-content p {
+
+  font-size: 14px;
+
+  color: var(--sub);
+
+}
+
+.evidence-arrow {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: var(--primary);
+
+  transition: transform 0.2s ease;
+
+}
+
+.evidence-card:hover .evidence-arrow {
+
+  transform: translateX(4px);
+
+}

@@ -1,0 +1,55 @@
+.sensor-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.sensor-card:hover{
+
+    transform:translateY(-4px);
+
+    border:2px solid var(--primary);
+
+}
+
+.sensor-icon{
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#EEF5FF;
+
+    color:var(--primary);
+
+}
+
+.sensor-title{
+
+    color:var(--sub);
+
+    margin-bottom:6px;
+
+}
