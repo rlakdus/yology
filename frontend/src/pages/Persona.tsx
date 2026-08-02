@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "../styles/persona.css";
 import Header from "../components/Header";
 
 const personas = [
@@ -27,7 +28,10 @@ const personas = [
 const Persona = () => {
   return (
     <>
-      <Header title="Choose Persona" />
+      <Header
+        title="Choose Persona"
+        subtitle="Select one scenario"
+      />
 
       <div className="page-container">
 
@@ -44,6 +48,12 @@ const Persona = () => {
               <h3>{p.title}</h3>
 
               <p>{p.description}</p>
+
+              <span>
+
+                Select →
+
+              </span>
 
             </div>
           </Link>

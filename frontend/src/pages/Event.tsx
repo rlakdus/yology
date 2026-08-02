@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "../styles/event.css";
 import Header from "../components/Header";
 
 const events = [
@@ -31,7 +32,10 @@ const events = [
 const Event = () => {
   return (
     <>
-      <Header title="Choose Event" />
+      <Header
+        title="Choose Event"
+        subtitle="Select reconstructed event"
+      />
 
       <div className="page-container">
         <h2>Select an Event</h2>

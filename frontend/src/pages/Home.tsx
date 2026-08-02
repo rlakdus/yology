@@ -8,6 +8,7 @@ const Home = () => {
     <>
       <Header
         title="FeelBack"
+        subtitle="AI-powered Event Reconstruction"
         showBack={false}
       />
 
@@ -20,16 +21,24 @@ const Home = () => {
           </p>
 
           <p className="home-description">
-            Reconstruct situations
-            <br />
-            Understand emotions
-            <br />
-            Support better decisions
+
+            Recover Context
+
+            <br /><br />
+
+            Understand Emotion
+
+            <br /><br />
+
+            Support Better Decisions
+
           </p>
 
           <Link to="/persona">
-            <button className="start-btn">
+            <button className="primary-btn">
+
               Start
+
             </button>
           </Link>
 

@@ -1,9 +1,13 @@
 import Header from "../components/Header";
+import "../styles/reconstruction.css";
 
 const Reconstruction = () => {
   return (
     <>
-      <Header title="Event Reconstruction" />
+      <Header
+        title="Event Reconstruction"
+        subtitle="AI reconstructed context"
+      />
 
       <div className="page-container">
 
@@ -97,7 +101,7 @@ const Reconstruction = () => {
 
         </div>
 
-        <button className="start-btn">
+        <button className="primary-btn">
 
           Start VR Reconstruction
 

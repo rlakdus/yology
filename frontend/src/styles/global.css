@@ -1,3 +1,7 @@
+/* ===========================
+   Global Reset
+=========================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -5,144 +9,73 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f8fafc;
-  color: #1f2937;
+  font-family:
+    Pretendard,
+    Inter,
+    Arial,
+    sans-serif;
+
+  background: var(--background);
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 button {
   font: inherit;
+  cursor: pointer;
 }
 
-.persona-card{
-    background:white;
-    border-radius:18px;
-    padding:24px;
-    margin:18px auto;
-    max-width:600px;
-    cursor:pointer;
-    transition:.2s;
-    box-shadow:0 6px 20px rgba(0,0,0,.08);
+/* ===========================
+   Layout
+=========================== */
+
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
 }
 
-.persona-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
+/* ===========================
+   Common Card
+=========================== */
+
+.card {
+  background: var(--card);
+
+  border-radius: var(--radius);
+
+  box-shadow: var(--shadow);
+
+  padding: 24px;
 }
 
-.persona-card h3{
-    color:#0f6fff;
-    margin-bottom:8px;
+/* ===========================
+   Common Button
+=========================== */
+
+.primary-btn {
+  width: 100%;
+  height: 56px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: var(--primary);
+
+  color: white;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  transition: 0.25s;
 }
 
-.event-card{
-    background:white;
-    border-radius:18px;
-    padding:24px;
-    margin:18px auto;
-    max-width:600px;
+.primary-btn:hover {
+  background: var(--primary-dark);
 
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-
-    transition:.25s;
-}
-
-.event-card.active{
-    cursor:pointer;
-}
-
-.event-card.active:hover{
-    transform:translateY(-4px);
-
-    box-shadow:0 12px 28px rgba(15,111,255,.15);
-
-    border:2px solid #0f6fff;
-}
-
-.event-card.disabled{
-    opacity:.45;
-}
-
-.event-card h3{
-    margin-bottom:10px;
-    color:#0f6fff;
-}
-
-.event-card p{
-    color:#666;
-    margin-bottom:10px;
-}
-
-.event-card span{
-    color:#d62828;
-    font-weight:600;
-}
-
-.cover-image{
-
-    width:100%;
-    border-radius:20px;
-    margin-bottom:30px;
-
-}
-
-.subtitle{
-
-    color:#666;
-    margin-bottom:35px;
-
-}
-
-.section{
-
-    margin-top:35px;
-
-}
-
-.section h3{
-
-    margin-bottom:18px;
-
-    color:#0f6fff;
-
-}
-
-.info-card{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    background:white;
-
-    padding:18px 24px;
-
-    border-radius:15px;
-
-    margin-bottom:14px;
-
-    box-shadow:0 5px 18px rgba(0,0,0,.08);
-
-}
-
-.info-card span{
-
-    font-weight:600;
-
-}
-
-.reason-box{
-
-    background:#eef5ff;
-
-    border-left:5px solid #0f6fff;
-
-    padding:24px;
-
-    border-radius:15px;
-
-    line-height:2;
-
+  transform: translateY(-2px);
 }

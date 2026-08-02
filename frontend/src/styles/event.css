@@ -1,0 +1,57 @@
+.event-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin:22px auto;
+
+    max-width:720px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.event-card.active:hover{
+
+    transform:translateY(-5px);
+
+    border:2px solid var(--primary);
+
+}
+
+.event-card.disabled{
+
+    opacity:.45;
+
+}
+
+.event-card h3{
+
+    color:var(--primary);
+
+    margin-bottom:12px;
+
+}
+
+.event-card p{
+
+    color:var(--sub);
+
+}
+
+.event-card span{
+
+    display:inline-block;
+
+    margin-top:18px;
+
+    color:#d62828;
+
+    font-weight:600;
+
+}

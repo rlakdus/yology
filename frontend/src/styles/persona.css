@@ -1,0 +1,49 @@
+.persona-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    margin:20px auto;
+
+    max-width:720px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.persona-card:hover{
+
+    transform:translateY(-5px);
+
+    border:2px solid var(--primary);
+
+}
+
+.persona-card h3{
+
+    color:var(--primary);
+
+    margin-bottom:12px;
+
+}
+
+.persona-card p{
+
+    color:var(--sub);
+
+    margin-bottom:18px;
+
+}
+
+.persona-card span{
+
+    font-weight:600;
+
+    color:var(--primary);
+
+}

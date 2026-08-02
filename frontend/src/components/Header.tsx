@@ -1,30 +1,45 @@
-import "../styles/header.css";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+import "../styles/header.css";
 
 interface HeaderProps {
   title: string;
+  subtitle?: string;
   showBack?: boolean;
 }
 
-const Header = ({ title, showBack = true }: HeaderProps) => {
+const Header = ({
+  title,
+  subtitle,
+  showBack = true,
+}: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
     <header className="header">
-      {showBack ? (
-        <button
-          className="back-button"
-          onClick={() => navigate(-1)}
-        >
-          ←
-        </button>
-      ) : (
-        <div style={{ width: "40px" }} />
+
+      <div className="header-top">
+
+        {showBack ? (
+          <button
+            className="back-btn"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft size={22}/>
+          </button>
+        ) : (
+          <div style={{width:42}}/>
+        )}
+
+      </div>
+
+      <h1>{title}</h1>
+
+      {subtitle && (
+        <p>{subtitle}</p>
       )}
 
-      <h2>{title}</h2>
-
-      <div style={{ width: "40px" }} />
     </header>
   );
 };
