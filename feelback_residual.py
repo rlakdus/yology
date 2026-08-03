@@ -237,16 +237,29 @@ def huber_fit(X, y, delta=1.35, iters=30):
     return beta
 
 
-def fit_expected(hr: pd.DataFrame):
-    """기대HR = 기준선 + f(실측 활동). 잔차 z는 활동 수준별로 척도를 잡는다."""
-    X = np.column_stack([np.ones(len(hr))] + [hr[c].to_numpy() for c in FEATURE_COLS])
-    y = (hr["value"] - hr["baseline"]).to_numpy(dtype=float)
-    beta = huber_fit(X, y)
-    hr["expected"] = hr["baseline"] + X @ beta
+def fit_expected(hr: pd.DataFrame, use_activity: bool = True):
+    """기대HR = 기준선 (+ use_activity면 f(실측 활동)).
+
+    use_activity=False("걸음수 제외" 모드)면 활동 피처를 아예 회귀에 안 넣는다 —
+    기대HR은 시간대 기준선 그대로, 잔차는 거기서 얼마나 벗어났는가로만 본다.
+    활동 데이터가 없는 사람/내보내기에도 그대로 쓸 수 있는 대신, "걸음 조금 + 심박
+    급등" 같은 걸 활동으로 설명해서 걸러내는 능력은 없다 — 세션 필터(밀도 기반, 걸음
+    불필요)로만 운동을 배제한다.
+    """
+    if use_activity:
+        X = np.column_stack([np.ones(len(hr))] + [hr[c].to_numpy() for c in FEATURE_COLS])
+        y = (hr["value"] - hr["baseline"]).to_numpy(dtype=float)
+        beta = huber_fit(X, y)
+        hr["expected"] = hr["baseline"] + X @ beta
+    else:
+        beta = np.zeros(1)
+        hr["expected"] = hr["baseline"]
     hr["residual"] = hr["value"] - hr["expected"]
 
     # 활동 시 잔차는 넓게, 정지 시 좁게 흩어진다(강도 추정 오차). 하나의 척도로 재면
     # 활동 잔차가 산포를 부풀려 정지 상태의 조용한 감정 반응을 묻어버린다.
+    # use_activity=False면 활동 수준 구분 자체가 없어(세션 밖은 전부 sedentary=True),
+    # 그룹이 사실상 하나뿐이라 groupby가 전체를 한 척도로 재는 것과 같아진다.
     hr["z"] = np.nan
     for _, grp in hr.groupby("sedentary"):
         r = grp["residual"]
@@ -379,7 +392,12 @@ def group_episodes(flagged: pd.DataFrame) -> pd.DataFrame:
 
     def summarize(g: pd.DataFrame) -> pd.Series:
         peak = g.loc[g["score"].idxmax()]
-        act = "정지(걸음<20)" if peak["sedentary"] else f"걸음 {peak['steps_5m']:.0f}/5분"
+        if pd.isna(peak["steps_5m"]):
+            act = "세션 밖(걸음수 미사용 모드)"
+        elif peak["sedentary"]:
+            act = "정지(걸음<20)"
+        else:
+            act = f"걸음 {peak['steps_5m']:.0f}/5분"
         reasons = [f"기대{peak['expected']:.0f}(기준선{peak['baseline']:.0f}"
                    f"+활동{peak['expected'] - peak['baseline']:+.0f}) 대비 실제{peak['value']:.0f} "
                    f"→ 초과 {peak['residual']:+.0f}bpm (z={peak['z']:.1f}); 직전5분 {act}"]
@@ -408,7 +426,7 @@ def group_episodes(flagged: pd.DataFrame) -> pd.DataFrame:
             "peak_hr": g["value"].max(),
             "expected_hr": round(peak["expected"], 1),
             "excess_bpm": round(g["residual"].max(), 1),
-            "steps_5m": round(peak["steps_5m"]),
+            "steps_5m": round(peak["steps_5m"]) if pd.notna(peak["steps_5m"]) else None,
             "hrv_ms": round(peak["hrv_nearby"], 1) if pd.notna(peak["hrv_nearby"]) else None,
             "hrr_slope": round(peak["hrr_slope"], 1) if pd.notna(peak["hrr_slope"]) else None,
             "arousal": arousal,
@@ -425,22 +443,36 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--vitals", default="data/export_vitals.csv", type=Path)
     p.add_argument("--activity", default="data/export_activity.csv", type=Path)
+    p.add_argument("--exclude-activity", action="store_true",
+                    help="걸음수/계단 등 실측 활동 피처를 아예 안 쓰고 기준선+세션 필터만으로 "
+                         "판정한다. 활동 데이터가 없는 사람/내보내기에도 그대로 쓸 수 있는 대신, "
+                         "'걸음 조금 + 심박 급등'을 활동으로 설명해 걸러내는 능력은 없어진다 — "
+                         "운동 배제는 세션 필터(밀도 기반, 걸음 불필요)에만 의존한다.")
     p.add_argument("--outdir", default="data", type=Path)
     args = p.parse_args()
 
-    hr_all, resp, hrv, resting = load_vitals(args.vitals)
-    activity = pd.read_csv(args.activity, parse_dates=["start", "end"])
+    use_activity = not args.exclude_activity
 
-    hr_all = detect_sessions(hr_all)
+    hr_all, resp, hrv, resting = load_vitals(args.vitals)
+    hr_all = detect_sessions(hr_all)  # 밀도 기반이라 걸음수 없어도 그대로 동작
     sessions = hr_all.attrs["sessions"]
-    timeline = build_activity_timeline(activity, hr_all["timestamp"].min(), hr_all["timestamp"].max())
-    hr_all = attach_features(hr_all, timeline)
 
     # 운동 세션(정지성 운동 포함) 내부는 후보에서 제외 — 걸음이 없어도 강도를 못 재
-    # 감정과 운동을 분리할 수 없다. 세션 밖은 걸음·계단으로 기대HR을 보정해 판정한다.
+    # 감정과 운동을 분리할 수 없다. 세션 밖만 판정 대상으로 남긴다.
     hr = hr_all[~hr_all["in_session"]].copy().reset_index(drop=True)
+
+    if use_activity:
+        activity = pd.read_csv(args.activity, parse_dates=["start", "end"])
+        timeline = build_activity_timeline(activity, hr_all["timestamp"].min(), hr_all["timestamp"].max())
+        hr = attach_features(hr, timeline)  # steps_5m/flights_5m/sedentary
+    else:
+        # 세션 밖만 남은 상태이므로, "정지"의 최선의 근사는 전부 True로 두는 것.
+        hr["sedentary"] = True
+        for col in FEATURE_COLS + [c for _, _, c in REPORT_FEATURES]:
+            hr[col] = np.nan
+
     hr["baseline"] = hr["timestamp"].dt.hour.map(circadian_baseline(hr))
-    hr, beta = fit_expected(hr)
+    hr, beta = fit_expected(hr, use_activity)
     hr = attach_hrv(hr, hrv)
     hr = attach_recovery(hr)
     hr = score(hr, resp)
@@ -453,12 +485,18 @@ def main():
     n_sess = len(sessions)
     print(f"심박 {len(hr_all)}건 → 운동 세션 {n_sess}개({int(hr_all['in_session'].sum())}건) 제외 "
           f"→ 후보 {len(hr)}건")
-    print(f"  실측 정지 상태(걸음<{SEDENTARY_STEPS_5M}/5분): {int(hr['sedentary'].sum())}건 / "
-          f"활동 중: {int((~hr['sedentary']).sum())}건")
+    if use_activity:
+        print(f"  실측 정지 상태(걸음<{SEDENTARY_STEPS_5M}/5분): {int(hr['sedentary'].sum())}건 / "
+              f"활동 중: {int((~hr['sedentary']).sum())}건")
+    else:
+        print(f"  걸음수/계단 미사용 모드 — 세션 필터만으로 운동 배제 ({len(hr)}건 판정 대상)")
     print(f"  HRV 부착: {int(hr['hrv_nearby'].notna().sum())}건 (±{HRV_WINDOW_MIN}분 이내)")
-    print("\n기대HR 회귀 계수:")
-    for name, b in zip(["절편"] + FEATURE_COLS, beta):
-        print(f"  {name:12s} {b:+8.3f}")
+    if use_activity:
+        print("\n기대HR 회귀 계수:")
+        for name, b in zip(["절편"] + FEATURE_COLS, beta):
+            print(f"  {name:12s} {b:+8.3f}")
+    else:
+        print("\n기대HR = 시간대 기준선 그대로 (활동 보정 없음)")
     print(f"\n탐지 {len(flagged)}건 → 에피소드 {len(episodes)}개")
     if episodes.empty:
         print("탐지된 에피소드가 없습니다.")
