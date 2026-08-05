@@ -11,21 +11,41 @@ Apple 건강 내보내기 zip에는 형식이 다른 두 XML이 들어있고, �
 | 파일 | 형식 | 담긴 것 | 파서 |
 |---|---|---|---|
 | `export_cda.xml` | HL7 CDA (중첩 observation) | 바이탈 3종(심박·SpO2·호흡수)만 | `scripts/parse_cda.py` |
-| `export.xml` | HealthKit (평탄한 Record) | **걸음·계단·활동에너지·HRV·운동세션** 등 전부 | `scripts/parse_export.py` |
+| `export_XX.xml` | HealthKit (평탄한 Record) | **걸음·계단·활동에너지·HRV·운동세션** 등 전부 | `scripts/parse_export.py` |
 
 초기 분석은 CDA만 있어서 활동 데이터 없이 진행했으나, **`export.xml`이 확보되면서
-실측 활동 기반 모델(v3)로 넘어갔다.** 아래 파이프라인의 주 경로는 `export.xml`이다.
+실측 활동 기반 모델(v3)로 넘어갔다.** 아래 파이프라인의 주 경로는 `export_XX.xml`이다.
+
+## 파일 배치와 사람별 파일명
+
+원본과 생성물을 섞지 않도록 폴더를 분리한다.
+
+```text
+data/
+├─ input/                         # 원본 Apple Health 내보내기
+│  └─ export_XX.xml
+└─ output/                        # 파싱·탐지 과정에서 생성되는 파일
+   ├─ export_XX_vitals.csv
+   ├─ export_XX_activity.csv
+   ├─ export_XX_feelback_residual_episodes.csv
+   └─ export_XX_feelback_daily_condition.csv
+```
+
+`XX`는 사람을 구분하는 접두어다. 예를 들어 `export_ay.xml`을 파싱하면
+`export_ay_vitals.csv`, `export_ay_activity.csv`가 생성되고, 이 두 파일로 탐지를 실행하면
+`export_ay_feelback_residual_episodes.csv`, `export_ay_feelback_daily_condition.csv`가 생성된다.
+기존 단일 파일명인 `export.xml`은 호환성을 위해 접두어 없이 기존 출력명(`export_vitals.csv` 등)을 유지한다.
 
 ## 파이프라인 개요
 
 ```mermaid
 flowchart TD
-    X["data/export.xml<br/>(HealthKit, 51MB)"] -->|"scripts/parse_export.py<br/>iterparse 스트리밍"| V["data/export_vitals.csv<br/>순간측정 (심박·HRV·호흡)"]
-    X -->|"parse_export.py"| ACT["data/export_activity.csv<br/>구간측정 (걸음·계단·에너지)"]
+    X["data/input/export_XX.xml<br/>(HealthKit)"] -->|"scripts/parse_export.py<br/>iterparse 스트리밍"| V["data/output/export_XX_vitals.csv<br/>순간측정 (심박·HRV·호흡)"]
+    X -->|"parse_export.py"| ACT["data/output/export_XX_activity.csv<br/>구간측정 (걸음·계단·에너지)"]
     V --> M["feelback_residual.py<br/>(v3: 실측 활동 보정 잔차 + HRV)"]
     ACT --> M
-    M --> E["data/feelback_residual_episodes.csv<br/>53 급성 에피소드, 점수순"]
-    M --> DC["data/feelback_daily_condition.csv<br/>일 단위 만성 저조 (3일 판정)"]
+    M --> E["data/output/export_XX_feelback_residual_episodes.csv<br/>급성 에피소드, 점수순"]
+    M --> DC["data/output/export_XX_feelback_daily_condition.csv<br/>일 단위 만성 저조"]
 
     A["data/export_cda.xml<br/>(참고: 바이탈만)"] -.->|"parse_cda.py"| C["export_cda_normalized.csv"]
     C -.->|"feelback_anomaly.py (v1)"| D["feelback_episodes.csv"]
@@ -33,13 +53,13 @@ flowchart TD
 
 | 파일 | 역할 |
 |---|---|
-| `scripts/parse_export.py` | **export.xml → 바이탈/활동 두 CSV** (주 파서) |
+| `scripts/parse_export.py` | **data/input/export_XX.xml → data/output/export_XX 바이탈/활동 CSV** (주 파서) |
 | `scripts/parse_cda.py` | export_cda.xml → 바이탈 CSV (초기 파서, 참고용) |
 | `feelback_residual.py` | **v3 탐지 모델** (급성 잔차 + HRV + **HRR 회복축**, **+ 일 단위 만성 저조**) |
 | `feelback_anomaly.py` | v1 탐지 모델 (안정 상태 필터, 초기 버전) |
 
 > **두 개의 산출물** — 같은 스크립트가 상보적인 두 시그니처를 낸다.
-> `feelback_residual_episodes.csv`는 **급성 각성**(순간 심박 스파이크), `feelback_daily_condition.csv`는
+> `export_XX_feelback_residual_episodes.csv`는 **급성 각성**(순간 심박 스파이크), `export_XX_feelback_daily_condition.csv`는
 > **만성 저조**(심박은 평범하나 하루 종일 HRV 바닥 + 안정시심박 상승)를 담는다. 둘은 생리적으로
 > 반대 시그니처라(2번 검증 참고) 한 모델로는 못 잡아, 후자를 일 단위 모듈로 따로 판정한다.
 
@@ -59,15 +79,15 @@ Record는 두 종류이고, 이 구분이 뒤 단계의 시간 정렬을 좌우�
 
 | 종류 | 판별 | 예시 | 저장 |
 |---|---|---|---|
-| **순간 측정** | `startDate == endDate` | 심박, 호흡수, SpO2, HRV | `export_vitals.csv` (long-format) |
-| **구간 측정** | `startDate < endDate` | 걸음, 계단, 활동에너지, 활동강도 | `export_activity.csv` (start/end/value 유지) |
+| **순간 측정** | `startDate == endDate` | 심박, 호흡수, SpO2, HRV | `data/output/export_XX_vitals.csv` (long-format) |
+| **구간 측정** | `startDate < endDate` | 걸음, 계단, 활동에너지, 활동강도 | `data/output/export_XX_activity.csv` (start/end/value 유지) |
 
 구간 측정은 그 구간 동안의 누적/평균이라, 순간 측정인 심박에 붙이려면 별도 정렬이 필요하다
 (→ 2-3).
 
 ## 1-3. 파싱 결과
 
-`export_vitals.csv` (순간 측정, 4,063행) / `export_activity.csv` (구간 측정, 43,682행)
+예시 원본의 결과: `export_vitals.csv` (순간 측정, 4,063행) / `export_activity.csv` (구간 측정, 43,682행)
 
 | 바이탈 | 건수 | 기간 | | 활동 | 건수 | 기간 |
 |---|---|---|---|---|---|---|
@@ -78,6 +98,31 @@ Record는 두 종류이고, 이 구분이 뒤 단계의 시간 정렬을 좌우�
 
 > 심박이 CDA(3,275)보다 export.xml(3,889)에 더 많고 최신(07-19)이라, **심박 소스를
 > export.xml로 일원화**했다. export.xml의 심박도 `motion_context` 메타데이터를 그대로 보유한다.
+
+## 1-4. 사람별 실행 예
+
+`ay`의 원본이 `data/input/export_ay.xml`일 때 다음 순서로 실행한다.
+
+```powershell
+& "C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe" scripts/parse_export.py --input data/input/export_ay.xml --outdir data/output
+& "C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe" feelback_residual.py --vitals data/output/export_ay_vitals.csv --activity data/output/export_ay_activity.csv --outdir data/output
+```
+
+파서는 입력 XML의 파일명 접두어를 자동으로 유지한다. 탐지 모델도 `--vitals` 파일명에서
+`_vitals`를 제외한 접두어를 가져와 사람별 결과 파일을 만든다. 즉 위 명령의 결과는 다음과 같다.
+
+```text
+data/output/export_ay_vitals.csv
+data/output/export_ay_activity.csv
+data/output/export_ay_feelback_residual_episodes.csv
+data/output/export_ay_feelback_daily_condition.csv
+```
+
+탐지 결과의 경로·파일명을 자동 규칙 대신 직접 정하려면 아래 옵션을 사용한다.
+
+```powershell
+& "C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe" feelback_residual.py --vitals data/output/export_ay_vitals.csv --activity data/output/export_ay_activity.csv --episodes-output data/output/ay_episodes.csv --daily-output data/output/ay_daily.csv
+```
 
 ---
 
@@ -221,7 +266,7 @@ Apple의 ActiveEnergyBurned는 부분적으로 심박에서 역산되기 때문�
 (워치가 운동 중 SDNN을 안 남김) 운동 오염 배제 없이 원본을 그대로 쓴다.
 
 실측: 18일 중 **3일 저조 판정** — 7/05(HRV 18ms=개인 32의 57%), 7/03(74%+안정시심박+6),
-7/10(55%+안정시심박+6). 산출물은 `feelback_daily_condition.csv`.
+7/10(55%+안정시심박+6). 산출물은 `export_XX_feelback_daily_condition.csv`.
 
 ---
 

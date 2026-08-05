@@ -21,11 +21,11 @@ Record는 두 종류다. 이 구분이 뒤 단계(활동 보정 모델)의 시�
       -> 그 구간 동안의 누적/평균. start~end 범위를 유지해야 심박 샘플에 정렬 가능.
 
 그래서 결과를 두 파일로 나눈다:
-    data/export_vitals.csv     순간 측정 (long-format, feelback 모델이 소비)
-    data/export_activity.csv   구간 측정 (start/end/value 유지)
+    data/output/export_vitals.csv     순간 측정 (long-format, feelback 모델이 소비)
+    data/output/export_activity.csv   구간 측정 (start/end/value 유지)
 
 사용법:
-    python3 scripts/parse_export.py [--input data/export.xml] [--outdir data]
+    python3 scripts/parse_export.py [--input data/input/export.xml] [--outdir data/output]
 """
 import argparse
 import sys
@@ -111,8 +111,8 @@ def parse(path: Path):
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--input", default="data/export.xml", type=Path)
-    parser.add_argument("--outdir", default="data", type=Path)
+    parser.add_argument("--input", default="data/input/export.xml", type=Path)
+    parser.add_argument("--outdir", default="data/output", type=Path)
     args = parser.parse_args()
 
     point_rows, interval_rows, n_records = parse(args.input)
@@ -128,8 +128,11 @@ def main():
 
     activity = pd.DataFrame(interval_rows).sort_values(["metric", "start"])
 
-    vitals_path = args.outdir / "export_vitals.csv"
-    activity_path = args.outdir / "export_activity.csv"
+    # Keep each person's export separate: export_XX.xml -> export_XX_*.csv.
+    # The original export.xml keeps its established output names.
+    output_prefix = args.input.stem
+    vitals_path = args.outdir / f"{output_prefix}_vitals.csv"
+    activity_path = args.outdir / f"{output_prefix}_activity.csv"
     vitals.to_csv(vitals_path, index=False)
     activity.to_csv(activity_path, index=False)
 

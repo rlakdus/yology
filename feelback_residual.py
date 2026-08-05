@@ -37,8 +37,11 @@ B/C)했다. export.xml이 확보되면서 그 한계가 풀렸다:
 걸음 소스는 iPhone(전 기간 커버, 구간 겹침 0%)만 쓴다 — Watch와 섞으면 이중계상된다.
 
 사용법:
-    python3 feelback_residual.py [--vitals data/export_vitals.csv]
-                                 [--activity data/export_activity.csv] [--outdir data]
+    python3 feelback_residual.py [--vitals data/output/export_vitals.csv]
+                                 [--activity data/output/export_activity.csv] [--outdir data/output]
+                                 [--episodes-output PATH] [--daily-output PATH]
+
+    export_ay_vitals.csv를 입력하면 기본 출력도 export_ay_feelback_*.csv로 분리된다.
 """
 import argparse
 import sys
@@ -423,10 +426,18 @@ def group_episodes(flagged: pd.DataFrame) -> pd.DataFrame:
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--vitals", default="data/export_vitals.csv", type=Path)
-    p.add_argument("--activity", default="data/export_activity.csv", type=Path)
-    p.add_argument("--outdir", default="data", type=Path)
+    p.add_argument("--vitals", default="data/output/export_vitals.csv", type=Path)
+    p.add_argument("--activity", default="data/output/export_activity.csv", type=Path)
+    p.add_argument("--outdir", default="data/output", type=Path)
+    p.add_argument("--episodes-output", type=Path,
+                   help="급성 에피소드 CSV 경로 (기본값: 입력 파일명 기반)")
+    p.add_argument("--daily-output", type=Path,
+                   help="일별 상태 CSV 경로 (기본값: 입력 파일명 기반)")
     args = p.parse_args()
+
+    # Keep each person's result separate: export_XX_vitals.csv -> export_XX_feelback_*.csv.
+    input_prefix = args.vitals.stem.removesuffix("_vitals")
+    output_prefix = "" if input_prefix == "export" else f"{input_prefix}_"
 
     hr_all, resp, hrv, resting = load_vitals(args.vitals)
     activity = pd.read_csv(args.activity, parse_dates=["start", "end"])
@@ -468,7 +479,7 @@ def main():
     print(f"  회복 프로파일: 지속성(긴장성) {n_sus}개 / 위상성(놀람) {n_pha}개 / 불명 "
           f"{len(episodes) - n_sus - n_pha}개")
 
-    out = args.outdir / "feelback_residual_episodes.csv"
+    out = args.episodes_output or args.outdir / f"{output_prefix}feelback_residual_episodes.csv"
     episodes.to_csv(out, index=False)
     cols = ["start", "duration_min", "peak_hr", "expected_hr", "excess_bpm",
             "steps_5m", "hrv_ms", "hrr_slope", "arousal", "peak_z", "score"]
@@ -479,7 +490,7 @@ def main():
     # 급성 스파이크와 별개로, 일 단위 만성 저조(HRV 바닥 + 안정시심박 상승)를 판정한다.
     daily = daily_condition(hrv, resting)
     if not daily.empty:
-        daily_out = args.outdir / "feelback_daily_condition.csv"
+        daily_out = args.daily_output or args.outdir / f"{output_prefix}feelback_daily_condition.csv"
         daily.to_csv(daily_out, index=False)
         low = daily[daily["low_condition"]]
         print(f"\n만성 저조 판정: {len(daily)}일 중 {len(low)}일")
