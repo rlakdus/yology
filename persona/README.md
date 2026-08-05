@@ -19,6 +19,7 @@
 ---
 
 ## 구체적인 페르소나 정의
+![페르소나 설명](/Users/ahyeonkim/Documents/GitHub/yology/persona/259a6e2d-bb0e-4061-bc0a-8d334d467d50.png)
 
 ### 1. 김하린 — 바쁜 일상 속 자신의 상태를 놓치는 사회초년생
 
