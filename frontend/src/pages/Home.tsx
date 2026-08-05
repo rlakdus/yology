@@ -7,9 +7,6 @@ import {
   Camera,
   MapPinned,
   Glasses,
-  HeartPulse,
-  MessagesSquare,
-  Sparkles
 } from "lucide-react";
 
 import "../styles/home.css";
@@ -21,27 +18,27 @@ const Home = () => {
   const features = [
 
     {
-      icon:<Brain size={32}/>,
-      title:"AI 추론",
-      description:"센서와 행동 데이터를 하나의 이야기로 연결합니다."
+      icon: <Brain size={32} />,
+      title: "AI 추론",
+      description: "센서와 행동 데이터를 하나의 이야기로 연결합니다."
     },
 
     {
-      icon:<Camera size={32}/>,
-      title:"멀티모달 분석",
-      description:"사진, GPS, 대화 데이터를 함께 이해합니다."
+      icon: <Camera size={32} />,
+      title: "멀티모달 분석",
+      description: "사진, GPS, 대화 데이터를 함께 이해합니다."
     },
 
     {
-      icon:<MapPinned size={32}/>,
-      title:"Event Reconstruction",
-      description:"시간의 흐름에 따라 사건을 복원합니다."
+      icon: <MapPinned size={32} />,
+      title: "Event Reconstruction",
+      description: "시간의 흐름에 따라 사건을 복원합니다."
     },
 
     {
-      icon:<Glasses size={32}/>,
-      title:"XR Replay",
-      description:"재구성된 경험을 다시 체험합니다."
+      icon: <Glasses size={32} />,
+      title: "XR Replay",
+      description: "재구성된 경험을 다시 체험합니다."
     }
 
   ];
@@ -90,19 +87,8 @@ const Home = () => {
             className="primary-btn"
             onClick={() => navigate("/persona")}
           >
-
-            데모 시작하기
-
+            <span>데모 시작하기</span>
             <ArrowRight size={18} />
-
-          </button>
-
-          <button className="secondary-btn">
-
-            <PlayCircle size={18} />
-
-            프로젝트 소개
-
           </button>
 
         </div>
@@ -115,7 +101,7 @@ const Home = () => {
 
         <div className="section-title">
 
-          AI가 하는 일
+          FEELBACK이 하는 일
 
         </div>
 
@@ -137,7 +123,7 @@ const Home = () => {
 
           {
 
-            features.map((item)=>(
+            features.map((item) => (
 
               <div className="feature-card" key={item.title}>
 
@@ -164,130 +150,6 @@ const Home = () => {
             ))
 
           }
-
-        </div>
-
-      </section>
-
-      {/* Flow */}
-
-      <section className="flow">
-
-        <div className="section-title">
-
-          Reconstruction Flow
-
-        </div>
-
-        <h2>
-
-          AI가 사건을 이해하는 과정
-
-        </h2>
-
-        <div className="flow-grid">
-
-          <div className="flow-card">
-
-            <HeartPulse size={32}/>
-
-            <h3>Sensor</h3>
-
-            <span>
-
-              Heart Rate
-
-              <br/>
-
-              Stress
-
-              <br/>
-
-              Motion
-
-            </span>
-
-          </div>
-
-          <div className="flow-arrow">
-
-            →
-
-          </div>
-
-          <div className="flow-card">
-
-            <MessagesSquare size={32}/>
-
-            <h3>Evidence</h3>
-
-            <span>
-
-              Photo
-
-              <br/>
-
-              GPS
-
-              <br/>
-
-              Chat
-
-            </span>
-
-          </div>
-
-          <div className="flow-arrow">
-
-            →
-
-          </div>
-
-          <div className="flow-card">
-
-            <Sparkles size={32}/>
-
-            <h3>AI Reasoning</h3>
-
-            <span>
-
-              Context
-
-              <br/>
-
-              Emotion
-
-              <br/>
-
-              Summary
-
-            </span>
-
-          </div>
-
-          <div className="flow-arrow">
-
-            →
-
-          </div>
-
-          <div className="flow-card">
-
-            <Glasses size={32}/>
-
-            <h3>XR Replay</h3>
-
-            <span>
-
-              Replay
-
-              <br/>
-
-              Visualization
-
-            </span>
-
-          </div>
 
         </div>
 
