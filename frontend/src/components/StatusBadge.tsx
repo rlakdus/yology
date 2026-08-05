@@ -1,4 +1,4 @@
-import "../styles/statusBadge.css";
+import "./StatusBadge.css";
 
 interface StatusBadgeProps {
   status: "High" | "Medium" | "Normal";

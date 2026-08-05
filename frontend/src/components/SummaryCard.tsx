@@ -1,4 +1,4 @@
-import "../styles/summaryCard.css";
+import "./SummaryCard.css";
 
 interface SummaryCardProps{
 

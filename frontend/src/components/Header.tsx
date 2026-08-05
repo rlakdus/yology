@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import "../styles/header.css";
+import "./Header.css";
 
 interface HeaderProps {
   title: string;

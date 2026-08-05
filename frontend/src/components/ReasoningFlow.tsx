@@ -1,4 +1,4 @@
-import "../styles/reasoningFlow.css";
+import "./ReasoningFlow.css";
 import { ChevronDown } from "lucide-react";
 
 interface Step {
