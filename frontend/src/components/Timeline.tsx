@@ -1,4 +1,4 @@
-import "../styles/timeline.css";
+import "./Timeline.css";
 
 interface TimelineItem {
   icon: React.ReactNode;

@@ -1,20 +1,22 @@
 :root{
 
-  --primary:#0F6FFF;
-  --primary-dark:#0957CA;
+    --primary:#0F6FFF;
+    --primary-light:#EAF3FF;
 
-  --background:#F6F8FC;
+    --background:#F7FAFC;
+    --surface:#FFFFFF;
 
-  --card:#FFFFFF;
+    --text:#1F2937;
+    --subtext:#64748B;
 
-  --text:#1F2937;
+    --border:#E5E7EB;
 
-  --sub:#6B7280;
+    --radius:20px;
 
-  --border:#E5E7EB;
+    --shadow:
+        0 10px 30px rgba(15,111,255,.08);
 
-  --radius:18px;
-
-  --shadow:0 10px 30px rgba(15,111,255,.08);
+    --shadow-hover:
+        0 18px 40px rgba(15,111,255,.18);
 
 }

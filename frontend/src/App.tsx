@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Persona from "./pages/Persona";
@@ -12,39 +12,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path="/" element={<Home />} />
-
-        <Route
-          path="/persona"
-          element={<Persona />}
-        />
-
-        <Route
-          path="/event"
-          element={<Event />}
-        />
-
-        <Route
-          path="/reconstruction"
-          element={<Reconstruction />}
-        />
-
-        <Route
-          path="/persona/he/events"
-          element={<HeEvents />}
-        />
-
+        <Route path="/persona" element={<Persona />} />
+        <Route path="/event" element={<Event />} />
+        <Route path="/reconstruction" element={<Reconstruction />} />
+        <Route path="/persona/he/events" element={<HeEvents />} />
         <Route
           path="/persona/he/reconstruction/:eventId"
           element={<HeReconstruction />}
         />
-
-        <Route
-          path="/vr/:persona/:eventId"
-          element={<VrScene />}
-        />
-
+        <Route path="/vr/:persona/:eventId" element={<VrScene />} />
       </Routes>
     </BrowserRouter>
   );

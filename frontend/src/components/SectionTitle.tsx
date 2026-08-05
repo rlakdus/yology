@@ -1,4 +1,4 @@
-import "../styles/sectionTitle.css";
+import "./SectionTitle.css";
 
 interface Props{
     title:string;

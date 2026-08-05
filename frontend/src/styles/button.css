@@ -1,0 +1,39 @@
+.primary-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    border:none;
+
+    border-radius:16px;
+
+    padding:18px 32px;
+
+    background:linear-gradient(
+        135deg,
+        #0F6FFF,
+        #428DFF
+    );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:var(--shadow-hover);
+
+}

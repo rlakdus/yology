@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import "../styles/evidenceCard.css";
+import "./EvidenceCard.css";
 
 interface EvidenceCardProps {
   icon: React.ReactNode;

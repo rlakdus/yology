@@ -1,4 +1,4 @@
-import "../styles/sensorCard.css";
+import "./SensorCard.css";
 
 interface SensorCardProps{
 
