@@ -121,7 +121,11 @@ DAILY_RHR_ELEVATED = 5       # 안정시심박이 개인 중앙값보다 이 bpm
 
 
 def load_vitals(path: Path):
-    v = pd.read_csv(path, parse_dates=["timestamp"])
+    # export.xml 유래 CSV는 timestamp 정밀도가 일정하지만, CDA/삼성 유래 CSV는
+    # 마이크로초 유무가 행마다 섞여 있어 고정 포맷 파서가 조용히 문자열로 남기고
+    # 실패한다. ISO8601로 명시하면 정밀도가 섞여 있어도 정상 파싱된다.
+    v = pd.read_csv(path)
+    v["timestamp"] = pd.to_datetime(v["timestamp"], format="ISO8601")
     def pick(name):
         return v[v["display_name"] == name].sort_values("timestamp").reset_index(drop=True)
     return (pick("Heart rate"), pick("Respiratory rate"), pick("HRV SDNN"),
