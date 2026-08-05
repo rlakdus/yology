@@ -1,0 +1,4 @@
+# scripts/estimate_depth.py 전용 의존성.
+# 저장소에 공통 매니페스트가 없어 이 기능에만 한정해 둔다.
+onnxruntime>=1.17
+pillow>=10.0

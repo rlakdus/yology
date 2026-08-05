@@ -22,6 +22,11 @@ const personas = [
     id: "driver",
     title: "Driver",
     description: "Driving situation"
+  },
+  {
+    id: "he",
+    title: "HE (Development)",
+    description: "HE biometric anomaly reconstruction"
   }
 ];
 
@@ -40,7 +45,7 @@ const Persona = () => {
         {personas.map((p) => (
           <Link
             key={p.id}
-            to="/event"
+            to={p.id === "he" ? "/persona/he/events" : "/event"}
             style={{ textDecoration: "none" }}
           >
             <div className="persona-card">

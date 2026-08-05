@@ -1,1 +1,7 @@
 /data
+
+# export_event_assets.py가 events/에서 만들어내는 사본
+/frontend/public/events
+
+# estimate_depth.py가 내려받는 ONNX 모델 캐시
+/scripts/.models

@@ -124,6 +124,23 @@ data/output/export_ay_feelback_daily_condition.csv
 & "C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe" feelback_residual.py --vitals data/output/export_ay_vitals.csv --activity data/output/export_ay_activity.csv --episodes-output data/output/ay_episodes.csv --daily-output data/output/ay_daily.csv
 ```
 
+## 1-5. 웹 재현 화면용 데이터 내보내기
+
+한 페르소나에는 한 사람의 데이터만 연결한다. 현재 개발용 HE 페르소나는
+`data/output/export_he_feelback_residual_episodes.csv`만 사용하며, 다른 사람의 에피소드와 섞지 않는다.
+탐지 결과를 HE 페르소나의 재현 화면에서 보려면 모델 CSV를 웹용 JSON으로 한 번 변환한다.
+결과 파일은 `frontend/public/data/he-anomaly-episodes.json`이다.
+
+```powershell
+& "C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe" scripts/export_anomaly_events.py --person he
+```
+
+프런트엔드에서는 HE 페르소나를 선택한 뒤 HE 이벤트를 선택하고, 해당 이벤트의
+`/persona/he/reconstruction/<event-id>` 복원 화면으로 이동한다. 현재 이벤트는 탐지 점수가 가장 높은
+HE 에피소드 하나로 설정되어 있다. 복원 화면에서 관측 심박, 기대 심박, 직전 걸음, 인근 HRV,
+잔차 점수와 시작·종료 시간을 확인할 수 있다. 이 화면은 탐지 후보를 재현하는 개발용 화면이며,
+감정이나 원인을 확정하는 진단 화면이 아니다.
+
 ---
 
 # 2단계: 탐지 모델 (`feelback_residual.py`)
