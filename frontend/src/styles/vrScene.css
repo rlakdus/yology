@@ -1,0 +1,248 @@
+.vr-scene {
+  position: fixed;
+  inset: 0;
+  background: #0a1526;
+  transition: opacity .6s ease;
+}
+
+.vr-scene.is-leaving {
+  opacity: 0;
+}
+
+.vr-scene-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+.vr-scene-canvas:active {
+  cursor: grabbing;
+}
+
+.vr-scene-message {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  color: #c7d6ee;
+  background: #0a1526;
+  text-align: center;
+}
+
+/* ===========================
+   시작 게이트
+=========================== */
+
+.vr-scene-gate {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(6, 13, 24, .72);
+  backdrop-filter: blur(10px);
+}
+
+.vr-scene-gate-card {
+  position: relative;
+  width: min(440px, 100%);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 22px;
+  padding: 30px 28px 26px;
+  color: #e8f0ff;
+  background: rgba(13, 26, 45, .92);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+}
+
+.vr-scene-back {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 10px;
+  color: #cfdcf2;
+  background: transparent;
+}
+
+.vr-scene-eyebrow {
+  margin-bottom: 6px;
+  color: #6ea8ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.vr-scene-gate-card h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.vr-scene-desc {
+  margin-top: 6px;
+  color: #a8bcd9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.vr-scene-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.vr-scene-facts div {
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+  padding: 12px 10px;
+  background: rgba(255, 255, 255, .04);
+  text-align: center;
+}
+
+.vr-scene-facts dt {
+  margin-bottom: 5px;
+  color: #8ba3c4;
+  font-size: 11px;
+}
+
+.vr-scene-facts dd {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.vr-scene-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px;
+  color: white;
+  background: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.vr-scene-start:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.vr-scene-start:disabled {
+  cursor: not-allowed;
+  color: #7991b6;
+  background: #22344f;
+}
+
+.vr-scene-error {
+  margin-top: 14px;
+  border: 1px solid rgba(255, 138, 138, .3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #ffb4b4;
+  background: rgba(120, 20, 30, .25);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.vr-scene-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+  color: #8ba3c4;
+  font-size: 12px;
+}
+
+/* ===========================
+   재생 중 HUD
+=========================== */
+
+.vr-scene-hud {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px 24px;
+  background: linear-gradient(to top, rgba(6, 13, 24, .8), transparent);
+  pointer-events: none;
+}
+
+.vr-scene-bpm,
+.vr-scene-stop {
+  pointer-events: auto;
+}
+
+.vr-scene-bpm {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: #ffb4c1;
+}
+
+.vr-scene-bpm svg {
+  align-self: center;
+}
+
+.vr-scene-bpm strong {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.vr-scene-bpm small {
+  color: #9fb4d4;
+  font-size: 12px;
+}
+
+.vr-scene-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .16);
+  overflow: hidden;
+}
+
+.vr-scene-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width .1s linear;
+}
+
+.vr-scene-stop {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 11px;
+  padding: 10px 14px;
+  color: #e8f0ff;
+  background: rgba(10, 21, 38, .7);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 650px) {
+  .vr-scene-hud {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 16px;
+  }
+
+  .vr-scene-stop {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}

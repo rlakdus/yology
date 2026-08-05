@@ -5,6 +5,9 @@ import Scenario from "./pages/Scenario";
 import Persona from "./pages/Persona";
 import Event from "./pages/Event";
 import Reconstruction from "./pages/Reconstruction";
+import HeEvents from "./pages/HeEvents";
+import HeReconstruction from "./pages/HeReconstruction";
+import VrScene from "./pages/VrScene";
 
 function App() {
 
@@ -37,6 +40,21 @@ function App() {
         <Route
           path="/reconstruction"
           element={<Reconstruction />}
+        />
+
+        <Route
+          path="/persona/he/events"
+          element={<HeEvents />}
+        />
+
+        <Route
+          path="/persona/he/reconstruction/:eventId"
+          element={<HeReconstruction />}
+        />
+
+        <Route
+          path="/vr/:persona/:eventId"
+          element={<VrScene />}
         />
 
       </Routes>

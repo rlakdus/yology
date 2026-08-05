@@ -1,7 +1,7 @@
 {
   "event_id": "event_001",
   "title": "Hospital Visit",
-  "persona": "caregiver",
+  "persona": "he",
   "emotion": "stress",
   "description": "Stress after hospital examination",
   "cover": "cover.jpg",

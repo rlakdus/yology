@@ -209,6 +209,13 @@ const Persona = () => {
 
       </div>
 
+      <button
+        className="persona-btn"
+        onClick={() => navigate("/persona/he/events")}
+      >
+        360° 재현 개발 장면 열기 →
+      </button>
+
     </div>
 
   );
