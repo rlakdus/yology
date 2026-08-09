@@ -1,0 +1,17 @@
+{
+  "age_group": "30대",
+  "situation": "동창회",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-08-29 21:10:00+09:00",
+  "duration_min": 4.5,
+  "peak_hr": 115,
+  "expected_hr": 83,
+  "excess_bpm": 32,
+  "steps_5m": 80,
+  "hrv_ms": 24.0,
+  "hrr_slope": 6.2,
+  "arousal": "위상성",
+  "score": 4.6,
+  "evidence": "기대83 대비 실제115 → 초과 +32bpm; 약간의 걸음(80/5분, 자리 이동), 빠른 회복 — 반가움/들뜸의 짧은 파동"
+}

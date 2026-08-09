@@ -1,0 +1,17 @@
+{
+  "age_group": "30대",
+  "situation": "처음으로 내 집 계약을 한 날",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-08-25 14:20:00+09:00",
+  "duration_min": 9.0,
+  "peak_hr": 108,
+  "expected_hr": 81,
+  "excess_bpm": 27,
+  "steps_5m": 5,
+  "hrv_ms": 19.0,
+  "hrr_slope": 2.1,
+  "arousal": "지속성",
+  "score": 4.9,
+  "evidence": "기대81 대비 실제108 → 초과 +27bpm; 정지 상태, 회복 더딤(2.1bpm/분) — 설렘과 부담이 섞인 지속 긴장"
+}

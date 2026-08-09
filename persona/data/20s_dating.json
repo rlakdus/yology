@@ -1,0 +1,19 @@
+{
+  "age_group": "20대",
+  "situation": "데이트",
+  "is_fabricated": false,
+  "source": "office(김아연)",
+  "start": "2026-07-31T23:44:10+09:00",
+  "end": "2026-07-31T23:44:10+09:00",
+  "duration_min": 0.0,
+  "peak_hr": 137.0,
+  "expected_hr": 90.3,
+  "excess_bpm": 46.7,
+  "steps_5m": 0,
+  "hrv_ms": null,
+  "hrr_slope": 6.7,
+  "arousal": "위상성",
+  "peak_z": 5.41,
+  "score": 7.41,
+  "evidence": "기대90(기준선90+활동+0) 대비 실제137 → 초과 +47bpm (z=5.4); 직전5분 정지(걸음<20); 급발현 +36bpm; 위상성(빠른 회복 6.7bpm/분); 야간"
+}

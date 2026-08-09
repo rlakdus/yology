@@ -1,0 +1,17 @@
+{
+  "age_group": "40대",
+  "situation": "부모님 병간호(병원)",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-09-05 15:40:00+09:00",
+  "duration_min": 22.0,
+  "peak_hr": 105,
+  "expected_hr": 82,
+  "excess_bpm": 23,
+  "steps_5m": 10,
+  "hrv_ms": 16.0,
+  "hrr_slope": 1.0,
+  "arousal": "지속성",
+  "score": 4.3,
+  "evidence": "기대82 대비 실제105 → 초과 +23bpm; 며칠째 낮은 HRV(16ms)와 겹치는 만성 저조 패턴, 병원 대기 중 지속되는 긴장"
+}

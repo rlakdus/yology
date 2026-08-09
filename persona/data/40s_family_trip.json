@@ -1,0 +1,17 @@
+{
+  "age_group": "40대",
+  "situation": "가족여행",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-09-13 13:15:00+09:00",
+  "duration_min": 6.0,
+  "peak_hr": 110,
+  "expected_hr": 86,
+  "excess_bpm": 24,
+  "steps_5m": 210,
+  "hrv_ms": 26.0,
+  "hrr_slope": 5.5,
+  "arousal": "위상성",
+  "score": 3.4,
+  "evidence": "기대86 대비 실제110 → 초과 +24bpm; 걸음 210/5분(활동 중), 빠른 회복 — 즐거운 활동성 반응"
+}

@@ -1,0 +1,19 @@
+{
+  "age_group": "20대",
+  "situation": "시험 직전·시험 기간",
+  "is_fabricated": false,
+  "source": "student(김하은)",
+  "start": "2026-07-27T13:39:23+09:00",
+  "end": "2026-07-27T13:57:40+09:00",
+  "duration_min": 18.3,
+  "peak_hr": 118.0,
+  "expected_hr": 88.4,
+  "excess_bpm": 29.6,
+  "steps_5m": 0,
+  "hrv_ms": 10.0,
+  "hrr_slope": 0.1,
+  "arousal": "지속성",
+  "peak_z": 2.72,
+  "score": 6.04,
+  "evidence": "기대88(기준선88+활동+1) 대비 실제116 → 초과 +28bpm (z=2.5); 직전5분 정지(걸음<20); 급발현 +15bpm; 지속성 각성(회복 0.1bpm/분, 116까지만 하강); HRV 눌림 10ms"
+}

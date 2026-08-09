@@ -1,0 +1,17 @@
+{
+  "age_group": "30대",
+  "situation": "어렸을 때 본 영화 재개봉",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-08-22 20:00:00+09:00",
+  "duration_min": 2.0,
+  "peak_hr": 98,
+  "expected_hr": 80,
+  "excess_bpm": 18,
+  "steps_5m": 0,
+  "hrv_ms": 28.0,
+  "hrr_slope": 4.0,
+  "arousal": null,
+  "score": 2.8,
+  "evidence": "기대80 대비 실제98 → 초과 +18bpm(경미); HRV는 평소 범위, 향수 어린 잔잔한 반응"
+}

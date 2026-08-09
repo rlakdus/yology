@@ -1,0 +1,17 @@
+{
+  "age_group": "30대",
+  "situation": "소개팅",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-08-14 19:30:00+09:00",
+  "duration_min": 3.5,
+  "peak_hr": 118,
+  "expected_hr": 80,
+  "excess_bpm": 38,
+  "steps_5m": 0,
+  "hrv_ms": 22.0,
+  "hrr_slope": 7.5,
+  "arousal": "위상성",
+  "score": 5.8,
+  "evidence": "기대80 대비 실제118 → 초과 +38bpm; 저녁 약속 직전 급발현, 빠른 회복(7.5bpm/분) — 설렘/긴장이 짧게 왔다 감"
+}

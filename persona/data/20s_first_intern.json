@@ -1,0 +1,19 @@
+{
+  "age_group": "20대",
+  "situation": "첫 인턴 출근일",
+  "is_fabricated": false,
+  "source": "office(김아연)",
+  "start": "2026-07-20T08:18:22+09:00",
+  "end": "2026-07-20T08:24:03+09:00",
+  "duration_min": 5.7,
+  "peak_hr": 129.0,
+  "expected_hr": 96.6,
+  "excess_bpm": 32.4,
+  "steps_5m": 0,
+  "hrv_ms": 15.9,
+  "hrr_slope": null,
+  "arousal": null,
+  "peak_z": 3.78,
+  "score": 6.28,
+  "evidence": "기대97(기준선96+활동+0) 대비 실제129 → 초과 +32bpm (z=3.8); 직전5분 정지(걸음<20); 급발현 +30bpm; HRV 눌림 16ms"
+}

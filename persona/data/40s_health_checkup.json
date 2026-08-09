@@ -1,0 +1,17 @@
+{
+  "age_group": "40대",
+  "situation": "건강검진 결과 듣는 날",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-09-02 11:00:00+09:00",
+  "duration_min": 15.0,
+  "peak_hr": 124,
+  "expected_hr": 82,
+  "excess_bpm": 42,
+  "steps_5m": 0,
+  "hrv_ms": 11.0,
+  "hrr_slope": 0.3,
+  "arousal": "지속성",
+  "score": 7.9,
+  "evidence": "기대82 대비 실제124 → 초과 +42bpm; HRV 11ms로 극도로 눌림, 회복이 거의 안 됨(0.3bpm/분) — 9개 시나리오 중 가장 강한 지속성 각성"
+}

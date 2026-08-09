@@ -1,0 +1,17 @@
+{
+  "age_group": "40대",
+  "situation": "자녀 졸업식",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-09-20 10:50:00+09:00",
+  "duration_min": 2.5,
+  "peak_hr": 103,
+  "expected_hr": 84,
+  "excess_bpm": 19,
+  "steps_5m": 0,
+  "hrv_ms": 25.0,
+  "hrr_slope": 5.0,
+  "arousal": "위상성",
+  "score": 2.6,
+  "evidence": "기대84 대비 실제103 → 초과 +19bpm(경미); 정지 상태, 빠른 회복 — 뭉클함이 짧게 스쳐감"
+}

@@ -1,0 +1,17 @@
+{
+  "age_group": "30대",
+  "situation": "중요 업무 미팅/발표",
+  "is_fabricated": true,
+  "source": null,
+  "start": "2026-08-18 10:15:00+09:00",
+  "duration_min": 12.0,
+  "peak_hr": 112,
+  "expected_hr": 78,
+  "excess_bpm": 34,
+  "steps_5m": 0,
+  "hrv_ms": 14.0,
+  "hrr_slope": 0.8,
+  "arousal": "지속성",
+  "score": 6.5,
+  "evidence": "기대78 대비 실제112 → 초과 +34bpm; 정지 상태, HRV 14ms로 크게 눌림, 회복 거의 없음(0.8bpm/분) — 발표 내내 긴장이 안 풀림"
+}
