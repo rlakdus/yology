@@ -1,0 +1,20 @@
+{
+  "age_group": "30대",
+  "situation": "소개팅",
+  "is_fabricated": true,
+  "is_synthetic_signal": false,
+  "source_note": "실제 office(김아연) 데이터의 2026-07-30 18:15:04+09:00 이벤트를 이 상황에 재배정함",
+  "start": "2026-07-30T18:15:04+09:00",
+  "end": "2026-07-30T18:15:04+09:00",
+  "duration_min": 0.0,
+  "peak_hr": 118.0,
+  "expected_hr": 84.9,
+  "excess_bpm": 33.1,
+  "steps_5m": 0,
+  "hrv_ms": null,
+  "hrr_slope": 16.5,
+  "arousal": "위상성",
+  "peak_z": 3.86,
+  "score": 4.86,
+  "evidence": "기대85(기준선85+활동+0) 대비 실제118 → 초과 +33bpm (z=3.9); 직전5분 정지(걸음<20); 급발현 +31bpm; 위상성(빠른 회복 16.5bpm/분)"
+}
