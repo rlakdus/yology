@@ -100,6 +100,12 @@ const Persona = () => {
   const title = location.state?.title || "Hospital Visit";
   const personas = personaMap[scenario] ?? personaMap.hospital;
 
+  const vrPersona = {
+    hospital: "he",
+    study: "student",
+    office: "office",
+  }[scenario as "hospital" | "study" | "office"] ?? "he";
+
   return (
     <div className="persona">
       <button className="back-btn" onClick={() => navigate("/scenario")}>
@@ -145,6 +151,14 @@ const Persona = () => {
           </div>
         ))}
       </div>
+
+      <button
+        className="persona-btn"
+        onClick={() => navigate(`/vr/${vrPersona}/event_001`)}
+      >
+        이 상황의 360° 재현 장면 열기 →
+      </button>
+
     </div>
   );
 };

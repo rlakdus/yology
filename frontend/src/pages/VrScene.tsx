@@ -284,6 +284,11 @@ const VrScene = () => {
           eventTitle={event.title}
           eventDescription={event.description}
           eventLabel={`${event.persona.toUpperCase()} · ${event.event_id}`}
+          provenance={event.panorama?.generated
+            ? event.panorama.mode === "recorded_anchor"
+              ? "촬영된 정면을 기준으로 AI가 확장한 360° 추정 환경입니다."
+              : "생체신호와 페르소나 패턴을 바탕으로 AI가 생성한 장면 가설이며 실제 장소 기록이 아닙니다."
+            : undefined}
           seconds={seconds}
           mediaCount={event.media.length}
           chatCount={event.chats.length}

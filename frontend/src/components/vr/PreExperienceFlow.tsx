@@ -18,6 +18,7 @@ type PreExperienceFlowProps = {
   eventTitle: string;
   eventDescription: string;
   eventLabel: string;
+  provenance?: string;
   seconds: number;
   mediaCount: number;
   chatCount: number;
@@ -77,6 +78,9 @@ const PreExperienceFlow = (props: PreExperienceFlowProps) => {
           <p className="vr-scene-eyebrow">{props.eventLabel} · HAPTIC PRELUDE</p>
           <h1>{props.eventTitle}</h1>
           <p className="vr-scene-desc">{props.eventDescription}</p>
+          {props.provenance && (
+            <p className="vr-scene-provenance">{props.provenance}</p>
+          )}
 
           <dl className="vr-scene-facts">
             <div><dt>VR 재현</dt><dd>{Math.round(props.seconds)}초</dd></div>

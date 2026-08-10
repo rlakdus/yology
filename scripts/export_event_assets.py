@@ -168,6 +168,30 @@ def read_chats(event_dir: Path) -> list[str]:
     return lines
 
 
+def export_panorama(metadata: dict, event_dir: Path, target_dir: Path) -> dict | None:
+    """Copy an optional equirectangular environment and preserve its provenance."""
+    entry = metadata.get("panorama")
+    if not isinstance(entry, dict) or not entry.get("file"):
+        return None
+
+    source = event_dir / entry["file"]
+    if not is_usable(source):
+        print(f"  ! 파노라마를 찾을 수 없어 제외: {entry['file']}")
+        return None
+
+    relative = source.relative_to(event_dir)
+    destination = target_dir / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+    return {
+        "src": relative.as_posix(),
+        "generated": bool(entry.get("generated", False)),
+        "mode": str(entry.get("mode", "scenario_hypothesis")),
+        "anchor_yaw_deg": float(entry.get("anchor_yaw_deg", 0)),
+        "source_note": str(entry.get("source_note", "")),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--persona", required=True, help="페르소나 식별자 (예: caregiver)")
@@ -194,6 +218,7 @@ def main():
 
     print(f"{event_dir} -> {target_dir}")
     media = build_media(metadata, event_dir, target_dir)
+    panorama = export_panorama(metadata, event_dir, target_dir)
 
     start = parse_time(metadata.get("start_time"))
     end = parse_time(metadata.get("end_time"))
@@ -210,6 +235,7 @@ def main():
         "start_time": metadata.get("start_time"),
         "end_time": metadata.get("end_time"),
         "duration_min": duration_min,
+        "panorama": panorama,
         "media": media,
         "chats": read_chats(event_dir),
         "sensor": json.loads(sensor_path.read_text(encoding="utf-8")) if sensor_path.exists() else {},
@@ -222,6 +248,8 @@ def main():
 
     # 이번에 쓰지 않은 지난 산출물만 걷어낸다. 잠겨 있으면 경고만 남기고 넘어간다.
     written = {output}
+    if panorama:
+        written.add(target_dir / panorama["src"])
     for entry in media:
         written.add(target_dir / entry["src"])
         for sidecar_path in (entry["depth"], entry["fill"]):

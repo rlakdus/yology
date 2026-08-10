@@ -90,6 +90,14 @@
   line-height: 1.5;
 }
 
+.vr-scene-provenance {
+  max-width: 34rem;
+  margin: 0.55rem auto 0;
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
 .vr-scene-facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

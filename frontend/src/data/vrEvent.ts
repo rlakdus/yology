@@ -21,6 +21,13 @@ export type VrEvent = {
   start_time: string | null;
   end_time: string | null;
   duration_min: number;
+  panorama: {
+    src: string;
+    generated: boolean;
+    mode: "recorded_anchor" | "scenario_hypothesis";
+    anchor_yaw_deg: number;
+    source_note: string;
+  } | null;
   media: VrMedia[];
   chats: string[];
   sensor: {
@@ -65,10 +72,10 @@ export const PLAYBACK = {
 /**
  * 둘러볼 수 있는 범위.
  *
- * 사진 한 장이 덮을 수 있는 각도에는 한계가 있어, 넓힐수록 사진 바깥의 흐린 여백이
- * 시야에 들어온다. 여기서 더 넓히려면 사진 바깥을 생성해 채우는 수밖에 없다.
+ * 파노라마 이벤트는 수평 회전을 완전히 열고, 상하 극점의 불안정을 피하기 위해
+ * pitch만 85°로 제한한다. 파노라마가 없는 이벤트도 기존 배경 셸 덕분에 안전하다.
  */
-export const LOOK = { yawDeg: 45, pitchDeg: 26 };
+export const LOOK = { yawDeg: 180, pitchDeg: 85 };
 
 /**
  * 카메라 미세 이동. 단위는 미터.
@@ -78,7 +85,7 @@ export const LOOK = { yawDeg: 45, pitchDeg: 26 };
  * 화면은 평면으로 보인다. 어지러우면 drift부터 낮춘다.
  */
 export const MOTION = {
-  drift: 0.02,
+  drift: 0.055,
   swayYaw: 0.035,
   swayPitch: 0.02,
   handheldPosition: 0.004,
@@ -226,6 +233,9 @@ export const useVrEvent = (persona?: string, eventId?: string) => {
         // depth를 빠뜨리면 SPA 폴백이 index.html을 돌려주고 텍스처 로더가 예외를 던진다.
         setEvent({
           ...payload,
+          panorama: payload.panorama
+            ? { ...payload.panorama, src: `${base}/${payload.panorama.src}` }
+            : null,
           media: payload.media.map((entry) => ({
             ...entry,
             src: `${base}/${entry.src}`,
