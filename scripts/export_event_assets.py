@@ -214,6 +214,8 @@ def main():
         "chats": read_chats(event_dir),
         "sensor": json.loads(sensor_path.read_text(encoding="utf-8")) if sensor_path.exists() else {},
     }
+    if metadata.get("experience"):
+        payload["experience"] = metadata["experience"]
 
     output = target_dir / "vr-event.json"
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

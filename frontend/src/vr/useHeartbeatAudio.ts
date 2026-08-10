@@ -4,7 +4,7 @@ interface HeartbeatOptions {
   /** 매 박동 직전에 호출되어 그 순간의 BPM을 알려준다. */
   getBpm: () => number;
   /** 박동이 울린 시점. vignette·패널 pulse가 소리와 붙도록 쓰인다. */
-  onBeat?: () => void;
+  onBeat?: (bpm: number) => void;
 }
 
 type Engine = {
@@ -13,7 +13,7 @@ type Engine = {
   running: boolean;
   timer: number | null;
   getBpm: () => number;
-  onBeat?: () => void;
+  onBeat?: (bpm: number) => void;
 };
 
 const clamp = (value: number, low: number, high: number) =>
@@ -62,7 +62,7 @@ const runBeat = (engine: Engine) => {
   thump(engine.context, at, 58, 0.9, 0.15, engine.output);
   thump(engine.context, at + Math.min(0.28 * interval, 0.3), 44, 0.5, 0.12, engine.output);
 
-  engine.onBeat?.();
+  engine.onBeat?.(bpm);
   engine.timer = window.setTimeout(() => runBeat(engine), interval * 1000);
 };
 

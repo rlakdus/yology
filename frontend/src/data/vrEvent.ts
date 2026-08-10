@@ -28,18 +28,38 @@ export type VrEvent = {
     eda?: number[];
     temperature?: number[];
   };
+  experience?: {
+    heartbeat?: {
+      mode?: "recorded-relative" | "recorded-absolute";
+      /** 원본 사건의 안정 구간에서 계산한 기준 심박. */
+      source_baseline_bpm?: number;
+      gain?: number;
+      /** 기준 박동에 익숙해지는 시간. prelude_seconds는 구형 매니페스트 호환용이다. */
+      adaptation_seconds?: number;
+      prelude_seconds?: number;
+      transition_seconds?: number;
+      cooldown_seconds?: number;
+    };
+    breathing?: {
+      /** 후보 기능 플래그. false면 오디오 엔진과 UI를 모두 시작하지 않는다. */
+      enabled?: boolean;
+      /** 합성 호흡 분위기의 전체 강도 (0~1). */
+      gain?: number;
+    };
+  };
 };
 
 /**
  * 재생 길이.
  *
- * 사건의 실제 길이는 재현 길이에 반영하지 않는다. 배속 개념도 두지 않는다.
- * 모든 재현은 같은 길이로 흐르고, 센서 곡선이 그 위에 균등하게 펼쳐진다.
+ * 사건 전체의 실제 길이를 재생하는 대신 핵심 순간을 짧게 재구성한다.
+ * 타임스탬프가 없는 센서 배열은 이 구간에 균등 배치되므로 원속도 기록이 아니라
+ * 상승→정점→완화의 상대 흐름을 표현하는 극적 보간이다.
  * 영상만은 압축할 수 없으므로 영상이 더 길면 거기에 맞춰 늘어난다.
  */
 export const PLAYBACK = {
-  seconds: 90,
-  hardMaxSeconds: 180,
+  seconds: 40,
+  hardMaxSeconds: 90,
 };
 
 /**
