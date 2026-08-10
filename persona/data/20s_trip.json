@@ -1,0 +1,19 @@
+{
+  "age_group": "20대",
+  "situation": "친구들과 여행",
+  "is_fabricated": false,
+  "source": "student(김하은)",
+  "start": "2026-07-25T20:53:54+09:00",
+  "end": "2026-07-25T20:56:15+09:00",
+  "duration_min": 2.4,
+  "peak_hr": 141.0,
+  "expected_hr": 103.8,
+  "excess_bpm": 37.2,
+  "steps_5m": 162,
+  "hrv_ms": null,
+  "hrr_slope": 14.0,
+  "arousal": "위상성",
+  "peak_z": 2.27,
+  "score": 3.27,
+  "evidence": "기대104(기준선92+활동+12) 대비 실제141 → 초과 +37bpm (z=2.3); 직전5분 걸음 162/5분; 급발현 +16bpm; 위상성(빠른 회복 14.0bpm/분)"
+}

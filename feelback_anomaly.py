@@ -161,22 +161,54 @@ def extract_features(df: pd.DataFrame) -> pd.DataFrame:
 # STEP 2. Z-score 1차 필터
 # ══════════════════════════════════════════
 
+def rolling_zscore(series: pd.Series, window: int = 60, floor: float = 1.0) -> pd.Series:
+    """전후 window분 컨텍스트 기준 z-score. 컨텍스트가 거의 안 변하는
+    구간(std≈0)에서 z가 폭발하지 않도록 std 하한(floor)을 둔다."""
+    roll = series.rolling(window, center=True, min_periods=5)
+    ctx_mean = roll.mean()
+    ctx_std = roll.std().clip(lower=floor)
+    return (series - ctx_mean) / ctx_std
+
+
 def zscore_filter(df: pd.DataFrame, threshold: float):
     """
-    전후 60분 컨텍스트 기준 z-score 계산
-    threshold 이상인 행만 후보로 통과
+    bpm / spo2 / resp_rate 각각 자기 컨텍스트 기준 z-score를 계산하고,
+    "셋 중 하나라도" 기준을 넘으면 후보로 통과시킨다 (기존엔 bpm만 봤음).
+    방향은 신호마다 임상적으로 의미 있는 쪽만 본다:
+      bpm       급등만  (z >  threshold)
+      spo2      급락만  (z < -threshold)  — 낮은 게 문제지 높은 건 이상 아님
+      resp_rate 급등/급감 둘 다 (|z| > threshold)
+    데이터가 아예 없는 신호(예: 삼성엔 spo2 없음)는 rolling이 전부 NaN이
+    되고, NaN 비교는 항상 False라 자연스럽게 게이트에서 빠진다.
     """
     df = df.copy()
 
-    roll         = df["bpm"].rolling(60, center=True, min_periods=5)
-    ctx_mean     = roll.mean()
-    ctx_std      = roll.std().clip(lower=1)
-    df["z_score"] = (df["bpm"] - ctx_mean) / ctx_std
+    df["bpm_z"]  = rolling_zscore(df["bpm"])
+    df["spo2_z"] = rolling_zscore(df["spo2"])
+    df["resp_z"] = rolling_zscore(df["resp_rate"])
 
-    candidates   = df[df["z_score"] > threshold].copy()
+    trig_bpm  = df["bpm_z"]  > threshold
+    trig_spo2 = df["spo2_z"] < -threshold
+    trig_resp = df["resp_z"].abs() > threshold
+
+    def reason_label(b: bool, s: bool, r: bool) -> str | None:
+        parts = [name for name, hit in (("bpm", b), ("spo2", s), ("resp", r)) if hit]
+        return "+".join(parts) if parts else None
+
+    df["trigger_reason"] = [
+        reason_label(b, s, r) for b, s, r in zip(trig_bpm, trig_spo2, trig_resp)
+    ]
+
+    # build_events 등 기존 코드와의 호환용 — "가장 튄" 신호의 z를 대표값으로.
+    df["z_score"] = df[["bpm_z", "spo2_z", "resp_z"]].abs().max(axis=1, skipna=True)
+
+    gate = trig_bpm | trig_spo2 | trig_resp
+    candidates = df[gate].copy()
 
     print(f"\n[Z-score 필터]")
     print(f"  전체 {len(df)}행 → 후보 {len(candidates)}행")
+    if len(candidates):
+        print(f"  트리거 내역: {candidates['trigger_reason'].value_counts().to_dict()}")
     print(f"  (threshold={threshold})")
 
     return candidates, df
@@ -261,6 +293,8 @@ def build_events(anomalies: pd.DataFrame,
         duration   = len(group)
         gradient   = group["bpm_gradient"].mean()
         if_score   = group["if_score"].min()
+        reasons    = group["trigger_reason"].dropna()
+        trigger    = reasons.mode().iloc[0] if not reasons.empty else "bpm"
 
         # 회복 시간
         after      = full_df[full_df["timestamp"] > end].head(30)
@@ -287,6 +321,7 @@ def build_events(anomalies: pd.DataFrame,
             "gradient":     round(float(gradient), 2),
             "recovery_min": round(float(recovery), 1),
             "pattern":      pattern,
+            "trigger":      trigger,
             "if_score":     round(float(if_score), 3),
         })
 
@@ -310,6 +345,7 @@ def print_results(person: str, events: list[dict]):
         print(f"  지속:     {e['duration_min']}분")
         print(f"  회복:     {e['recovery_min']:.0f}분")
         print(f"  패턴:     {e['pattern']}")
+        print(f"  트리거:   {e['trigger']}")
         print(f"  IF점수:   {e['if_score']:.3f}")
 
 

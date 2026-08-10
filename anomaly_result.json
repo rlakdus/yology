@@ -9,6 +9,7 @@
       "gradient": 3.1,
       "recovery_min": 14.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.623
     },
     {
@@ -20,6 +21,7 @@
       "gradient": 1.13,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.67
     },
     {
@@ -31,6 +33,7 @@
       "gradient": 1.3,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.601
     },
     {
@@ -42,6 +45,7 @@
       "gradient": 3.8,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.744
     },
     {
@@ -53,6 +57,7 @@
       "gradient": 1.11,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.775
     },
     {
@@ -64,6 +69,7 @@
       "gradient": 3.75,
       "recovery_min": 3.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.664
     },
     {
@@ -75,6 +81,7 @@
       "gradient": 1.3,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.671
     },
     {
@@ -86,6 +93,7 @@
       "gradient": 1.11,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.691
     },
     {
@@ -97,6 +105,7 @@
       "gradient": 4.86,
       "recovery_min": 24.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.662
     },
     {
@@ -108,6 +117,7 @@
       "gradient": 4.11,
       "recovery_min": 6.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.689
     },
     {
@@ -119,6 +129,7 @@
       "gradient": 1.53,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.626
     },
     {
@@ -130,6 +141,7 @@
       "gradient": 1.88,
       "recovery_min": 17.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.713
     },
     {
@@ -141,6 +153,7 @@
       "gradient": 3.96,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.717
     },
     {
@@ -152,6 +165,7 @@
       "gradient": 2.45,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.593
     },
     {
@@ -163,6 +177,7 @@
       "gradient": 0.65,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.729
     },
     {
@@ -174,6 +189,7 @@
       "gradient": 1.37,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.625
     },
     {
@@ -185,6 +201,7 @@
       "gradient": 2.75,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.596
     },
     {
@@ -196,6 +213,7 @@
       "gradient": 0.38,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.704
     },
     {
@@ -207,6 +225,7 @@
       "gradient": 3.45,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.708
     },
     {
@@ -218,6 +237,7 @@
       "gradient": 4.05,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.749
     },
     {
@@ -229,6 +249,7 @@
       "gradient": 2.4,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.574
     },
     {
@@ -240,6 +261,7 @@
       "gradient": 2.01,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.695
     },
     {
@@ -251,6 +273,7 @@
       "gradient": 0.65,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.723
     },
     {
@@ -262,6 +285,7 @@
       "gradient": 0.08,
       "recovery_min": 28.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.599
     },
     {
@@ -273,6 +297,7 @@
       "gradient": 5.07,
       "recovery_min": 6.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.679
     },
     {
@@ -284,6 +309,7 @@
       "gradient": 0.9,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.573
     },
     {
@@ -295,6 +321,7 @@
       "gradient": 1.3,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.644
     },
     {
@@ -306,6 +333,7 @@
       "gradient": 4.22,
       "recovery_min": 9.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.664
     },
     {
@@ -317,6 +345,7 @@
       "gradient": 7.49,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.69
     },
     {
@@ -328,6 +357,7 @@
       "gradient": 2.05,
       "recovery_min": 20.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.66
     },
     {
@@ -339,6 +369,7 @@
       "gradient": 1.11,
       "recovery_min": 15.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.69
     },
     {
@@ -350,6 +381,7 @@
       "gradient": 0.58,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.695
     },
     {
@@ -361,6 +393,7 @@
       "gradient": 0.13,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.608
     },
     {
@@ -372,6 +405,7 @@
       "gradient": 0.51,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.633
     },
     {
@@ -383,6 +417,7 @@
       "gradient": 2.1,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.591
     },
     {
@@ -394,6 +429,7 @@
       "gradient": 9.23,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.718
     },
     {
@@ -405,6 +441,7 @@
       "gradient": 2.5,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.606
     },
     {
@@ -416,6 +453,7 @@
       "gradient": 1.1,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.685
     },
     {
@@ -427,6 +465,7 @@
       "gradient": 0.83,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.622
     },
     {
@@ -438,6 +477,7 @@
       "gradient": 1.79,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.62
     },
     {
@@ -449,6 +489,7 @@
       "gradient": 0.86,
       "recovery_min": 14.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.774
     },
     {
@@ -460,6 +501,7 @@
       "gradient": 1.1,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.655
     },
     {
@@ -471,6 +513,7 @@
       "gradient": 3.13,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.684
     },
     {
@@ -482,6 +525,7 @@
       "gradient": 0.53,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.735
     },
     {
@@ -493,6 +537,7 @@
       "gradient": 1.28,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.603
     },
     {
@@ -504,6 +549,7 @@
       "gradient": 0.73,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.595
     },
     {
@@ -515,6 +561,7 @@
       "gradient": 3.0,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.603
     },
     {
@@ -526,6 +573,7 @@
       "gradient": 1.6,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.564
     },
     {
@@ -537,6 +585,7 @@
       "gradient": 1.74,
       "recovery_min": 20.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.701
     },
     {
@@ -548,6 +597,7 @@
       "gradient": 4.03,
       "recovery_min": 18.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.676
     },
     {
@@ -559,6 +609,7 @@
       "gradient": 2.22,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.57
     },
     {
@@ -570,6 +621,7 @@
       "gradient": 0.54,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.69
     },
     {
@@ -581,6 +633,7 @@
       "gradient": 1.86,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.63
     },
     {
@@ -592,6 +645,7 @@
       "gradient": 2.4,
       "recovery_min": 10.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.602
     },
     {
@@ -603,6 +657,7 @@
       "gradient": 3.53,
       "recovery_min": 18.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.655
     },
     {
@@ -614,6 +669,7 @@
       "gradient": 2.5,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.578
     },
     {
@@ -625,6 +681,7 @@
       "gradient": 0.9,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.629
     },
     {
@@ -636,6 +693,7 @@
       "gradient": 4.89,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.643
     },
     {
@@ -647,6 +705,7 @@
       "gradient": 1.08,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.623
     },
     {
@@ -658,6 +717,7 @@
       "gradient": 6.1,
       "recovery_min": 20.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -669,6 +729,7 @@
       "gradient": 2.86,
       "recovery_min": 2.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.668
     },
     {
@@ -680,6 +741,7 @@
       "gradient": 2.67,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.665
     },
     {
@@ -691,6 +753,7 @@
       "gradient": 1.97,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.773
     },
     {
@@ -702,6 +765,7 @@
       "gradient": 1.43,
       "recovery_min": 29.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.619
     },
     {
@@ -713,6 +777,7 @@
       "gradient": 1.47,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.598
     },
     {
@@ -724,6 +789,7 @@
       "gradient": 2.4,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.578
     },
     {
@@ -735,6 +801,7 @@
       "gradient": 2.86,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.69
     },
     {
@@ -746,6 +813,7 @@
       "gradient": 0.96,
       "recovery_min": 16.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.758
     },
     {
@@ -757,6 +825,7 @@
       "gradient": 0.44,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.573
     },
     {
@@ -768,6 +837,7 @@
       "gradient": 2.45,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.595
     },
     {
@@ -779,6 +849,7 @@
       "gradient": 2.2,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     },
     {
@@ -790,6 +861,7 @@
       "gradient": 2.3,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.572
     },
     {
@@ -801,6 +873,7 @@
       "gradient": 1.7,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.567
     },
     {
@@ -812,6 +885,7 @@
       "gradient": 0.27,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.619
     },
     {
@@ -823,6 +897,7 @@
       "gradient": 2.4,
       "recovery_min": 15.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.577
     },
     {
@@ -834,6 +909,7 @@
       "gradient": 2.5,
       "recovery_min": 10.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.595
     },
     {
@@ -845,6 +921,7 @@
       "gradient": 1.34,
       "recovery_min": 24.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -856,6 +933,7 @@
       "gradient": 1.31,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.6
     },
     {
@@ -867,6 +945,7 @@
       "gradient": 1.5,
       "recovery_min": 13.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.588
     },
     {
@@ -878,6 +957,7 @@
       "gradient": 1.72,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.626
     },
     {
@@ -889,6 +969,7 @@
       "gradient": 4.91,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.695
     },
     {
@@ -900,6 +981,7 @@
       "gradient": 3.94,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.66
     },
     {
@@ -911,6 +993,7 @@
       "gradient": 0.7,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.696
     },
     {
@@ -922,6 +1005,7 @@
       "gradient": 2.61,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.722
     },
     {
@@ -933,6 +1017,7 @@
       "gradient": 1.21,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.654
     },
     {
@@ -944,6 +1029,7 @@
       "gradient": 0.87,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.643
     },
     {
@@ -955,6 +1041,7 @@
       "gradient": 1.1,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.678
     },
     {
@@ -966,6 +1053,7 @@
       "gradient": 2.4,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.573
     },
     {
@@ -977,6 +1065,7 @@
       "gradient": 2.4,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.59
     },
     {
@@ -988,6 +1077,7 @@
       "gradient": 3.77,
       "recovery_min": 14.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.642
     },
     {
@@ -999,6 +1089,7 @@
       "gradient": 1.32,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.617
     },
     {
@@ -1010,6 +1101,7 @@
       "gradient": 2.31,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.664
     },
     {
@@ -1021,6 +1113,7 @@
       "gradient": 1.62,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.701
     },
     {
@@ -1032,6 +1125,7 @@
       "gradient": 1.06,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.669
     },
     {
@@ -1043,6 +1137,7 @@
       "gradient": 2.1,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.573
     },
     {
@@ -1054,6 +1149,7 @@
       "gradient": 2.7,
       "recovery_min": 10.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.609
     },
     {
@@ -1065,6 +1161,7 @@
       "gradient": 2.1,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.594
     },
     {
@@ -1076,6 +1173,7 @@
       "gradient": 1.53,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.62
     },
     {
@@ -1087,6 +1185,7 @@
       "gradient": 5.42,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.772
     },
     {
@@ -1098,6 +1197,7 @@
       "gradient": 4.78,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -1109,6 +1209,7 @@
       "gradient": 2.0,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.58
     },
     {
@@ -1120,6 +1221,7 @@
       "gradient": 5.7,
       "recovery_min": 5.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.651
     },
     {
@@ -1131,6 +1233,7 @@
       "gradient": 2.2,
       "recovery_min": 16.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.587
     },
     {
@@ -1142,6 +1245,7 @@
       "gradient": 1.38,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.63
     },
     {
@@ -1153,6 +1257,7 @@
       "gradient": 0.6,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.724
     },
     {
@@ -1164,6 +1269,7 @@
       "gradient": 3.46,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.692
     },
     {
@@ -1175,6 +1281,7 @@
       "gradient": 2.01,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.654
     },
     {
@@ -1186,6 +1293,7 @@
       "gradient": 4.18,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.662
     },
     {
@@ -1197,6 +1305,7 @@
       "gradient": 3.21,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.723
     },
     {
@@ -1208,6 +1317,7 @@
       "gradient": 2.79,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.699
     },
     {
@@ -1219,6 +1329,7 @@
       "gradient": 5.01,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.644
     },
     {
@@ -1230,6 +1341,7 @@
       "gradient": 3.42,
       "recovery_min": 10.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.687
     },
     {
@@ -1241,6 +1353,7 @@
       "gradient": 6.22,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.668
     },
     {
@@ -1252,6 +1365,7 @@
       "gradient": 2.95,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.693
     },
     {
@@ -1263,6 +1377,7 @@
       "gradient": 5.2,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.676
     },
     {
@@ -1274,6 +1389,7 @@
       "gradient": 1.73,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.649
     },
     {
@@ -1285,6 +1401,7 @@
       "gradient": 1.54,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.62
     },
     {
@@ -1296,6 +1413,7 @@
       "gradient": 1.79,
       "recovery_min": 21.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.632
     },
     {
@@ -1307,6 +1425,7 @@
       "gradient": 2.4,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.588
     },
     {
@@ -1318,6 +1437,7 @@
       "gradient": 0.42,
       "recovery_min": 13.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.704
     },
     {
@@ -1329,6 +1449,7 @@
       "gradient": 2.14,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.658
     },
     {
@@ -1340,6 +1461,7 @@
       "gradient": 2.1,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     },
     {
@@ -1351,6 +1473,7 @@
       "gradient": 1.13,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.714
     },
     {
@@ -1362,6 +1485,7 @@
       "gradient": 0.94,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.737
     },
     {
@@ -1373,6 +1497,7 @@
       "gradient": 0.57,
       "recovery_min": 14.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.696
     },
     {
@@ -1384,6 +1509,7 @@
       "gradient": 2.4,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     },
     {
@@ -1395,6 +1521,7 @@
       "gradient": 0.15,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.588
     },
     {
@@ -1406,6 +1533,7 @@
       "gradient": 0.87,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.637
     },
     {
@@ -1417,6 +1545,7 @@
       "gradient": 2.18,
       "recovery_min": 19.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.583
     },
     {
@@ -1428,6 +1557,7 @@
       "gradient": 2.55,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     },
     {
@@ -1439,6 +1569,7 @@
       "gradient": 1.62,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.613
     },
     {
@@ -1450,6 +1581,7 @@
       "gradient": 2.6,
       "recovery_min": 20.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.619
     },
     {
@@ -1461,6 +1593,7 @@
       "gradient": 2.3,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.575
     },
     {
@@ -1472,6 +1605,7 @@
       "gradient": 1.03,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.633
     },
     {
@@ -1483,6 +1617,7 @@
       "gradient": 1.16,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.627
     },
     {
@@ -1494,6 +1629,7 @@
       "gradient": 5.31,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.695
     },
     {
@@ -1505,6 +1641,7 @@
       "gradient": 5.69,
       "recovery_min": 18.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.656
     },
     {
@@ -1516,6 +1653,7 @@
       "gradient": 2.18,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.568
     },
     {
@@ -1527,6 +1665,7 @@
       "gradient": 2.0,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.593
     },
     {
@@ -1538,6 +1677,7 @@
       "gradient": 1.04,
       "recovery_min": 48.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.667
     },
     {
@@ -1549,6 +1689,7 @@
       "gradient": 4.23,
       "recovery_min": 17.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.656
     },
     {
@@ -1560,6 +1701,7 @@
       "gradient": 3.31,
       "recovery_min": 16.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.668
     },
     {
@@ -1571,6 +1713,7 @@
       "gradient": 1.92,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.694
     },
     {
@@ -1582,6 +1725,7 @@
       "gradient": 2.0,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.636
     },
     {
@@ -1593,6 +1737,7 @@
       "gradient": 6.21,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.679
     },
     {
@@ -1604,6 +1749,7 @@
       "gradient": 3.66,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.724
     },
     {
@@ -1615,6 +1761,7 @@
       "gradient": 0.26,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.67
     },
     {
@@ -1626,6 +1773,7 @@
       "gradient": 2.36,
       "recovery_min": 14.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.596
     },
     {
@@ -1637,6 +1785,7 @@
       "gradient": 0.82,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.759
     },
     {
@@ -1648,6 +1797,7 @@
       "gradient": 1.28,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.592
     },
     {
@@ -1659,6 +1809,7 @@
       "gradient": 10.75,
       "recovery_min": 13.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.691
     },
     {
@@ -1670,6 +1821,7 @@
       "gradient": 1.33,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.663
     },
     {
@@ -1681,6 +1833,7 @@
       "gradient": 4.01,
       "recovery_min": 7.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.674
     },
     {
@@ -1692,6 +1845,7 @@
       "gradient": 1.71,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.634
     },
     {
@@ -1703,6 +1857,7 @@
       "gradient": 9.32,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.782
     },
     {
@@ -1714,6 +1869,7 @@
       "gradient": 1.17,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.691
     },
     {
@@ -1725,6 +1881,7 @@
       "gradient": 0.11,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.584
     },
     {
@@ -1736,6 +1893,7 @@
       "gradient": 0.33,
       "recovery_min": 11.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.64
     },
     {
@@ -1747,6 +1905,7 @@
       "gradient": 6.17,
       "recovery_min": 8.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.733
     },
     {
@@ -1758,6 +1917,7 @@
       "gradient": 0.77,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.615
     },
     {
@@ -1769,6 +1929,7 @@
       "gradient": 2.3,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.59
     },
     {
@@ -1780,6 +1941,7 @@
       "gradient": 0.06,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.703
     },
     {
@@ -1791,6 +1953,7 @@
       "gradient": 0.24,
       "recovery_min": 11.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -1802,6 +1965,7 @@
       "gradient": 1.54,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.645
     },
     {
@@ -1813,6 +1977,7 @@
       "gradient": 0.55,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.769
     },
     {
@@ -1824,6 +1989,7 @@
       "gradient": 6.79,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.733
     },
     {
@@ -1835,6 +2001,7 @@
       "gradient": 1.82,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.643
     },
     {
@@ -1846,6 +2013,7 @@
       "gradient": 1.87,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.626
     },
     {
@@ -1857,6 +2025,7 @@
       "gradient": 4.73,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.709
     },
     {
@@ -1868,6 +2037,7 @@
       "gradient": 6.26,
       "recovery_min": 17.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.779
     },
     {
@@ -1879,6 +2049,7 @@
       "gradient": 2.2,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.578
     },
     {
@@ -1890,6 +2061,7 @@
       "gradient": 3.23,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.706
     },
     {
@@ -1901,6 +2073,7 @@
       "gradient": 1.01,
       "recovery_min": 28.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.606
     },
     {
@@ -1912,6 +2085,7 @@
       "gradient": 1.02,
       "recovery_min": 16.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.7
     },
     {
@@ -1923,6 +2097,7 @@
       "gradient": 4.25,
       "recovery_min": 54.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.686
     },
     {
@@ -1934,6 +2109,7 @@
       "gradient": 2.2,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.691
     },
     {
@@ -1945,6 +2121,7 @@
       "gradient": 0.9,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.65
     },
     {
@@ -1956,6 +2133,7 @@
       "gradient": 2.91,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.665
     },
     {
@@ -1967,6 +2145,7 @@
       "gradient": 1.45,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.612
     },
     {
@@ -1978,6 +2157,7 @@
       "gradient": 2.5,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.585
     },
     {
@@ -1989,6 +2169,7 @@
       "gradient": 0.83,
       "recovery_min": 11.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.705
     },
     {
@@ -2000,6 +2181,7 @@
       "gradient": 1.14,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.609
     },
     {
@@ -2011,6 +2193,7 @@
       "gradient": 0.56,
       "recovery_min": 37.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.749
     },
     {
@@ -2022,6 +2205,7 @@
       "gradient": 5.83,
       "recovery_min": 15.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.788
     },
     {
@@ -2033,6 +2217,7 @@
       "gradient": 1.24,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.598
     },
     {
@@ -2044,6 +2229,7 @@
       "gradient": 1.0,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.627
     },
     {
@@ -2055,6 +2241,7 @@
       "gradient": 7.5,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.773
     },
     {
@@ -2066,6 +2253,7 @@
       "gradient": 1.6,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.577
     },
     {
@@ -2077,6 +2265,7 @@
       "gradient": 0.93,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.649
     },
     {
@@ -2088,6 +2277,7 @@
       "gradient": 3.27,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.674
     },
     {
@@ -2099,6 +2289,7 @@
       "gradient": 1.26,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.692
     },
     {
@@ -2110,6 +2301,7 @@
       "gradient": 1.55,
       "recovery_min": 21.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.628
     },
     {
@@ -2121,6 +2313,7 @@
       "gradient": 0.47,
       "recovery_min": 22.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.605
     },
     {
@@ -2132,6 +2325,7 @@
       "gradient": 2.18,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.566
     },
     {
@@ -2143,6 +2337,7 @@
       "gradient": 0.33,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.704
     },
     {
@@ -2154,6 +2349,7 @@
       "gradient": 0.57,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.741
     },
     {
@@ -2165,6 +2361,7 @@
       "gradient": 2.48,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.696
     },
     {
@@ -2176,6 +2373,7 @@
       "gradient": 0.53,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.681
     },
     {
@@ -2187,6 +2385,7 @@
       "gradient": 1.64,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.742
     },
     {
@@ -2198,6 +2397,7 @@
       "gradient": 2.2,
       "recovery_min": 14.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.581
     },
     {
@@ -2209,6 +2409,7 @@
       "gradient": 4.77,
       "recovery_min": 3.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.655
     },
     {
@@ -2220,6 +2421,7 @@
       "gradient": 0.69,
       "recovery_min": 12.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.696
     },
     {
@@ -2231,6 +2433,7 @@
       "gradient": 3.52,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.676
     },
     {
@@ -2242,6 +2445,7 @@
       "gradient": 0.79,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.583
     },
     {
@@ -2253,6 +2457,7 @@
       "gradient": 1.5,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.627
     },
     {
@@ -2264,6 +2469,7 @@
       "gradient": 1.26,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.592
     },
     {
@@ -2275,6 +2481,7 @@
       "gradient": 0.35,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.627
     },
     {
@@ -2286,6 +2493,7 @@
       "gradient": 1.1,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.671
     },
     {
@@ -2297,6 +2505,7 @@
       "gradient": 1.53,
       "recovery_min": 39.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.614
     },
     {
@@ -2308,6 +2517,7 @@
       "gradient": 1.7,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.562
     },
     {
@@ -2319,6 +2529,7 @@
       "gradient": 3.36,
       "recovery_min": 48.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.658
     },
     {
@@ -2330,6 +2541,7 @@
       "gradient": 1.7,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.563
     },
     {
@@ -2341,6 +2553,7 @@
       "gradient": 2.69,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.689
     },
     {
@@ -2352,6 +2565,7 @@
       "gradient": 0.8,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.663
     },
     {
@@ -2363,6 +2577,7 @@
       "gradient": 0.66,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.618
     },
     {
@@ -2374,6 +2589,7 @@
       "gradient": 0.83,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.645
     },
     {
@@ -2385,6 +2601,7 @@
       "gradient": 4.75,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.637
     },
     {
@@ -2396,6 +2613,7 @@
       "gradient": 0.61,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.721
     },
     {
@@ -2407,6 +2625,7 @@
       "gradient": 0.33,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.703
     },
     {
@@ -2418,6 +2637,7 @@
       "gradient": 1.56,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.618
     },
     {
@@ -2429,6 +2649,7 @@
       "gradient": 4.81,
       "recovery_min": 8.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.677
     },
     {
@@ -2440,6 +2661,7 @@
       "gradient": 1.12,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.739
     },
     {
@@ -2451,6 +2673,7 @@
       "gradient": 1.27,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.67
     },
     {
@@ -2462,6 +2685,7 @@
       "gradient": 1.0,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.769
     },
     {
@@ -2473,6 +2697,7 @@
       "gradient": 0.94,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.588
     },
     {
@@ -2484,6 +2709,7 @@
       "gradient": 0.49,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.654
     },
     {
@@ -2495,6 +2721,7 @@
       "gradient": 0.26,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.678
     },
     {
@@ -2506,6 +2733,7 @@
       "gradient": 2.08,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.698
     },
     {
@@ -2517,6 +2745,7 @@
       "gradient": 4.08,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.667
     },
     {
@@ -2528,6 +2757,7 @@
       "gradient": 1.84,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.681
     },
     {
@@ -2539,6 +2769,7 @@
       "gradient": 2.31,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -2550,6 +2781,7 @@
       "gradient": 1.72,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.681
     },
     {
@@ -2561,6 +2793,7 @@
       "gradient": 5.81,
       "recovery_min": 7.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.712
     },
     {
@@ -2572,6 +2805,7 @@
       "gradient": 2.58,
       "recovery_min": 17.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.585
     },
     {
@@ -2583,6 +2817,7 @@
       "gradient": 1.88,
       "recovery_min": 12.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.617
     },
     {
@@ -2594,6 +2829,7 @@
       "gradient": 1.23,
       "recovery_min": 19.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.62
     },
     {
@@ -2605,6 +2841,7 @@
       "gradient": -0.11,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.697
     },
     {
@@ -2616,6 +2853,7 @@
       "gradient": 0.65,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.731
     },
     {
@@ -2627,6 +2865,7 @@
       "gradient": 2.88,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.658
     },
     {
@@ -2638,6 +2877,7 @@
       "gradient": 5.33,
       "recovery_min": 11.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.651
     },
     {
@@ -2649,6 +2889,7 @@
       "gradient": 7.48,
       "recovery_min": 17.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.722
     },
     {
@@ -2660,6 +2901,7 @@
       "gradient": 2.7,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.681
     },
     {
@@ -2671,6 +2913,7 @@
       "gradient": 4.76,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.653
     },
     {
@@ -2682,6 +2925,7 @@
       "gradient": 7.08,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.765
     },
     {
@@ -2693,6 +2937,7 @@
       "gradient": 1.42,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.705
     },
     {
@@ -2704,6 +2949,7 @@
       "gradient": 2.07,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.667
     },
     {
@@ -2715,6 +2961,7 @@
       "gradient": 0.8,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.595
     },
     {
@@ -2726,6 +2973,7 @@
       "gradient": 2.6,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.598
     },
     {
@@ -2737,6 +2985,7 @@
       "gradient": 2.3,
       "recovery_min": 17.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.57
     },
     {
@@ -2748,6 +2997,7 @@
       "gradient": 3.63,
       "recovery_min": 13.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.675
     },
     {
@@ -2759,6 +3009,7 @@
       "gradient": 2.0,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.697
     },
     {
@@ -2770,6 +3021,7 @@
       "gradient": 3.16,
       "recovery_min": 2.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.71
     },
     {
@@ -2781,6 +3033,7 @@
       "gradient": 0.57,
       "recovery_min": 8.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.742
     },
     {
@@ -2792,6 +3045,7 @@
       "gradient": 0.27,
       "recovery_min": 18.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.714
     },
     {
@@ -2803,6 +3057,7 @@
       "gradient": 1.78,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.586
     },
     {
@@ -2814,6 +3069,7 @@
       "gradient": 0.85,
       "recovery_min": 15.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.768
     },
     {
@@ -2825,6 +3081,7 @@
       "gradient": 1.36,
       "recovery_min": 15.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.679
     },
     {
@@ -2836,6 +3093,7 @@
       "gradient": 6.98,
       "recovery_min": 7.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.667
     },
     {
@@ -2847,6 +3105,7 @@
       "gradient": 2.91,
       "recovery_min": 3.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.674
     },
     {
@@ -2858,6 +3117,7 @@
       "gradient": 2.36,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.574
     },
     {
@@ -2869,6 +3129,7 @@
       "gradient": 1.36,
       "recovery_min": 17.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.719
     },
     {
@@ -2880,6 +3141,7 @@
       "gradient": 2.1,
       "recovery_min": 21.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.575
     },
     {
@@ -2891,6 +3153,7 @@
       "gradient": 1.39,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.769
     },
     {
@@ -2902,6 +3165,7 @@
       "gradient": 0.56,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.618
     },
     {
@@ -2913,6 +3177,7 @@
       "gradient": 0.62,
       "recovery_min": 15.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.636
     },
     {
@@ -2924,6 +3189,7 @@
       "gradient": 5.97,
       "recovery_min": 57.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.721
     },
     {
@@ -2935,6 +3201,7 @@
       "gradient": 1.6,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.566
     },
     {
@@ -2946,6 +3213,7 @@
       "gradient": 1.53,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.746
     },
     {
@@ -2957,6 +3225,7 @@
       "gradient": 2.0,
       "recovery_min": 17.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.577
     },
     {
@@ -2968,6 +3237,7 @@
       "gradient": 2.77,
       "recovery_min": 16.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.608
     },
     {
@@ -2979,6 +3249,7 @@
       "gradient": 1.13,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.614
     },
     {
@@ -2990,6 +3261,7 @@
       "gradient": 8.19,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.744
     },
     {
@@ -3001,6 +3273,7 @@
       "gradient": 1.66,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.645
     },
     {
@@ -3012,6 +3285,7 @@
       "gradient": 2.56,
       "recovery_min": 20.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.587
     },
     {
@@ -3023,6 +3297,7 @@
       "gradient": 0.7,
       "recovery_min": 16.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.776
     },
     {
@@ -3034,6 +3309,7 @@
       "gradient": 1.83,
       "recovery_min": 9.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.661
     },
     {
@@ -3045,6 +3321,7 @@
       "gradient": 0.41,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.626
     },
     {
@@ -3056,6 +3333,7 @@
       "gradient": 5.34,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.65
     },
     {
@@ -3067,6 +3345,7 @@
       "gradient": 4.09,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.673
     },
     {
@@ -3078,6 +3357,7 @@
       "gradient": 2.77,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.599
     },
     {
@@ -3089,6 +3369,7 @@
       "gradient": 1.42,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.609
     },
     {
@@ -3100,6 +3381,7 @@
       "gradient": 1.28,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.618
     },
     {
@@ -3111,6 +3393,7 @@
       "gradient": 3.64,
       "recovery_min": 13.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.704
     },
     {
@@ -3122,6 +3405,7 @@
       "gradient": 1.25,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.664
     },
     {
@@ -3133,6 +3417,7 @@
       "gradient": 2.56,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.577
     },
     {
@@ -3144,6 +3429,7 @@
       "gradient": 2.6,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.578
     },
     {
@@ -3155,6 +3441,7 @@
       "gradient": 1.5,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.769
     },
     {
@@ -3166,6 +3453,7 @@
       "gradient": 1.82,
       "recovery_min": 23.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.649
     },
     {
@@ -3177,6 +3465,7 @@
       "gradient": 3.0,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.609
     },
     {
@@ -3188,6 +3477,7 @@
       "gradient": -1.18,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.704
     },
     {
@@ -3199,6 +3489,7 @@
       "gradient": 2.5,
       "recovery_min": 10.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.583
     },
     {
@@ -3210,6 +3501,7 @@
       "gradient": 0.44,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.628
     },
     {
@@ -3221,6 +3513,7 @@
       "gradient": 1.7,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.687
     },
     {
@@ -3232,6 +3525,7 @@
       "gradient": 2.64,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     },
     {
@@ -3243,6 +3537,7 @@
       "gradient": 2.7,
       "recovery_min": 2.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.583
     },
     {
@@ -3254,6 +3549,7 @@
       "gradient": 0.21,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.649
     },
     {
@@ -3265,6 +3561,7 @@
       "gradient": 5.59,
       "recovery_min": 23.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.703
     },
     {
@@ -3276,6 +3573,7 @@
       "gradient": 2.2,
       "recovery_min": 14.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.571
     },
     {
@@ -3287,6 +3585,7 @@
       "gradient": 2.45,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.57
     },
     {
@@ -3298,6 +3597,7 @@
       "gradient": 2.36,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.591
     },
     {
@@ -3309,6 +3609,7 @@
       "gradient": 2.7,
       "recovery_min": 7.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.593
     },
     {
@@ -3320,6 +3621,7 @@
       "gradient": 2.24,
       "recovery_min": 2.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.671
     },
     {
@@ -3331,6 +3633,7 @@
       "gradient": 5.97,
       "recovery_min": 26.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.741
     },
     {
@@ -3342,6 +3645,7 @@
       "gradient": 5.34,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.691
     },
     {
@@ -3353,6 +3657,7 @@
       "gradient": 4.26,
       "recovery_min": 2.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.689
     },
     {
@@ -3364,6 +3669,7 @@
       "gradient": 0.19,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.669
     },
     {
@@ -3375,6 +3681,7 @@
       "gradient": 7.27,
       "recovery_min": 14.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.786
     },
     {
@@ -3386,6 +3693,7 @@
       "gradient": 1.96,
       "recovery_min": 30.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.664
     },
     {
@@ -3397,6 +3705,7 @@
       "gradient": 14.31,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.73
     },
     {
@@ -3408,6 +3717,7 @@
       "gradient": 2.7,
       "recovery_min": 20.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.592
     },
     {
@@ -3419,6 +3729,7 @@
       "gradient": 3.13,
       "recovery_min": 26.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.699
     },
     {
@@ -3430,6 +3741,7 @@
       "gradient": 2.5,
       "recovery_min": 18.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.584
     },
     {
@@ -3441,6 +3753,7 @@
       "gradient": 3.2,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.777
     },
     {
@@ -3452,6 +3765,7 @@
       "gradient": 4.78,
       "recovery_min": 21.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.636
     },
     {
@@ -3463,6 +3777,7 @@
       "gradient": 8.83,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.793
     },
     {
@@ -3474,6 +3789,7 @@
       "gradient": 2.76,
       "recovery_min": 4.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.669
     },
     {
@@ -3485,6 +3801,7 @@
       "gradient": 2.44,
       "recovery_min": 5.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.675
     }
   ],
@@ -3498,6 +3815,7 @@
       "gradient": 13.42,
       "recovery_min": 26.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.689
     },
     {
@@ -3509,6 +3827,7 @@
       "gradient": 1.15,
       "recovery_min": 10.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.597
     }
   ],
@@ -3522,6 +3841,7 @@
       "gradient": 3.64,
       "recovery_min": 6.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.627
     },
     {
@@ -3533,6 +3853,7 @@
       "gradient": 7.59,
       "recovery_min": 8.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.648
     },
     {
@@ -3544,6 +3865,7 @@
       "gradient": 6.6,
       "recovery_min": 5.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.699
     },
     {
@@ -3555,6 +3877,7 @@
       "gradient": 7.0,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.71
     },
     {
@@ -3566,6 +3889,7 @@
       "gradient": 5.36,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.661
     },
     {
@@ -3577,6 +3901,7 @@
       "gradient": -0.17,
       "recovery_min": 2.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.618
     },
     {
@@ -3588,6 +3913,7 @@
       "gradient": 2.94,
       "recovery_min": 6.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.624
     },
     {
@@ -3599,6 +3925,7 @@
       "gradient": 6.23,
       "recovery_min": 1.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.635
     },
     {
@@ -3610,7 +3937,32 @@
       "gradient": 0.17,
       "recovery_min": 2.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.58
+    },
+    {
+      "start": "2026-07-07 00:07",
+      "end": "00:12",
+      "peak_bpm": 69.0,
+      "peak_zscore": 3.83,
+      "duration_min": 6,
+      "gradient": -1.08,
+      "recovery_min": 1.0,
+      "pattern": "완만한_상승",
+      "trigger": "resp",
+      "if_score": -0.618
+    },
+    {
+      "start": "2026-07-07 00:20",
+      "end": "00:22",
+      "peak_bpm": 66.0,
+      "peak_zscore": 2.25,
+      "duration_min": 3,
+      "gradient": 0.0,
+      "recovery_min": 1.0,
+      "pattern": "완만한_상승",
+      "trigger": "resp",
+      "if_score": -0.618
     },
     {
       "start": "2026-07-07 01:40",
@@ -3621,6 +3973,7 @@
       "gradient": 0.42,
       "recovery_min": 1.0,
       "pattern": "완만한_상승",
+      "trigger": "bpm",
       "if_score": -0.58
     },
     {
@@ -3632,6 +3985,7 @@
       "gradient": 3.78,
       "recovery_min": 28.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.695
     },
     {
@@ -3643,6 +3997,7 @@
       "gradient": 10.82,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.657
     },
     {
@@ -3654,6 +4009,7 @@
       "gradient": 3.18,
       "recovery_min": 4.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.647
     },
     {
@@ -3665,6 +4021,7 @@
       "gradient": 6.09,
       "recovery_min": 18.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.653
     },
     {
@@ -3676,6 +4033,7 @@
       "gradient": 6.13,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.589
     },
     {
@@ -3687,6 +4045,7 @@
       "gradient": 6.25,
       "recovery_min": 7.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.683
     },
     {
@@ -3698,6 +4057,7 @@
       "gradient": 3.33,
       "recovery_min": 7.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.578
     },
     {
@@ -3709,6 +4069,7 @@
       "gradient": 12.3,
       "recovery_min": 30.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.668
     },
     {
@@ -3720,6 +4081,7 @@
       "gradient": 3.48,
       "recovery_min": 20.0,
       "pattern": "급격한_상승",
+      "trigger": "bpm",
       "if_score": -0.636
     }
   ]

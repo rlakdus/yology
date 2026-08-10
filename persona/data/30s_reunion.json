@@ -1,0 +1,20 @@
+{
+  "age_group": "30대",
+  "situation": "동창회",
+  "is_fabricated": true,
+  "is_synthetic_signal": false,
+  "source_note": "실제 student(김하은) 데이터의 2026-07-02 20:41:43+09:00 이벤트를 이 상황에 재배정함",
+  "start": "2026-07-02T20:41:43+09:00",
+  "end": "2026-07-02T20:41:43+09:00",
+  "duration_min": 0.0,
+  "peak_hr": 171.0,
+  "expected_hr": 127.9,
+  "excess_bpm": 43.1,
+  "steps_5m": 314,
+  "hrv_ms": null,
+  "hrr_slope": 4.3,
+  "arousal": "위상성",
+  "peak_z": 2.62,
+  "score": 3.62,
+  "evidence": "기대128(기준선92+활동+36) 대비 실제171 → 초과 +43bpm (z=2.6); 직전5분 걸음 314/5분; 급발현 +91bpm; 위상성(빠른 회복 4.3bpm/분)"
+}

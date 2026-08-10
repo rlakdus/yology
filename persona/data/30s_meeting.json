@@ -1,0 +1,20 @@
+{
+  "age_group": "30대",
+  "situation": "중요 업무 미팅/발표",
+  "is_fabricated": true,
+  "is_synthetic_signal": false,
+  "source_note": "실제 student(김하은) 데이터의 2026-07-30 14:25:42+09:00 이벤트를 이 상황에 재배정함",
+  "start": "2026-07-30T14:25:42+09:00",
+  "end": "2026-07-30T14:58:08+09:00",
+  "duration_min": 32.4,
+  "peak_hr": 119.0,
+  "expected_hr": 89.8,
+  "excess_bpm": 29.2,
+  "steps_5m": 0,
+  "hrv_ms": 14.4,
+  "hrr_slope": 2.3,
+  "arousal": "지속성",
+  "peak_z": 2.69,
+  "score": 6.19,
+  "evidence": "기대90(기준선89+활동+1) 대비 실제119 → 초과 +29bpm (z=2.7); 직전5분 정지(걸음<20); 급발현 +60bpm; 지속성 각성(회복 2.3bpm/분, 111까지만 하강); HRV 눌림 14ms"
+}
