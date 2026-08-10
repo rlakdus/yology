@@ -8,6 +8,13 @@
   "start_time": "2026-08-01T14:20:00",
   "end_time": "2026-08-01T14:35:00",
   "vr_scene": "hospital_room",
+  "panorama": {
+    "file": "panorama/waiting_room_360.generated.png",
+    "generated": true,
+    "mode": "recorded_anchor",
+    "anchor_yaw_deg": 0,
+    "source_note": "AI-generated 360 environment anchored to images/waiting_room.jpg"
+  },
   "assets": [
     { "file": "images/waiting_room.jpg", "taken_at": "2026-08-01T14:22:00" },
     { "file": "videos/hospital_visit.mp4", "taken_at": "2026-08-01T14:26:00" }

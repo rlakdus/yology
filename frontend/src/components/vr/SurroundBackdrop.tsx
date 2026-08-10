@@ -1,6 +1,9 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { BackSide, Color, Mesh, MeshBasicMaterial, type Texture } from "three";
+import { useTexture } from "@react-three/drei";
+import {
+  BackSide, Color, Mesh, MeshBasicMaterial, SRGBColorSpace, type Texture,
+} from "three";
 
 import { mediaCueAt, type VrEvent } from "../../data/vrEvent";
 import type { PlaybackRefs } from "./ReconstructionScene";
@@ -10,7 +13,10 @@ const SHELL_RADIUS = 12;
 
 const CALM = new Color("#0e1a2c");
 const TENSE = new Color("#2a1119");
+const WHITE = new Color("white");
 const shellColor = new Color();
+const TRANSPARENT_PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 interface SurroundBackdropProps {
   event: VrEvent;
@@ -29,6 +35,8 @@ const SurroundBackdrop = ({ event, playback, blurred }: SurroundBackdropProps) =
   const shellRef = useRef<Mesh>(null);
   const backRef = useRef<Mesh>(null);
   const frontRef = useRef<Mesh>(null);
+  const panorama = useTexture(event.panorama?.src ?? TRANSPARENT_PIXEL);
+  panorama.colorSpace = SRGBColorSpace;
 
   useFrame(() => {
     const progress = playback.progress.current;
@@ -37,7 +45,9 @@ const SurroundBackdrop = ({ event, playback, blurred }: SurroundBackdropProps) =
     const shell = shellRef.current;
     if (shell) {
       const material = shell.material as MeshBasicMaterial;
-      material.color.copy(shellColor.copy(CALM).lerp(TENSE, tone));
+      material.color.copy(
+        event.panorama ? WHITE : shellColor.copy(CALM).lerp(TENSE, tone),
+      );
     }
 
     // 흐린 배경도 패널과 같은 크로스페이드를 따라간다.
@@ -68,14 +78,26 @@ const SurroundBackdrop = ({ event, playback, blurred }: SurroundBackdropProps) =
     <>
       {/* 배경은 반드시 패널보다 먼저 그려져야 한다. 모두 깊이를 기록하지 않는
           반투명이라 순서만이 앞뒤를 정한다. */}
-      <mesh ref={shellRef} renderOrder={-20}>
-        <sphereGeometry args={[SHELL_RADIUS, 24, 16]} />
+      <mesh
+        ref={shellRef}
+        renderOrder={-20}
+        rotation={[
+          0,
+          event.panorama ? Math.PI / 2 + event.panorama.anchor_yaw_deg * Math.PI / 180 : 0,
+          0,
+        ]}
+      >
+        <sphereGeometry args={[SHELL_RADIUS, 64, 40]} />
         {/* 첫 프레임 전에도 흰 구가 비치지 않도록 차분한 색에서 시작한다. */}
-        <meshBasicMaterial side={BackSide} color={CALM} />
+        <meshBasicMaterial
+          side={BackSide}
+          color={event.panorama ? "white" : CALM}
+          map={event.panorama ? panorama : null}
+        />
       </mesh>
 
       {/* 패널 가장자리가 배경으로 번지도록 정면에만 넓게 깐다. */}
-      <group position={[0, 1.6, -7.5]}>
+      {!event.panorama && <group position={[0, 1.6, -7.5]}>
         <mesh ref={backRef} renderOrder={-11}>
           <planeGeometry args={[34, 20]} />
           <meshBasicMaterial transparent depthWrite={false} />
@@ -84,7 +106,7 @@ const SurroundBackdrop = ({ event, playback, blurred }: SurroundBackdropProps) =
           <planeGeometry args={[34, 20]} />
           <meshBasicMaterial transparent depthWrite={false} />
         </mesh>
-      </group>
+      </group>}
     </>
   );
 };
