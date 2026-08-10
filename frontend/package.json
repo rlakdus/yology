@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "sync:events": "python ../scripts/export_all_event_assets.py",
+    "predev": "npm run sync:events",
     "dev": "vite",
+    "prebuild": "npm run sync:events",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

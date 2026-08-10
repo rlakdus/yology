@@ -125,14 +125,16 @@ const PanoramaEnvironment = ({ panorama, playback }: PanoramaEnvironmentProps) =
   });
 
   return (
-    <mesh
-      ref={meshRef}
-      material={material}
-      renderOrder={-20}
-      rotation={[0, Math.PI / 2 + panorama.anchor_yaw_deg * Math.PI / 180, 0]}
-    >
-      <sphereGeometry args={[1, 192, 96]} />
-    </mesh>
+    <group rotation={[0, Math.PI / 2 + panorama.anchor_yaw_deg * Math.PI / 180, 0]}>
+      <mesh renderOrder={-21}>
+        <sphereGeometry args={[FAR_RADIUS + 0.2, 128, 64]} />
+        <meshBasicMaterial map={colorTexture} side={BackSide} />
+      </mesh>
+
+      <mesh ref={meshRef} material={material} renderOrder={-20}>
+        <sphereGeometry args={[1, 192, 96]} />
+      </mesh>
+    </group>
   );
 };
 
