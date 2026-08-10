@@ -9,6 +9,7 @@
   "vr_scene": "night_study_room",
   "panorama": {
     "file": "panorama/night_study_360.generated.png",
+    "depth": "panorama/night_study_360.generated.png.depth.png",
     "generated": true,
     "mode": "scenario_hypothesis",
     "anchor_yaw_deg": 0,

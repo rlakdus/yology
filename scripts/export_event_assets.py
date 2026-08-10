@@ -183,8 +183,23 @@ def export_panorama(metadata: dict, event_dir: Path, target_dir: Path) -> dict |
     destination = target_dir / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
+
+    depth_value = entry.get("depth")
+    depth_source = (
+        event_dir / depth_value
+        if depth_value
+        else source.with_suffix(f"{source.suffix}.depth.png")
+    )
+    depth_relative = None
+    if is_usable(depth_source):
+        depth_relative = depth_source.relative_to(event_dir)
+        depth_destination = target_dir / depth_relative
+        depth_destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(depth_source, depth_destination)
+
     return {
         "src": relative.as_posix(),
+        "depth": depth_relative.as_posix() if depth_relative else None,
         "generated": bool(entry.get("generated", False)),
         "mode": str(entry.get("mode", "scenario_hypothesis")),
         "anchor_yaw_deg": float(entry.get("anchor_yaw_deg", 0)),
@@ -250,6 +265,8 @@ def main():
     written = {output}
     if panorama:
         written.add(target_dir / panorama["src"])
+        if panorama["depth"]:
+            written.add(target_dir / panorama["depth"])
     for entry in media:
         written.add(target_dir / entry["src"])
         for sidecar_path in (entry["depth"], entry["fill"]):

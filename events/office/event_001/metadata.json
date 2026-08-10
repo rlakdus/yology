@@ -9,6 +9,7 @@
   "vr_scene": "deadline_office",
   "panorama": {
     "file": "panorama/deadline_office_360.generated.png",
+    "depth": "panorama/deadline_office_360.generated.png.depth.png",
     "generated": true,
     "mode": "scenario_hypothesis",
     "anchor_yaw_deg": 0,

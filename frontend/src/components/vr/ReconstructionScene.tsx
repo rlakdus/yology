@@ -63,9 +63,11 @@ const ReconstructionScene = ({
 
   return (
     <>
-      <LookAroundControls playback={playback} />
+      <LookAroundControls playback={playback} continuous={Boolean(event.panorama)} />
       <SurroundBackdrop event={event} playback={playback} blurred={blurred} />
-      <SceneMediaPanel event={event} playback={playback} videos={videos} />
+      {!event.panorama && (
+        <SceneMediaPanel event={event} playback={playback} videos={videos} />
+      )}
     </>
   );
 };

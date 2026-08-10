@@ -43,6 +43,7 @@ const wobble = (time: number, seed: number) =>
 
 interface LookAroundControlsProps {
   playback: PlaybackRefs;
+  continuous?: boolean;
 }
 
 /**
@@ -57,7 +58,7 @@ interface LookAroundControlsProps {
  * 인공적으로 움직이면 벡션으로 멀미가 난다. 대신 사용자의 실제 고개 움직임이
  * 진짜 6DoF 시차를 만든다 — 부조가 실제 지오메트리라 그대로 동작한다.
  */
-const LookAroundControls = ({ playback }: LookAroundControlsProps) => {
+const LookAroundControls = ({ playback, continuous = false }: LookAroundControlsProps) => {
   const camera = useThree((state) => state.camera);
   const domElement = useThree((state) => state.gl.domElement);
   const session = useXR((state) => state.session);
@@ -80,10 +81,12 @@ const LookAroundControls = ({ playback }: LookAroundControlsProps) => {
 
     const onPointerMove = (event: PointerEvent) => {
       if (!dragging.current) return;
-      yaw.current = MathUtils.clamp(
-        yaw.current + resist(yaw.current, -event.movementX * SENSITIVITY, yawLimit),
-        -yawLimit, yawLimit,
-      );
+      yaw.current = continuous
+        ? yaw.current - event.movementX * SENSITIVITY
+        : MathUtils.clamp(
+            yaw.current + resist(yaw.current, -event.movementX * SENSITIVITY, yawLimit),
+            -yawLimit, yawLimit,
+          );
       pitch.current = MathUtils.clamp(
         pitch.current + resist(pitch.current, -event.movementY * SENSITIVITY, pitchLimit),
         -pitchLimit, pitchLimit,
@@ -108,7 +111,7 @@ const LookAroundControls = ({ playback }: LookAroundControlsProps) => {
       domElement.removeEventListener("pointerup", onPointerUp);
       domElement.removeEventListener("pointercancel", onPointerUp);
     };
-  }, [domElement, session]);
+  }, [continuous, domElement, session]);
 
   useFrame((_, delta) => {
     if (session) return;
@@ -120,7 +123,7 @@ const LookAroundControls = ({ playback }: LookAroundControlsProps) => {
     const pitchLimit = MathUtils.degToRad(LOOK.pitchDeg);
 
     // 손을 떼면 미디어가 시야 한가운데로 돌아온다.
-    if (!dragging.current) {
+    if (!dragging.current && !continuous) {
       const decay = 1 - Math.exp(-RECENTER_RATE * delta);
       yaw.current += (0 - yaw.current) * decay;
       pitch.current += (0 - pitch.current) * decay;
@@ -138,7 +141,7 @@ const LookAroundControls = ({ playback }: LookAroundControlsProps) => {
     z += wobble(time, 8.7) * MOTION.handheldPosition * 0.5;
 
     // 둘러보는 행위 자체가 시차를 만든다. 시야를 오른쪽으로 돌리면 머리도 오른쪽으로 옮겨간다.
-    x -= (yaw.current / yawLimit) * MOTION.swayYaw;
+    x -= (continuous ? Math.sin(yaw.current) : yaw.current / yawLimit) * MOTION.swayYaw;
     y -= (pitch.current / pitchLimit) * MOTION.swayPitch;
 
     // 심박마다 아주 작은 충격이 들어갔다 감쇠한다.

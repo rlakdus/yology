@@ -23,6 +23,7 @@ export type VrEvent = {
   duration_min: number;
   panorama: {
     src: string;
+    depth: string | null;
     generated: boolean;
     mode: "recorded_anchor" | "scenario_hypothesis";
     anchor_yaw_deg: number;
@@ -234,7 +235,13 @@ export const useVrEvent = (persona?: string, eventId?: string) => {
         setEvent({
           ...payload,
           panorama: payload.panorama
-            ? { ...payload.panorama, src: `${base}/${payload.panorama.src}` }
+            ? {
+                ...payload.panorama,
+                src: `${base}/${payload.panorama.src}`,
+                depth: payload.panorama.depth
+                  ? `${base}/${payload.panorama.depth}`
+                  : null,
+              }
             : null,
           media: payload.media.map((entry) => ({
             ...entry,

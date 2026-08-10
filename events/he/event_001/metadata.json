@@ -9,7 +9,8 @@
   "end_time": "2026-08-01T14:35:00",
   "vr_scene": "hospital_room",
   "panorama": {
-    "file": "panorama/waiting_room_360.generated.png",
+    "file": "panorama/waiting_room_360.v2.generated.png",
+    "depth": "panorama/waiting_room_360.v2.generated.png.depth.png",
     "generated": true,
     "mode": "recorded_anchor",
     "anchor_yaw_deg": 0,
