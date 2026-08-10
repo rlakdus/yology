@@ -232,6 +232,30 @@
 
 /* ------------------------- */
 
+.persona-actions{
+
+    display:grid;
+
+    gap:10px;
+
+}
+
+.persona-btn.persona-btn-secondary{
+
+    background:#eaf3ff;
+
+    color:#0F6FFF;
+
+}
+
+.persona-btn.persona-btn-secondary:hover{
+
+    background:#dbeafe;
+
+}
+
+/* ------------------------- */
+
 .persona-btn{
 
     width:100%;

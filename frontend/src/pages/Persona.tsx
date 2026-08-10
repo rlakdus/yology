@@ -133,32 +133,32 @@ const Persona = () => {
             <span className="persona-age">{person.age}</span>
             <p>{person.description}</p>
             <div className="persona-status">{person.status}</div>
-            <button
-              className="persona-btn"
-              onClick={() =>
-                person.path
-                  ? navigate(person.path)
-                  : navigate("/event", {
-                      state: {
-                        scenario,
-                        persona: person.name,
-                      },
-                    })
-              }
-            >
-              경험 재구성 →
-            </button>
+            <div className="persona-actions">
+              <button
+                className="persona-btn persona-btn-secondary"
+                onClick={() =>
+                  person.path
+                    ? navigate(person.path)
+                    : navigate("/event", {
+                        state: {
+                          scenario,
+                          persona: person.name,
+                        },
+                      })
+                }
+              >
+                경험 재구성 →
+              </button>
+              <button
+                className="persona-btn"
+                onClick={() => navigate(`/vr/${vrPersona}/event_001`)}
+              >
+                VR 체험 →
+              </button>
+            </div>
           </div>
         ))}
       </div>
-
-      <button
-        className="persona-btn"
-        onClick={() => navigate(`/vr/${vrPersona}/event_001`)}
-      >
-        이 상황의 360° 재현 장면 열기 →
-      </button>
-
     </div>
   );
 };
