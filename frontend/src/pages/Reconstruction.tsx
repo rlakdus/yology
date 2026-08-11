@@ -10,7 +10,6 @@ import SummaryCard from "../components/SummaryCard";
 import "../styles/reconstruction.css";
 
 import {
-
   Heart,
   Activity,
   MapPin,
@@ -18,9 +17,27 @@ import {
   Image,
   MessageCircle,
   Brain,
+  GraduationCap,
+  Glasses,
 } from "lucide-react";
 
+import { useLocation, useNavigate } from "react-router-dom";
+
 const Reconstruction = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const {
+    momentTitle = "중요한 시험",
+    momentDescription = "긴장과 집중이 가장 높았던 시험 전후의 순간",
+    demoSource = "student",
+    eventId = "event_001",
+  } = location.state || {};
+
+  const handleVrReplay = () => {
+    navigate(`/vr/${demoSource}/${eventId}`);
+  };
+
   return (
     <>
       <Header
@@ -35,19 +52,19 @@ const Reconstruction = () => {
         <div className="hero">
 
           <img
-            src="https://placehold.co/900x350"
+            src="https://placehold.co/900x350/eaf3ff/0f6fff?text=Study+Session"
             className="cover-image"
-            alt="Hospital Visit"
+            alt="Study Session"
           />
 
           <div className="hero-overlay">
 
             <h1 className="hero-title">
-              Hospital Visit
+              {momentTitle}
             </h1>
 
             <p className="hero-sub">
-              Family Caregiver
+              Study Session · Student
             </p>
 
             <div className="hero-info">
@@ -55,7 +72,7 @@ const Reconstruction = () => {
               <StatusBadge status="High" />
 
               <div className="badge">
-                🕒 12:15 PM
+                🕒 14:25
               </div>
 
             </div>
@@ -64,36 +81,26 @@ const Reconstruction = () => {
 
         </div>
 
+        {/* Summary */}
+
         <div className="summary-grid">
 
           <SummaryCard
-
             icon={<Image size={28} />}
-
             title="Evidence"
-
             value="3"
-
           />
 
           <SummaryCard
-
             icon={<Heart size={28} />}
-
             title="Sensors"
-
             value="4"
-
           />
 
           <SummaryCard
-
             icon={<Brain size={28} />}
-
             title="Confidence"
-
             value="91%"
-
           />
 
         </div>
@@ -107,7 +114,7 @@ const Reconstruction = () => {
           <SensorCard
             icon={<Heart size={24} />}
             title="Heart Rate"
-            value="118 bpm"
+            value="112 bpm"
           />
 
           <SensorCard
@@ -118,14 +125,14 @@ const Reconstruction = () => {
 
           <SensorCard
             icon={<MapPin size={24} />}
-            title="Location"
-            value="Seoul Hospital"
+            title="Context"
+            value="Study Session"
           />
 
           <SensorCard
             icon={<Clock size={24} />}
             title="Time"
-            value="12:15 PM"
+            value="14:25"
           />
 
         </div>
@@ -136,49 +143,55 @@ const Reconstruction = () => {
 
         <EvidenceCard
           icon={<Image size={26} />}
-          title="Waiting Room Image"
-          subtitle="Hospital Camera"
+          title="Study Environment"
+          subtitle="Captured Image"
         />
 
         <EvidenceCard
           icon={<MessageCircle size={26} />}
-          title="Caregiver Chat"
-          subtitle="KakaoTalk Conversation"
+          title="Conversation Record"
+          subtitle="Message Context"
         />
 
         <EvidenceCard
-          icon={<MapPin size={26} />}
-          title="Hospital GPS"
-          subtitle="Location History"
+          icon={<GraduationCap size={26} />}
+          title="Exam Context"
+          subtitle="Academic Schedule"
         />
+
+        {/* Timeline */}
 
         <SectionTitle title="Timeline" />
 
         <Timeline
           items={[
             {
+              icon: <GraduationCap size={20} />,
+              time: "14:03",
+              title: "Study Session Started",
+              description:
+                "시험을 앞두고 집중 학습을 시작했습니다.",
+            },
+            {
               icon: <Heart size={20} />,
-              time: "12:03",
+              time: "14:12",
               title: "Heart Rate Increased",
-              description: "Heart rate rose above the normal range.",
-            },
-            {
-              icon: <MapPin size={20} />,
-              time: "12:07",
-              title: "Entered Hospital",
-              description: "GPS detected arrival at Seoul Hospital.",
-            },
-            {
-              icon: <MessageCircle size={20} />,
-              time: "12:10",
-              title: "Family Conversation",
-              description: "Caregiver exchanged messages with family.",
+              description:
+                "심박수가 평소보다 빠르게 증가하기 시작했습니다.",
             },
             {
               icon: <Activity size={20} />,
-              time: "12:15",
-              title: "Stress Peak",
-              description: "Stress level reached its highest point.",
+              time: "14:20",
+              title: "Stress Level Increased",
+              description:
+                "집중과 긴장이 동시에 높아지며 스트레스 신호가 탐지되었습니다.",
+            },
+            {
+              icon: <Brain size={20} />,
+              time: "14:25",
+              title: "Stress Peak Detected",
+              description:
+                "AI가 해당 구간을 중요한 스트레스 이벤트로 판단했습니다.",
             },
           ]}
         />
@@ -191,26 +204,54 @@ const Reconstruction = () => {
           steps={[
             {
               icon: <Heart size={24} />,
-              title: "Heart Rate 118 bpm",
+              title: "Elevated Heart Rate",
             },
             {
-              icon: <MapPin size={24} />,
-              title: "Hospital Location",
+              icon: <Activity size={24} />,
+              title: "High Stress Signal",
             },
             {
-              icon: <MessageCircle size={24} />,
-              title: "Caregiver Conversation",
+              icon: <GraduationCap size={24} />,
+              title: "Exam Context",
             },
             {
               icon: <Brain size={24} />,
               title: "AI Context Analysis",
             },
           ]}
-          result="Anxiety"
+          result="Exam Anxiety & High Focus"
         />
 
-        <button className="primary-btn">
-          Start VR Reconstruction
+        {/* Reconstruction Summary */}
+
+        <div className="reconstruction-summary-box">
+
+          <span className="reconstruction-summary-label">
+            RECONSTRUCTED MEMORY
+          </span>
+
+          <h3>
+            AI가 이 순간을 이렇게 해석했습니다.
+          </h3>
+
+          <p>
+            {momentDescription}
+            {" "}
+            심박과 스트레스 신호가 동시에 증가했고,
+            시험이라는 상황적 맥락을 종합했을 때
+            높은 긴장감과 집중이 공존했던 순간으로 추정됩니다.
+          </p>
+
+        </div>
+
+        {/* VR */}
+
+        <button
+          className="primary-btn"
+          onClick={handleVrReplay}
+        >
+          <Glasses size={20} />
+          VR로 다시 경험하기
         </button>
 
       </div>

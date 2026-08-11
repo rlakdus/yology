@@ -1,0 +1,447 @@
+/* =========================
+   MOMENT PAGE
+========================= */
+
+.moment-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(15, 111, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #f8fbff 0%, #f4f8fd 100%);
+  padding: 42px 24px 90px;
+  color: #0f172a;
+}
+
+.moment-container {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.moment-back {
+  width: 46px;
+  height: 46px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.94);
+  color: #334155;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 7px 20px rgba(15, 23, 42, 0.045);
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.moment-back:hover {
+  color: #0f6fff;
+  border-color: #b9d5ff;
+  transform: translateX(-2px);
+
+  box-shadow: 0 10px 24px rgba(15, 111, 255, 0.09);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.moment-header {
+  max-width: 760px;
+  margin: 56px auto 42px;
+  text-align: center;
+}
+
+.moment-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 9px 18px;
+
+  border-radius: 999px;
+
+  background: #eaf3ff;
+  color: #0f6fff;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  margin-bottom: 22px;
+}
+
+.moment-header h1 {
+  margin: 0;
+
+  font-size: clamp(42px, 5vw, 58px);
+  line-height: 1.17;
+
+  font-weight: 850;
+  letter-spacing: -0.045em;
+
+  color: #0f172a;
+}
+
+.moment-header p {
+  margin: 25px auto 0;
+
+  max-width: 680px;
+
+  color: #64748b;
+
+  font-size: 17px;
+  line-height: 1.85;
+  font-weight: 450;
+}
+
+/* =========================
+   AGE SELECTOR
+========================= */
+
+.age-selector {
+  width: fit-content;
+  max-width: 100%;
+
+  margin: 0 auto 56px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px;
+
+  border: 1px solid #e6edf6;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+}
+
+.age-button {
+  min-width: 104px;
+
+  padding: 12px 24px;
+
+  border: none;
+  border-radius: 13px;
+
+  background: transparent;
+  color: #64748b;
+
+  font-size: 15px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.age-button:hover {
+  color: #0f6fff;
+  background: #f4f8ff;
+}
+
+.age-button.active {
+  background: #0f6fff;
+  color: #ffffff;
+
+  box-shadow: 0 8px 20px rgba(15, 111, 255, 0.2);
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.moment-section {
+  width: 100%;
+}
+
+.moment-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 32px;
+
+  margin-bottom: 26px;
+}
+
+.moment-section-heading > div > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #0f6fff;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.moment-section-heading h2 {
+  margin: 0;
+
+  font-size: 30px;
+  line-height: 1.35;
+
+  font-weight: 820;
+  letter-spacing: -0.03em;
+
+  color: #0f172a;
+}
+
+.moment-section-heading > p {
+  max-width: 330px;
+
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+  line-height: 1.75;
+
+  text-align: right;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.moment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.moment-card {
+  min-height: 270px;
+
+  padding: 30px;
+
+  border: 1px solid #e8eef6;
+  border-radius: 25px;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+
+  transition:
+    transform 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease,
+    background 0.24s ease;
+}
+
+.moment-card:hover {
+  transform: translateY(-5px);
+
+  border-color: #bfd8ff;
+
+  background: #ffffff;
+
+  box-shadow: 0 20px 46px rgba(15, 111, 255, 0.11);
+}
+
+/* =========================
+   ICON
+========================= */
+
+.moment-icon {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf3ff;
+  color: #0f6fff;
+
+  margin-bottom: 27px;
+
+  transition:
+    transform 0.24s ease,
+    background 0.24s ease;
+}
+
+.moment-card:hover .moment-icon {
+  transform: scale(1.04);
+
+  background: #e2efff;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.moment-card-content {
+  flex: 1;
+}
+
+.moment-card-content h3 {
+  margin: 0 0 12px;
+
+  color: #0f172a;
+
+  font-size: 23px;
+  font-weight: 820;
+  letter-spacing: -0.025em;
+}
+
+.moment-card-content p {
+  margin: 0;
+
+  max-width: 440px;
+
+  color: #64748b;
+
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* =========================
+   CARD FOOTER
+========================= */
+
+.moment-card-bottom {
+  margin-top: 28px;
+  padding-top: 20px;
+
+  border-top: 1px solid #eef2f7;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #475569;
+
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.moment-arrow {
+  color: #94a3b8;
+
+  transition:
+    transform 0.22s ease,
+    color 0.22s ease;
+}
+
+.moment-card:hover .moment-card-bottom {
+  color: #0f6fff;
+}
+
+.moment-card:hover .moment-arrow {
+  color: #0f6fff;
+  transform: translateX(4px);
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .moment-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .moment-section-heading > p {
+    max-width: 520px;
+    text-align: left;
+  }
+
+  .moment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .moment-page {
+    padding: 28px 17px 65px;
+  }
+
+  .moment-header {
+    margin-top: 42px;
+    margin-bottom: 34px;
+  }
+
+  .moment-header h1 {
+    font-size: 38px;
+  }
+
+  .moment-header p {
+    font-size: 15.5px;
+  }
+
+  .age-selector {
+    width: 100%;
+    margin-bottom: 42px;
+  }
+
+  .age-button {
+    min-width: 0;
+    flex: 1;
+
+    padding: 11px 14px;
+  }
+
+  .moment-section-heading h2 {
+    font-size: 25px;
+  }
+
+  .moment-card {
+    min-height: 245px;
+
+    padding: 25px;
+
+    border-radius: 22px;
+  }
+
+  .moment-icon {
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 22px;
+  }
+
+  .moment-card-content h3 {
+    font-size: 21px;
+  }
+}

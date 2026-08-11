@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Scenario from "./pages/Scenario";
+import Moment from "./pages/Moment";
 import Persona from "./pages/Persona";
 import Event from "./pages/Event";
 import Reconstruction from "./pages/Reconstruction";
@@ -14,16 +14,32 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/scenario" element={<Scenario />} />
+
+        <Route path="/moment" element={<Moment />} />
+
         <Route path="/persona" element={<Persona />} />
+
         <Route path="/event" element={<Event />} />
-        <Route path="/reconstruction" element={<Reconstruction />} />
-        <Route path="/persona/he/events" element={<HeEvents />} />
+
+        <Route
+          path="/reconstruction"
+          element={<Reconstruction />}
+        />
+
+        <Route
+          path="/persona/he/events"
+          element={<HeEvents />}
+        />
+
         <Route
           path="/persona/he/reconstruction/:eventId"
           element={<HeReconstruction />}
         />
-        <Route path="/vr/:persona/:eventId" element={<VrScene />} />
+
+        <Route
+          path="/vr/:persona/:eventId"
+          element={<VrScene />}
+        />
       </Routes>
     </BrowserRouter>
   );

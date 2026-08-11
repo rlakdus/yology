@@ -84,7 +84,7 @@ const Home = () => {
 
           <button
             className="primary-btn"
-            onClick={() => navigate("/scenario")}
+            onClick={() => navigate("/moment")}
           >
             <span>데모 시작하기</span>
             <ArrowRight size={18} />

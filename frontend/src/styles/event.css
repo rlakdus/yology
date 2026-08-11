@@ -1,57 +1,393 @@
-.event-card{
+/* =========================
+   EVENT PAGE
+========================= */
 
-    background:white;
+.event-page {
+  min-height: 100vh;
+  padding: 42px 24px 90px;
 
-    border-radius:20px;
+  background:
+    radial-gradient(circle at top right, rgba(15, 111, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #f8fbff 0%, #f4f8fd 100%);
 
-    padding:30px;
-
-    margin:22px auto;
-
-    max-width:720px;
-
-    box-shadow:var(--shadow);
-
-    transition:.25s;
-
+  color: #0f172a;
 }
 
-.event-card.active:hover{
-
-    transform:translateY(-5px);
-
-    border:2px solid var(--primary);
-
+.event-container {
+  width: min(1060px, 100%);
+  margin: 0 auto;
 }
 
-.event-card.disabled{
+/* =========================
+   BACK
+========================= */
 
-    opacity:.45;
+.event-back {
+  width: 46px;
+  height: 46px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #334155;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.045);
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.event-card h3{
+.event-back:hover {
+  transform: translateX(-2px);
 
-    color:var(--primary);
+  color: #0f6fff;
+  border-color: #bfd8ff;
 
-    margin-bottom:12px;
-
+  box-shadow: 0 10px 26px rgba(15, 111, 255, 0.09);
 }
 
-.event-card p{
+/* =========================
+   HERO
+========================= */
 
-    color:var(--sub);
+.event-hero {
+  max-width: 760px;
 
+  margin: 58px auto 44px;
+
+  text-align: center;
 }
 
-.event-card span{
+.event-chip {
+  display: inline-flex;
 
-    display:inline-block;
+  padding: 9px 18px;
 
-    margin-top:18px;
+  border-radius: 999px;
 
-    color:#d62828;
+  background: #eaf3ff;
+  color: #0f6fff;
 
-    font-weight:600;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 
+  margin-bottom: 21px;
+}
+
+.event-hero h1 {
+  margin: 0;
+
+  font-size: clamp(42px, 5vw, 58px);
+  line-height: 1.15;
+
+  font-weight: 850;
+  letter-spacing: -0.045em;
+
+  color: #0f172a;
+}
+
+.event-hero p {
+  max-width: 650px;
+
+  margin: 22px auto 0;
+
+  color: #64748b;
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+/* =========================
+   MAIN PREVIEW CARD
+========================= */
+
+.event-preview-card {
+  padding: 38px;
+
+  border: 1px solid #e6edf6;
+  border-radius: 30px;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.06);
+}
+
+/* =========================
+   TOP
+========================= */
+
+.event-preview-top {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 32px;
+
+  padding-bottom: 30px;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.event-label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #0f6fff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.event-preview-top h2 {
+  margin: 0 0 12px;
+
+  color: #0f172a;
+
+  font-size: 30px;
+  font-weight: 820;
+  letter-spacing: -0.03em;
+}
+
+.event-preview-top p {
+  max-width: 600px;
+
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.event-ai-badge {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 15px;
+
+  border-radius: 999px;
+
+  background: #eef6ff;
+  color: #0f6fff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* =========================
+   INFO GRID
+========================= */
+
+.event-info-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 28px;
+}
+
+.event-info-item {
+  min-height: 100px;
+
+  padding: 19px;
+
+  border: 1px solid #edf2f7;
+  border-radius: 18px;
+
+  background: #fbfdff;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.event-info-icon {
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #eaf3ff;
+  color: #0f6fff;
+}
+
+.event-info-item span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.event-info-item strong {
+  color: #1e293b;
+
+  font-size: 14px;
+  font-weight: 780;
+}
+
+/* =========================
+   SUMMARY
+========================= */
+
+.event-summary {
+  margin-top: 24px;
+
+  padding: 25px 27px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15, 111, 255, 0.07),
+      rgba(15, 111, 255, 0.025)
+    );
+
+  border: 1px solid #dcecff;
+}
+
+.event-summary span {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #0f6fff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.event-summary p {
+  margin: 0;
+
+  color: #475569;
+
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.event-primary-btn {
+  width: 100%;
+  height: 60px;
+
+  margin-top: 28px;
+
+  border: none;
+  border-radius: 17px;
+
+  background: #0f6fff;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 12px 26px rgba(15, 111, 255, 0.2);
+
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.event-primary-btn:hover {
+  transform: translateY(-2px);
+
+  background: #095ee6;
+
+  box-shadow: 0 16px 32px rgba(15, 111, 255, 0.25);
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .event-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .event-preview-top {
+    flex-direction: column;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .event-page {
+    padding: 28px 17px 65px;
+  }
+
+  .event-hero {
+    margin-top: 42px;
+  }
+
+  .event-hero h1 {
+    font-size: 38px;
+  }
+
+  .event-hero p {
+    font-size: 15.5px;
+  }
+
+  .event-preview-card {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .event-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-preview-top h2 {
+    font-size: 25px;
+  }
+
+  .event-primary-btn {
+    height: 56px;
+  }
 }
