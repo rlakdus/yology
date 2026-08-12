@@ -1,35 +1,44 @@
-/* ==============================
-   RECONSTRUCTION PAGE
-============================== */
+/* ========================================
+   VIVIA · RECONSTRUCTION PAGE
+======================================== */
 
-.reconstruction-page {
+.vivia-reconstruction-page {
   min-height: 100vh;
+
+  padding: 38px 24px 100px;
 
   background:
     radial-gradient(
-      circle at 88% 4%,
+      circle at 8% 2%,
       rgba(15, 111, 255, 0.08),
-      transparent 25%
+      transparent 23%
     ),
-    #f7faff;
+    radial-gradient(
+      circle at 94% 9%,
+      rgba(255, 138, 61, 0.09),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      #f5f8fc 100%
+    );
 
   color: #0f172a;
 }
 
-.reconstruction-container {
-  width: min(1120px, calc(100% - 48px));
+.vivia-reconstruction-container {
+  width: min(1120px, 100%);
 
   margin: 0 auto;
-
-  padding: 36px 0 100px;
 }
 
 
-/* ==============================
+/* ========================================
    BACK
-============================== */
+======================================== */
 
-.reconstruction-back {
+.vivia-reconstruction-back {
   width: 46px;
   height: 46px;
 
@@ -40,124 +49,42 @@
   border: 1px solid #e2e8f0;
   border-radius: 50%;
 
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+
   color: #334155;
 
   cursor: pointer;
 
-  box-shadow: 0 7px 20px rgba(15, 23, 42, 0.045);
+  box-shadow:
+    0 7px 20px rgba(15, 23, 42, 0.045);
 
   transition:
-    transform .2s ease,
-    color .2s ease,
-    border-color .2s ease;
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.reconstruction-back:hover {
+.vivia-reconstruction-back:hover {
   transform: translateX(-2px);
 
   color: #0f6fff;
-
-  border-color: #bfd8ff;
+  border-color: #b9d5ff;
 }
 
 
-/* ==============================
-   PROGRESS
-============================== */
+/* ========================================
+   HEADER
+======================================== */
 
-.reconstruction-progress {
-  max-width: 720px;
+.vivia-reconstruction-header {
+  max-width: 760px;
 
-  margin: 38px auto 64px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.reconstruction-progress-item {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  color: #94a3b8;
-
-  font-size: 12px;
-  font-weight: 750;
-
-  white-space: nowrap;
-}
-
-.reconstruction-progress-item > span {
-  width: 27px;
-  height: 27px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  border: 1px solid #dbe4ef;
-
-  background: white;
-
-  font-size: 11px;
-}
-
-.reconstruction-progress-item.complete {
-  color: #64748b;
-}
-
-.reconstruction-progress-item.complete > span {
-  background: #eaf3ff;
-  border-color: #d3e5ff;
-
-  color: #0f6fff;
-}
-
-.reconstruction-progress-item.active {
-  color: #0f6fff;
-}
-
-.reconstruction-progress-item.active > span {
-  background: #0f6fff;
-  border-color: #0f6fff;
-
-  color: white;
-
-  box-shadow: 0 5px 15px rgba(15, 111, 255, .22);
-}
-
-.reconstruction-progress-line {
-  width: 55px;
-  height: 1px;
-
-  margin: 0 12px;
-
-  background: #dde5ef;
-}
-
-.reconstruction-progress-line.complete {
-  background: #9fc6ff;
-}
-
-
-/* ==============================
-   INTRO
-============================== */
-
-.reconstruction-intro {
-  max-width: 750px;
-
-  margin: 0 auto 48px;
+  margin: 56px auto 52px;
 
   text-align: center;
 }
 
-.reconstruction-chip {
+.vivia-reconstruction-eyebrow {
   display: inline-flex;
   align-items: center;
 
@@ -165,34 +92,39 @@
 
   padding: 9px 17px;
 
-  margin-bottom: 21px;
+  margin-bottom: 20px;
 
   border-radius: 999px;
 
-  background: #eaf3ff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(15, 111, 255, 0.1),
+      rgba(255, 138, 61, 0.11)
+    );
+
   color: #0f6fff;
 
   font-size: 12px;
   font-weight: 850;
-  letter-spacing: .08em;
+
+  letter-spacing: 0.09em;
 }
 
-.reconstruction-intro h1 {
+.vivia-reconstruction-header h1 {
   margin: 0;
 
   color: #0f172a;
 
-  font-size: clamp(42px, 5vw, 58px);
+  font-size: clamp(43px, 5vw, 59px);
   line-height: 1.16;
 
   font-weight: 850;
-  letter-spacing: -.045em;
+  letter-spacing: -0.045em;
 }
 
-.reconstruction-intro p {
-  max-width: 650px;
-
-  margin: 22px auto 0;
+.vivia-reconstruction-header p {
+  margin: 22px 0 0;
 
   color: #64748b;
 
@@ -201,253 +133,637 @@
 }
 
 
-/* ==============================
+/* ========================================
    HERO
-============================== */
+======================================== */
 
-.reconstruction-hero {
+.vivia-reconstruction-hero {
   position: relative;
-
-  width: 100%;
-  height: 430px;
 
   overflow: hidden;
 
-  border-radius: 30px;
+  padding: 42px;
 
-  background: #dfeeff;
-
-  box-shadow:
-    0 20px 55px rgba(15, 23, 42, .09);
-}
-
-.reconstruction-cover {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.reconstruction-hero-shade {
-  position: absolute;
-  inset: 0;
+  border: 1px solid #dfe8f3;
+  border-radius: 32px;
 
   background:
     linear-gradient(
-      90deg,
-      rgba(8, 20, 38, .76) 0%,
-      rgba(8, 20, 38, .45) 44%,
-      rgba(8, 20, 38, .05) 78%
+      145deg,
+      #ffffff 0%,
+      #f9fcff 58%,
+      #fff8f3 100%
     );
+
+  box-shadow:
+    0 22px 60px rgba(25, 46, 78, 0.08);
 }
 
-.reconstruction-hero-content {
+.vivia-reconstruction-hero-glow {
   position: absolute;
 
-  left: 48px;
-  bottom: 44px;
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.vivia-reconstruction-hero-glow.blue {
+  width: 300px;
+  height: 300px;
+
+  left: -150px;
+  bottom: -180px;
+
+  background:
+    rgba(15, 111, 255, 0.1);
+}
+
+.vivia-reconstruction-hero-glow.orange {
+  width: 320px;
+  height: 320px;
+
+  right: -150px;
+  top: -180px;
+
+  background:
+    rgba(255, 138, 61, 0.12);
+}
+
+.vivia-reconstruction-hero-top,
+.vivia-reconstruction-hero-content,
+.vivia-reconstruction-hero-meta {
+  position: relative;
 
   z-index: 2;
-
-  color: white;
 }
 
-.reconstruction-hero-label {
-  display: block;
-
-  margin-bottom: 11px;
-
-  color: rgba(255, 255, 255, .72);
-
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .09em;
-}
-
-.reconstruction-hero-content h2 {
-  margin: 0 0 8px;
-
-  color: white;
-
-  font-size: 42px;
-  line-height: 1.2;
-
-  font-weight: 840;
-  letter-spacing: -.035em;
-}
-
-.reconstruction-hero-content > p {
-  margin: 0;
-
-  color: rgba(255, 255, 255, .75);
-
-  font-size: 16px;
-}
-
-.reconstruction-hero-meta {
+.vivia-reconstruction-hero-top {
   display: flex;
   align-items: center;
-
-  gap: 10px;
-
-  margin-top: 19px;
+  justify-content: space-between;
 }
 
-.reconstruction-time-badge {
-  display: inline-flex;
+.vivia-reconstruction-main-icon {
+  width: 66px;
+  height: 66px;
+
+  display: flex;
   align-items: center;
+  justify-content: center;
 
-  gap: 6px;
+  border-radius: 21px;
 
-  padding: 8px 12px;
+  background:
+    linear-gradient(
+      145deg,
+      #e9f3ff,
+      #fff0e6
+    );
+
+  color: #0f6fff;
+}
+
+.vivia-reconstruction-category {
+  padding: 8px 13px;
 
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, .15);
-  color: white;
+  background: #eef5ff;
 
-  backdrop-filter: blur(10px);
+  color: #0f6fff;
+
+  font-size: 11px;
+  font-weight: 850;
+
+  letter-spacing: 0.08em;
+}
+
+.vivia-reconstruction-hero-content {
+  max-width: 720px;
+
+  padding-top: 46px;
+}
+
+.vivia-reconstruction-date {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  color: #ff7a2a;
+
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.vivia-reconstruction-hero-content h2 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 39px;
+  font-weight: 850;
+
+  letter-spacing: -0.04em;
+}
+
+.vivia-reconstruction-hero-content strong {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #ff7a2a;
+
+  font-size: 15px;
+}
+
+.vivia-reconstruction-hero-content p {
+  margin: 17px 0 0;
+
+  color: #64748b;
+
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.vivia-reconstruction-hero-meta {
+  margin-top: 34px;
+
+  padding-top: 23px;
+
+  border-top: 1px solid #e7edf4;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 11px;
+}
+
+.vivia-reconstruction-hero-meta > div {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  background: white;
+
+  color: #475569;
 
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 750;
+
+  border: 1px solid #e7edf4;
 }
 
 
-/* ==============================
-   SECTION COMMON
-============================== */
+/* ========================================
+   COMMON SECTION
+======================================== */
 
-.reconstruction-overview,
-.reconstruction-block {
-  margin-top: 70px;
+.vivia-reconstruction-section {
+  margin-top: 76px;
 }
 
-.reconstruction-section-head {
+.vivia-reconstruction-section-head {
   display: flex;
-
   align-items: flex-end;
   justify-content: space-between;
 
-  gap: 32px;
+  gap: 30px;
 
-  margin-bottom: 25px;
+  margin-bottom: 27px;
 }
 
-.reconstruction-section-head span {
+.vivia-reconstruction-section-head span {
   display: block;
 
   margin-bottom: 7px;
 
-  color: #0f6fff;
+  color: #ff7a2a;
 
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 850;
+
+  letter-spacing: 0.08em;
 }
 
-.reconstruction-section-head h2 {
+.vivia-reconstruction-section-head h2 {
   margin: 0;
 
   color: #0f172a;
 
   font-size: 30px;
-  font-weight: 820;
+  font-weight: 840;
 
-  letter-spacing: -.03em;
+  letter-spacing: -0.03em;
 }
 
-.reconstruction-section-head p {
-  max-width: 340px;
+.vivia-reconstruction-section-head > p {
+  max-width: 330px;
 
   margin: 0;
 
   color: #94a3b8;
 
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.7;
 
   text-align: right;
 }
 
-.reconstruction-section-description {
-  margin: -7px 0 22px;
+
+/* ========================================
+   SENSOR
+======================================== */
+
+.vivia-reconstruction-sensor-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.vivia-reconstruction-sensor-card {
+  min-height: 150px;
+
+  padding: 22px;
+
+  border: 1px solid #e5ebf3;
+  border-radius: 21px;
+
+  background: white;
+
+  box-shadow:
+    0 9px 25px rgba(15, 23, 42, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.vivia-reconstruction-sensor-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 30px rgba(15, 111, 255, 0.07);
+}
+
+.vivia-reconstruction-sensor-icon {
+  width: 45px;
+  height: 45px;
+
+  margin-bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+}
+
+.vivia-reconstruction-sensor-icon.blue {
+  color: #0f6fff;
+  background: #eaf3ff;
+}
+
+.vivia-reconstruction-sensor-icon.orange {
+  color: #ff7a2a;
+  background: #fff1e8;
+}
+
+.vivia-reconstruction-sensor-card > span {
+  display: block;
 
   color: #94a3b8;
 
-  font-size: 14px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.vivia-reconstruction-sensor-card > strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #1e293b;
+
+  font-size: 18px;
+  font-weight: 840;
+}
+
+
+/* ========================================
+   EVIDENCE
+======================================== */
+
+.vivia-reconstruction-evidence-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 17px;
+}
+
+.vivia-reconstruction-evidence-card {
+  padding: 25px;
+
+  border: 1px solid #e5ebf3;
+  border-radius: 23px;
+
+  background: white;
+
+  box-shadow:
+    0 10px 26px rgba(15, 23, 42, 0.04);
+}
+
+.vivia-reconstruction-evidence-icon {
+  width: 50px;
+  height: 50px;
+
+  margin-bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eaf3ff,
+      #fff1e8
+    );
+
+  color: #0f6fff;
+}
+
+.vivia-reconstruction-evidence-card > span {
+  color: #ff7a2a;
+
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.vivia-reconstruction-evidence-card h3 {
+  margin: 7px 0 9px;
+
+  color: #0f172a;
+
+  font-size: 18px;
+  font-weight: 830;
+}
+
+.vivia-reconstruction-evidence-card p {
+  margin: 0;
+
+  min-height: 48px;
+
+  color: #64748b;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.vivia-reconstruction-evidence-footer {
+  margin-top: 23px;
+  padding-top: 16px;
+
+  border-top: 1px solid #edf1f5;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.vivia-reconstruction-evidence-count {
+  margin-top: 16px;
+
+  padding: 13px 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  border-radius: 14px;
+
+  background: #f7faff;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+
+/* ========================================
+   TIMELINE
+======================================== */
+
+.vivia-reconstruction-timeline {
+  padding: 10px 4px;
+}
+
+.vivia-reconstruction-timeline-item {
+  display: grid;
+
+  grid-template-columns:
+    70px
+    34px
+    1fr;
+
+  min-height: 110px;
+}
+
+.vivia-reconstruction-time {
+  padding-top: 2px;
+
+  color: #64748b;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.vivia-reconstruction-timeline-axis {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vivia-reconstruction-timeline-axis > span {
+  position: relative;
+
+  z-index: 2;
+
+  width: 14px;
+  height: 14px;
+
+  border: 3px solid white;
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 1px #dce5ef;
+}
+
+.vivia-reconstruction-timeline-axis > span.blue {
+  background: #0f6fff;
+}
+
+.vivia-reconstruction-timeline-axis > span.orange {
+  background: #ff8a3d;
+}
+
+.vivia-reconstruction-timeline-axis > i {
+  position: absolute;
+
+  top: 14px;
+  bottom: -5px;
+
+  width: 1px;
+
+  background: #dce5ef;
+}
+
+.vivia-reconstruction-timeline-content {
+  padding-bottom: 28px;
+}
+
+.vivia-reconstruction-timeline-content h3 {
+  margin: 0 0 7px;
+
+  color: #0f172a;
+
+  font-size: 17px;
+  font-weight: 820;
+}
+
+.vivia-reconstruction-timeline-content p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 13px;
   line-height: 1.7;
 }
 
 
-/* ==============================
-   SUMMARY
-============================== */
+/* ========================================
+   AI REASONING
+======================================== */
 
-.reconstruction-page .summary-grid {
+.vivia-reconstruction-reasoning {
   display: grid;
-
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 18px;
-}
-
-
-/* ==============================
-   SENSOR
-============================== */
-
-.reconstruction-page .sensor-grid {
-  display: grid;
-
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-
-  gap: 16px;
-}
-
-
-/* ==============================
-   EVIDENCE
-============================== */
-
-.reconstruction-evidence-list {
-  display: grid;
+  grid-template-columns:
+    repeat(4, 1fr);
 
   gap: 14px;
 }
 
+.vivia-reconstruction-reasoning-step {
+  position: relative;
 
-/* ==============================
-   FINAL RESULT
-============================== */
+  min-height: 145px;
 
-.reconstruction-result {
-  margin-top: 80px;
+  padding: 22px;
 
-  padding: 38px;
+  border: 1px solid #e5ebf3;
+  border-radius: 21px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fbff
+    );
+}
+
+.vivia-reconstruction-reasoning-number {
+  color: #ff7a2a;
+
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.vivia-reconstruction-reasoning-step small {
+  display: block;
+
+  margin-top: 25px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.vivia-reconstruction-reasoning-step strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #0f172a;
+
+  font-size: 15px;
+  font-weight: 820;
+}
+
+.vivia-reconstruction-reasoning-arrow {
+  position: absolute;
+
+  right: -17px;
+  top: 50%;
+
+  z-index: 5;
+
+  transform: translateY(-50%);
+
+  color: #b7c2cf;
+}
+
+
+/* ========================================
+   RESULT
+======================================== */
+
+.vivia-reconstruction-result {
+  margin-top: 82px;
+
+  padding: 40px;
 
   display: flex;
   align-items: flex-start;
 
   gap: 25px;
 
-  border: 1px solid #d6e8ff;
-  border-radius: 28px;
+  border: 1px solid #d8e7fa;
+  border-radius: 29px;
 
   background:
     linear-gradient(
-      135deg,
-      #f0f7ff 0%,
-      #ffffff 76%
+      145deg,
+      #eef6ff,
+      #ffffff 62%,
+      #fff7f1
     );
 
-  box-shadow: 0 16px 45px rgba(15, 111, 255, .07);
+  box-shadow:
+    0 18px 50px rgba(15, 111, 255, 0.07);
 }
 
-.reconstruction-result-icon {
-  width: 58px;
-  height: 58px;
+.vivia-reconstruction-result-icon {
+  width: 60px;
+  height: 60px;
 
   flex-shrink: 0;
 
@@ -455,114 +771,148 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 18px;
+  border-radius: 19px;
 
-  background: #0f6fff;
+  background:
+    linear-gradient(
+      135deg,
+      #0f6fff,
+      #247eff
+    );
+
   color: white;
 
-  box-shadow: 0 12px 26px rgba(15, 111, 255, .22);
+  box-shadow:
+    0 12px 28px rgba(15, 111, 255, 0.2);
 }
 
-.reconstruction-result-content {
+.vivia-reconstruction-result-content {
   width: 100%;
 }
 
-.reconstruction-result-content > span {
+.vivia-reconstruction-result-content > span {
   display: block;
 
   margin-bottom: 8px;
 
-  color: #0f6fff;
+  color: #ff7a2a;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 850;
-  letter-spacing: .08em;
+
+  letter-spacing: 0.08em;
 }
 
-.reconstruction-result-content h2 {
-  margin: 0 0 14px;
+.vivia-reconstruction-result-content h2 {
+  margin: 0;
 
   color: #0f172a;
 
-  font-size: 27px;
-  font-weight: 820;
+  font-size: 28px;
+  line-height: 1.35;
 
-  letter-spacing: -.025em;
+  font-weight: 840;
 }
 
-.reconstruction-result-content p {
+.vivia-reconstruction-result-content > p {
   max-width: 800px;
 
-  margin: 0;
+  margin: 17px 0 0;
 
   color: #475569;
 
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.9;
 }
 
-.reconstruction-result-content p strong {
-  color: #0f172a;
+.vivia-reconstruction-result-highlight {
+  margin-top: 22px;
+
+  padding: 15px 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border-radius: 15px;
+
+  background: white;
+
+  color: #ff7a2a;
+
+  border: 1px solid #f0e5dc;
+}
+
+.vivia-reconstruction-result-highlight strong {
+  color: #1e293b;
+
+  font-size: 14px;
 }
 
 
-/* ==============================
+/* ========================================
    CONFIDENCE
-============================== */
+======================================== */
 
-.reconstruction-confidence {
-  max-width: 620px;
-
+.vivia-reconstruction-confidence {
   margin-top: 25px;
 }
 
-.reconstruction-confidence > div:first-child {
+.vivia-reconstruction-confidence > div:first-child {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 8px;
-
-  font-size: 13px;
+  margin-bottom: 9px;
 }
 
-.reconstruction-confidence span {
+.vivia-reconstruction-confidence span {
   color: #64748b;
+
+  font-size: 12px;
 }
 
-.reconstruction-confidence strong {
+.vivia-reconstruction-confidence strong {
   color: #0f6fff;
+
+  font-size: 14px;
 }
 
-.reconstruction-confidence-track {
+.vivia-reconstruction-confidence-track {
   height: 7px;
 
   overflow: hidden;
 
   border-radius: 999px;
 
-  background: #dce9f9;
+  background: #dce6f2;
 }
 
-.reconstruction-confidence-track span {
+.vivia-reconstruction-confidence-track > span {
   display: block;
 
-  width: 91%;
   height: 100%;
 
   border-radius: inherit;
 
-  background: #0f6fff;
+  background:
+    linear-gradient(
+      90deg,
+      #0f6fff,
+      #ff8a3d
+    );
 }
 
 
-/* ==============================
+/* ========================================
    VR CTA
-============================== */
+======================================== */
 
-.reconstruction-vr {
+.vivia-reconstruction-vr {
   position: relative;
 
-  margin-top: 70px;
+  margin-top: 75px;
 
   overflow: hidden;
 
@@ -571,235 +921,384 @@
   background:
     linear-gradient(
       135deg,
-      #081b38,
-      #0a326d 58%,
-      #0f6fff
+      #071a39 0%,
+      #0b3a79 57%,
+      #0f6fff 100%
     );
 
-  color: white;
-
   box-shadow:
-    0 25px 65px rgba(8, 35, 78, .2);
+    0 27px 70px rgba(6, 34, 76, 0.2);
 }
 
-.reconstruction-vr-glow {
+.vivia-reconstruction-vr-glow {
   position: absolute;
 
-  width: 380px;
-  height: 380px;
+  width: 420px;
+  height: 420px;
 
-  right: -110px;
-  top: -150px;
+  right: -120px;
+  top: -190px;
 
   border-radius: 50%;
 
-  background: rgba(90, 162, 255, .24);
+  background:
+    rgba(255, 138, 61, 0.23);
 
-  filter: blur(20px);
+  filter: blur(25px);
 }
 
-.reconstruction-vr-content {
+.vivia-reconstruction-vr-content {
   position: relative;
 
   z-index: 2;
 
-  padding: 60px;
+  padding: 65px 24px;
 
   text-align: center;
 }
 
-.reconstruction-vr-icon {
-  width: 70px;
-  height: 70px;
+.vivia-reconstruction-vr-icon {
+  width: 68px;
+  height: 68px;
 
-  margin: 0 auto 22px;
+  margin: 0 auto 20px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid rgba(255, 255, 255, .18);
-  border-radius: 22px;
+  border-radius: 21px;
 
-  background: rgba(255, 255, 255, .1);
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
 
-  backdrop-filter: blur(10px);
+  background:
+    rgba(255, 255, 255, 0.11);
+
+  color: #ffb27c;
 }
 
-.reconstruction-vr-label {
-  display: block;
-
-  margin-bottom: 12px;
-
+.vivia-reconstruction-vr-content > span {
   color: #9fcaff;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 850;
-  letter-spacing: .1em;
+
+  letter-spacing: 0.1em;
 }
 
-.reconstruction-vr h2 {
-  margin: 0;
+.vivia-reconstruction-vr h2 {
+  margin: 13px 0 0;
 
   color: white;
 
-  font-size: 39px;
-  line-height: 1.25;
+  font-size: 38px;
+  line-height: 1.28;
 
-  font-weight: 830;
-  letter-spacing: -.035em;
+  font-weight: 850;
 }
 
-.reconstruction-vr p {
-  max-width: 560px;
-
+.vivia-reconstruction-vr p {
   margin: 17px auto 28px;
 
-  color: rgba(255, 255, 255, .68);
+  color:
+    rgba(255, 255, 255, 0.68);
 
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
-.reconstruction-vr-btn {
+.vivia-reconstruction-vr-button {
   min-width: 270px;
   height: 58px;
 
-  padding: 0 28px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
+  padding: 0 26px;
 
   border: none;
   border-radius: 17px;
 
   background: white;
-  color: #0a3c84;
 
-  font-size: 16px;
-  font-weight: 800;
+  color: #0b438d;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  font-size: 15px;
+  font-weight: 820;
 
   cursor: pointer;
 
-  box-shadow: 0 13px 30px rgba(0, 0, 0, .15);
+  box-shadow:
+    0 13px 30px rgba(0, 0, 0, 0.15);
 
   transition:
-    transform .22s ease,
-    box-shadow .22s ease;
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
-.reconstruction-vr-btn:hover {
+.vivia-reconstruction-vr-button:hover {
   transform: translateY(-3px);
 
-  box-shadow: 0 18px 35px rgba(0, 0, 0, .2);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.2);
 }
 
-.reconstruction-vr small {
+.vivia-reconstruction-vr-content small {
   display: block;
 
-  margin-top: 17px;
+  margin-top: 16px;
 
-  color: rgba(255, 255, 255, .4);
+  color:
+    rgba(255, 255, 255, 0.37);
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 
-/* ==============================
+/* ========================================
+   MODAL
+======================================== */
+
+.vivia-reconstruction-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 999;
+
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(7, 20, 39, 0.55);
+
+  backdrop-filter: blur(8px);
+}
+
+.vivia-reconstruction-modal {
+  position: relative;
+
+  width: min(470px, 100%);
+
+  padding: 43px;
+
+  border-radius: 29px;
+
+  background:
+    linear-gradient(
+      150deg,
+      #ffffff,
+      #fff9f5
+    );
+
+  text-align: center;
+
+  box-shadow:
+    0 30px 80px rgba(8, 25, 48, 0.24);
+}
+
+.vivia-reconstruction-modal-close {
+  position: absolute;
+
+  top: 17px;
+  right: 17px;
+
+  width: 35px;
+  height: 35px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f6fa;
+
+  color: #64748b;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.vivia-reconstruction-modal-icon {
+  width: 62px;
+  height: 62px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eaf3ff,
+      #fff0e5
+    );
+
+  color: #ff7a2a;
+}
+
+.vivia-reconstruction-modal > span {
+  color: #0f6fff;
+
+  font-size: 11px;
+  font-weight: 850;
+
+  letter-spacing: 0.09em;
+}
+
+.vivia-reconstruction-modal h2 {
+  margin: 12px 0 0;
+
+  color: #0f172a;
+
+  font-size: 28px;
+  line-height: 1.35;
+}
+
+.vivia-reconstruction-modal p {
+  margin: 17px 0 27px;
+
+  color: #64748b;
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.vivia-reconstruction-modal > button:last-child {
+  width: 100%;
+  height: 53px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: #0f6fff;
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* ========================================
    TABLET
-============================== */
+======================================== */
 
 @media (max-width: 900px) {
 
-  .reconstruction-page .sensor-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .reconstruction-section-head {
+  .vivia-reconstruction-section-head {
     flex-direction: column;
     align-items: flex-start;
 
     gap: 10px;
   }
 
-  .reconstruction-section-head p {
+  .vivia-reconstruction-section-head > p {
     text-align: left;
   }
 
-  .reconstruction-progress {
+  .vivia-reconstruction-sensor-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .vivia-reconstruction-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vivia-reconstruction-reasoning {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .vivia-reconstruction-reasoning-arrow {
     display: none;
   }
 
 }
 
 
-/* ==============================
+/* ========================================
    MOBILE
-============================== */
+======================================== */
 
-@media (max-width: 640px) {
+@media (max-width: 650px) {
 
-  .reconstruction-container {
-    width: min(100% - 34px, 1120px);
-
-    padding-top: 28px;
+  .vivia-reconstruction-page {
+    padding: 28px 17px 70px;
   }
 
-  .reconstruction-intro {
-    margin-top: 40px;
+  .vivia-reconstruction-header {
+    margin-top: 42px;
   }
 
-  .reconstruction-intro h1 {
+  .vivia-reconstruction-header h1 {
     font-size: 38px;
   }
 
-  .reconstruction-intro p {
+  .vivia-reconstruction-header p {
     font-size: 15px;
   }
 
-  .reconstruction-hero {
-    height: 360px;
+  .vivia-reconstruction-hero {
+    padding: 27px;
 
-    border-radius: 24px;
+    border-radius: 25px;
   }
 
-  .reconstruction-hero-content {
-    left: 25px;
-    bottom: 27px;
-  }
-
-  .reconstruction-hero-content h2 {
+  .vivia-reconstruction-hero-content h2 {
     font-size: 31px;
   }
 
-  .reconstruction-page .summary-grid {
+  .vivia-reconstruction-sensor-grid {
     grid-template-columns: 1fr;
   }
 
-  .reconstruction-page .sensor-grid {
+  .vivia-reconstruction-reasoning {
     grid-template-columns: 1fr;
   }
 
-  .reconstruction-result {
-    padding: 25px;
+  .vivia-reconstruction-timeline-item {
+    grid-template-columns:
+      55px
+      27px
+      1fr;
+  }
+
+  .vivia-reconstruction-result {
+    padding: 27px;
 
     flex-direction: column;
   }
 
-  .reconstruction-vr-content {
-    padding: 44px 24px;
+  .vivia-reconstruction-vr-content {
+    padding: 52px 22px;
   }
 
-  .reconstruction-vr h2 {
+  .vivia-reconstruction-vr h2 {
     font-size: 31px;
   }
 
-  .reconstruction-vr-btn {
+  .vivia-reconstruction-vr-button {
     width: 100%;
     min-width: 0;
   }
 
+  .vivia-reconstruction-modal {
+    padding: 37px 24px 27px;
+  }
 }

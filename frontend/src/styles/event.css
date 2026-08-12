@@ -1,28 +1,42 @@
-/* =========================
-   EVENT PAGE
-========================= */
+/* ========================================
+   VIVIA · EVENT PAGE
+======================================== */
 
-.event-page {
+.vivia-event-page {
   min-height: 100vh;
-  padding: 42px 24px 90px;
+  padding: 38px 24px 90px;
 
   background:
-    radial-gradient(circle at top right, rgba(15, 111, 255, 0.08), transparent 28%),
-    linear-gradient(180deg, #f8fbff 0%, #f4f8fd 100%);
+    radial-gradient(
+      circle at 10% 3%,
+      rgba(15, 111, 255, 0.08),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 92% 10%,
+      rgba(255, 138, 61, 0.09),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      #f6f9fd 100%
+    );
 
   color: #0f172a;
 }
 
-.event-container {
-  width: min(1060px, 100%);
+.vivia-event-container {
+  width: min(1080px, 100%);
   margin: 0 auto;
 }
 
-/* =========================
-   BACK
-========================= */
 
-.event-back {
+/* ========================================
+   BACK
+======================================== */
+
+.vivia-event-back {
   width: 46px;
   height: 46px;
 
@@ -38,7 +52,8 @@
 
   cursor: pointer;
 
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.045);
+  box-shadow:
+    0 7px 20px rgba(15, 23, 42, 0.045);
 
   transition:
     transform 0.2s ease,
@@ -47,157 +62,240 @@
     box-shadow 0.2s ease;
 }
 
-.event-back:hover {
+.vivia-event-back:hover {
   transform: translateX(-2px);
 
   color: #0f6fff;
-  border-color: #bfd8ff;
+  border-color: #b9d5ff;
 
-  box-shadow: 0 10px 26px rgba(15, 111, 255, 0.09);
+  box-shadow:
+    0 10px 24px rgba(15, 111, 255, 0.09);
 }
 
-/* =========================
-   HERO
-========================= */
 
-.event-hero {
+/* ========================================
+   HEADER
+======================================== */
+
+.vivia-event-header {
   max-width: 760px;
 
-  margin: 58px auto 44px;
+  margin: 56px auto 46px;
 
   text-align: center;
 }
 
-.event-chip {
+.vivia-event-eyebrow {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  padding: 9px 18px;
+  padding: 9px 17px;
+
+  margin-bottom: 20px;
 
   border-radius: 999px;
 
-  background: #eaf3ff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(15, 111, 255, 0.1),
+      rgba(255, 138, 61, 0.11)
+    );
+
   color: #0f6fff;
 
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-
-  margin-bottom: 21px;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
 }
 
-.event-hero h1 {
+.vivia-event-header h1 {
   margin: 0;
 
+  color: #0f172a;
+
   font-size: clamp(42px, 5vw, 58px);
-  line-height: 1.15;
+  line-height: 1.16;
 
   font-weight: 850;
   letter-spacing: -0.045em;
-
-  color: #0f172a;
 }
 
-.event-hero p {
-  max-width: 650px;
+.vivia-event-header p {
+  margin: 16px auto 0;
 
-  margin: 22px auto 0;
-
-  color: #64748b;
+  color: #ff7a2a;
 
   font-size: 17px;
-  line-height: 1.8;
+  line-height: 1.6;
+
+  font-weight: 750;
 }
 
-/* =========================
-   MAIN PREVIEW CARD
-========================= */
 
-.event-preview-card {
+/* ========================================
+   MAIN EVENT CARD
+======================================== */
+
+.vivia-event-card {
+  position: relative;
+
+  overflow: hidden;
+
   padding: 38px;
 
-  border: 1px solid #e6edf6;
+  border: 1px solid #dee8f4;
   border-radius: 30px;
 
-  background: rgba(255, 255, 255, 0.97);
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fbfdff 62%,
+      #fffaf6 100%
+    );
 
-  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 24px 60px rgba(25, 46, 78, 0.08);
 }
 
-/* =========================
-   TOP
-========================= */
+.vivia-event-card::before {
+  content: "";
 
-.event-preview-top {
+  position: absolute;
+
+  width: 300px;
+  height: 300px;
+
+  top: -140px;
+  right: -110px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 138, 61, 0.14),
+      rgba(255, 138, 61, 0.035) 58%,
+      transparent 72%
+    );
+
+  pointer-events: none;
+}
+
+.vivia-event-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 260px;
+  height: 260px;
+
+  left: -130px;
+  bottom: -150px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(15, 111, 255, 0.09),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   CARD TOP
+======================================== */
+
+.vivia-event-card-top {
+  position: relative;
+  z-index: 2;
+
   display: flex;
-
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
 
   gap: 32px;
 
   padding-bottom: 30px;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid #e9eef5;
 }
 
-.event-label {
-  display: block;
+.vivia-event-date {
+  display: inline-flex;
 
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 
-  color: #0f6fff;
+  padding: 7px 12px;
 
-  font-size: 13px;
-  font-weight: 800;
+  border-radius: 999px;
+
+  background: #fff2e8;
+  color: #e86d1e;
+
+  font-size: 12px;
+  font-weight: 850;
 }
 
-.event-preview-top h2 {
+.vivia-event-card-top h2 {
   margin: 0 0 12px;
 
   color: #0f172a;
 
   font-size: 30px;
-  font-weight: 820;
+  font-weight: 830;
   letter-spacing: -0.03em;
 }
 
-.event-preview-top p {
-  max-width: 600px;
+.vivia-event-card-top p {
+  max-width: 650px;
 
   margin: 0;
 
   color: #64748b;
 
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
-.event-ai-badge {
+.vivia-event-match-badge {
   flex-shrink: 0;
 
   display: inline-flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 7px;
 
-  padding: 10px 15px;
+  padding: 10px 14px;
 
   border-radius: 999px;
 
-  background: #eef6ff;
+  background: #edf5ff;
   color: #0f6fff;
 
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 850;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 111, 255, 0.05);
 }
 
-/* =========================
+
+/* ========================================
    INFO GRID
-========================= */
+======================================== */
 
-.event-info-grid {
+.vivia-event-info-grid {
+  position: relative;
+  z-index: 2;
+
   display: grid;
-
   grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 14px;
@@ -205,25 +303,42 @@
   margin-top: 28px;
 }
 
-.event-info-item {
-  min-height: 100px;
+.vivia-event-info-item {
+  min-height: 104px;
 
   padding: 19px;
-
-  border: 1px solid #edf2f7;
-  border-radius: 18px;
-
-  background: #fbfdff;
 
   display: flex;
   align-items: center;
 
   gap: 14px;
+
+  border: 1px solid #e8edf4;
+  border-radius: 19px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.035);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.event-info-icon {
-  width: 44px;
-  height: 44px;
+.vivia-event-info-item:hover {
+  transform: translateY(-2px);
+
+  border-color: #c9ddfa;
+
+  box-shadow:
+    0 12px 28px rgba(15, 111, 255, 0.07);
+}
+
+.vivia-event-info-icon {
+  width: 46px;
+  height: 46px;
 
   flex-shrink: 0;
 
@@ -231,63 +346,167 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 14px;
+  border-radius: 15px;
+}
 
+.vivia-event-info-icon.blue {
   background: #eaf3ff;
   color: #0f6fff;
 }
 
-.event-info-item span {
+.vivia-event-info-icon.orange {
+  background: #fff1e8;
+  color: #ff7a2a;
+}
+
+.vivia-event-info-item span {
   display: block;
 
   margin-bottom: 4px;
 
   color: #94a3b8;
 
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 750;
 }
 
-.event-info-item strong {
+.vivia-event-info-item strong {
   color: #1e293b;
 
   font-size: 14px;
-  font-weight: 780;
+  font-weight: 820;
 }
 
-/* =========================
-   SUMMARY
-========================= */
 
-.event-summary {
+/* ========================================
+   SIGNAL ROW
+======================================== */
+
+.vivia-event-signal-row {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 18px;
+}
+
+.vivia-event-signal-card {
+  min-height: 90px;
+
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  border: 1px solid #e7edf4;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f9fbff,
+      #fffaf6
+    );
+
+  color: #0f6fff;
+}
+
+.vivia-event-signal-card:nth-child(2) {
+  color: #ff7a2a;
+}
+
+.vivia-event-signal-card:nth-child(3) {
+  color: #64748b;
+}
+
+.vivia-event-signal-card span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.vivia-event-signal-card strong {
+  color: #1e293b;
+
+  font-size: 14px;
+  font-weight: 820;
+}
+
+
+/* ========================================
+   AI SUMMARY
+======================================== */
+
+.vivia-event-summary {
+  position: relative;
+  z-index: 2;
+
   margin-top: 24px;
 
-  padding: 25px 27px;
+  padding: 25px;
 
-  border-radius: 20px;
+  display: flex;
+  align-items: flex-start;
+
+  gap: 17px;
+
+  border: 1px solid #d8e9ff;
+  border-radius: 21px;
 
   background:
     linear-gradient(
       135deg,
       rgba(15, 111, 255, 0.07),
-      rgba(15, 111, 255, 0.025)
+      rgba(255, 138, 61, 0.055)
     );
-
-  border: 1px solid #dcecff;
 }
 
-.event-summary span {
+.vivia-event-summary-icon {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eaf3ff,
+      #fff1e8
+    );
+
+  color: #ff7a2a;
+}
+
+.vivia-event-summary span {
   display: block;
 
-  margin-bottom: 9px;
+  margin-bottom: 7px;
 
   color: #0f6fff;
 
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
 }
 
-.event-summary p {
+.vivia-event-summary p {
   margin: 0;
 
   color: #475569;
@@ -296,11 +515,15 @@
   line-height: 1.85;
 }
 
-/* =========================
-   CTA
-========================= */
 
-.event-primary-btn {
+/* ========================================
+   PRIMARY CTA
+======================================== */
+
+.vivia-event-primary {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
   height: 60px;
 
@@ -309,7 +532,13 @@
   border: none;
   border-radius: 17px;
 
-  background: #0f6fff;
+  background:
+    linear-gradient(
+      90deg,
+      #0f6fff,
+      #247eff
+    );
+
   color: white;
 
   display: flex;
@@ -319,75 +548,107 @@
   gap: 10px;
 
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 820;
 
   cursor: pointer;
 
-  box-shadow: 0 12px 26px rgba(15, 111, 255, 0.2);
+  box-shadow:
+    0 13px 28px rgba(15, 111, 255, 0.2);
 
   transition:
     transform 0.22s ease,
-    background 0.22s ease,
     box-shadow 0.22s ease;
 }
 
-.event-primary-btn:hover {
+.vivia-event-primary:hover {
   transform: translateY(-2px);
 
-  background: #095ee6;
-
-  box-shadow: 0 16px 32px rgba(15, 111, 255, 0.25);
+  box-shadow:
+    0 17px 34px rgba(15, 111, 255, 0.26);
 }
 
-/* =========================
+.vivia-event-primary svg {
+  transition:
+    transform 0.2s ease;
+}
+
+.vivia-event-primary:hover svg {
+  transform: translateX(4px);
+}
+
+
+/* ========================================
    TABLET
-========================= */
+======================================== */
 
 @media (max-width: 900px) {
-  .event-info-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  .vivia-event-info-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
-  .event-preview-top {
+  .vivia-event-signal-row {
+    grid-template-columns: 1fr;
+  }
+
+  .vivia-event-card-top {
     flex-direction: column;
   }
 }
 
-/* =========================
+
+/* ========================================
    MOBILE
-========================= */
+======================================== */
 
 @media (max-width: 640px) {
-  .event-page {
-    padding: 28px 17px 65px;
+
+  .vivia-event-page {
+    padding: 28px 17px 70px;
   }
 
-  .event-hero {
+  .vivia-event-back {
+    width: 42px;
+    height: 42px;
+  }
+
+  .vivia-event-header {
     margin-top: 42px;
+    margin-bottom: 36px;
   }
 
-  .event-hero h1 {
+  .vivia-event-header h1 {
     font-size: 38px;
   }
 
-  .event-hero p {
-    font-size: 15.5px;
+  .vivia-event-header p {
+    font-size: 15px;
   }
 
-  .event-preview-card {
+  .vivia-event-card {
     padding: 24px;
+
     border-radius: 24px;
   }
 
-  .event-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .event-preview-top h2 {
+  .vivia-event-card-top h2 {
     font-size: 25px;
   }
 
-  .event-primary-btn {
+  .vivia-event-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vivia-event-info-item {
+    min-height: 90px;
+  }
+
+  .vivia-event-summary {
+    flex-direction: column;
+  }
+
+  .vivia-event-primary {
     height: 56px;
   }
 }

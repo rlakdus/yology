@@ -23,13 +23,23 @@ type AgeGroup = "20s" | "30s" | "40s";
 
 type MomentItem = {
   id: string;
+
+  /* Moment 카드용 월 단위 */
   date?: string;
+
+  /* Event 상세용 정확한 날짜 */
+  exactDate?: string;
+
   title: string;
   subtitle: string;
   description: string;
+
   location?: string;
+
   icon: LucideIcon;
+
   available: boolean;
+
   demoSource?: string;
   eventId?: string;
 };
@@ -49,56 +59,88 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
   "20s": [
     {
       id: "exam-interview",
+
       date: "2026.04",
+      exactDate: "",
+
       title: "시험·면접 직전후",
       subtitle: "긴장과 몰입이 가장 높았던 순간",
+
       description:
         "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
+
       location: "Campus",
+
       icon: GraduationCap,
+
       available: true,
+
       demoSource: "student",
       eventId: "event_001",
     },
 
     {
       id: "first-concert",
+
       date: "2026.05",
+      exactDate: "",
+
       title: "대학 입학 후 첫 콘서트",
       subtitle: "처음 마주한 공연장의 열기",
+
       description:
         "좋아하는 음악과 사람들 사이에서 설렘과 몰입이 높아졌던 순간을 다시 떠올립니다.",
+
       location: "Seoul",
+
       icon: Music,
+
       available: true,
+
       demoSource: "student",
       eventId: "event_002",
     },
 
     {
       id: "mongolia-trip",
+
       date: "2026.07",
+      exactDate: "",
+
       title: "몽골 여행",
       subtitle: "초원을 달리던 여름",
+
       description:
         "끝없이 펼쳐진 초원에서 말을 타며 느꼈던 자유와 설렘을 몸의 신호와 함께 다시 경험합니다.",
+
       location: "Mongolia",
+
       icon: Plane,
+
       available: true,
+
       demoSource: "student",
       eventId: "event_003",
     },
 
     {
       id: "favorite-movie",
+
       date: "2026.08",
+      exactDate: "",
+
       title: "좋아하는 영화 관람",
       subtitle: "오래 기억하고 싶은 한 장면",
+
       description:
         "영화를 보며 느꼈던 몰입과 감정의 변화를 몸의 신호와 함께 다시 꺼내봅니다.",
+
       location: "Cinema",
+
       icon: Film,
+
       available: true,
+
       demoSource: "student",
       eventId: "event_004",
     },
@@ -112,41 +154,57 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
   "30s": [
     {
       id: "important-work",
+
       title: "중요한 업무",
       subtitle: "커리어의 중요한 전환점",
+
       description:
         "중요한 미팅이나 발표처럼 오래 기억에 남을 업무 순간입니다.",
+
       icon: Presentation,
+
       available: false,
     },
 
     {
       id: "first-home",
+
       title: "첫 집",
       subtitle: "새로운 삶의 공간",
+
       description:
         "처음 나만의 공간을 마련하며 느꼈던 감정을 기록합니다.",
+
       icon: House,
+
       available: false,
     },
 
     {
       id: "old-friends",
+
       title: "오랜만의 친구 모임",
       subtitle: "시간을 넘어 다시 만난 사람들",
+
       description:
         "오랜만에 만난 친구들과 다시 추억을 나누었던 순간입니다.",
+
       icon: UsersRound,
+
       available: false,
     },
 
     {
       id: "special-memory",
+
       title: "잊고 싶지 않은 기억",
       subtitle: "시간이 지나도 남는 순간",
+
       description:
         "나에게 특별했던 기억을 다시 꺼내볼 수 있습니다.",
+
       icon: Sparkles,
+
       available: false,
     },
   ],
@@ -159,41 +217,57 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
   "40s": [
     {
       id: "health-check",
+
       title: "건강을 확인한 날",
       subtitle: "결과를 기다리던 시간",
+
       description:
         "건강검진 결과를 기다리며 여러 생각이 스쳤던 순간입니다.",
+
       icon: Stethoscope,
+
       available: false,
     },
 
     {
       id: "parents",
+
       title: "부모님과의 순간",
       subtitle: "시간이 지날수록 소중해지는 기억",
+
       description:
         "부모님과 함께한 평범하지만 오래 남는 순간을 기록합니다.",
+
       icon: Heart,
+
       available: false,
     },
 
     {
       id: "family-trip",
+
       title: "가족과의 여행",
       subtitle: "함께해서 더 특별했던 시간",
+
       description:
         "가족과 함께한 여행의 분위기와 감정을 다시 경험합니다.",
+
       icon: Plane,
+
       available: false,
     },
 
     {
       id: "child-milestone",
+
       title: "가족의 새로운 시작",
       subtitle: "삶의 또 다른 전환점",
+
       description:
         "입학이나 졸업처럼 가족 모두에게 의미가 컸던 순간입니다.",
+
       icon: GraduationCap,
+
       available: false,
     },
   ],
@@ -272,16 +346,27 @@ const Moment = () => {
         ageLabel: ageLabels[selectedAge],
 
         momentId: moment.id,
+
         momentTitle: moment.title,
         momentSubtitle: moment.subtitle,
         momentDescription:
           moment.description,
 
+        /* 월 단위 */
         momentDate: moment.date,
-        momentLocation: moment.location,
 
-        demoSource: moment.demoSource,
-        eventId: moment.eventId,
+        /* 정확한 날짜 */
+        momentExactDate:
+          moment.exactDate,
+
+        momentLocation:
+          moment.location,
+
+        demoSource:
+          moment.demoSource,
+
+        eventId:
+          moment.eventId,
       },
     });
   };
@@ -297,7 +382,9 @@ const Moment = () => {
   return (
     <div className="life-moment-page">
 
-      {/* Back */}
+      {/* =====================
+          BACK
+      ===================== */}
 
       <button
         className="life-moment-back"
@@ -639,7 +726,7 @@ const Moment = () => {
       </main>
 
       {/* =====================
-          COMING SOON MODAL
+          COMING SOON
       ===================== */}
 
       {showComingSoon && (
