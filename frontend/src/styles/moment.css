@@ -1,28 +1,49 @@
-/* =========================
-   MOMENT PAGE
-========================= */
+/* ========================================
+   VIVIA · LIFE ARCHIVE
+   Moment Page
+======================================== */
 
-.moment-page {
+.life-moment-page {
   min-height: 100vh;
+  padding: 38px 24px 90px;
+
   background:
-    radial-gradient(circle at top left, rgba(15, 111, 255, 0.08), transparent 28%),
-    linear-gradient(180deg, #f8fbff 0%, #f4f8fd 100%);
-  padding: 42px 24px 90px;
+    radial-gradient(
+      circle at 10% 3%,
+      rgba(15, 111, 255, 0.08),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 91% 12%,
+      rgba(255, 138, 61, 0.09),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      #f6f9fd 100%
+    );
+
   color: #0f172a;
 }
 
-.moment-container {
-  width: min(1120px, 100%);
+.life-moment-container {
+  width: min(1180px, 100%);
   margin: 0 auto;
 }
 
-/* =========================
-   BACK BUTTON
-========================= */
 
-.moment-back {
+/* ========================================
+   BACK BUTTON
+======================================== */
+
+.life-moment-back {
   width: 46px;
   height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border: 1px solid #e2e8f0;
   border-radius: 50%;
@@ -30,219 +51,462 @@
   background: rgba(255, 255, 255, 0.94);
   color: #334155;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   cursor: pointer;
 
-  box-shadow: 0 7px 20px rgba(15, 23, 42, 0.045);
+  box-shadow:
+    0 7px 20px rgba(15, 23, 42, 0.045);
 
   transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
     transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-.moment-back:hover {
-  color: #0f6fff;
-  border-color: #b9d5ff;
+.life-moment-back:hover {
   transform: translateX(-2px);
 
-  box-shadow: 0 10px 24px rgba(15, 111, 255, 0.09);
+  color: #0f6fff;
+  border-color: #b9d5ff;
+
+  box-shadow:
+    0 10px 24px rgba(15, 111, 255, 0.09);
 }
 
-/* =========================
-   HEADER
-========================= */
 
-.moment-header {
-  max-width: 760px;
-  margin: 56px auto 42px;
+/* ========================================
+   HEADER
+======================================== */
+
+.life-moment-header {
+  max-width: 780px;
+
+  margin: 52px auto 58px;
+
   text-align: center;
 }
 
-.moment-chip {
+.life-moment-eyebrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  padding: 9px 18px;
+  padding: 9px 17px;
+  margin-bottom: 20px;
 
   border-radius: 999px;
 
-  background: #eaf3ff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(15, 111, 255, 0.1),
+      rgba(255, 138, 61, 0.11)
+    );
+
   color: #0f6fff;
 
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-
-  margin-bottom: 22px;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
 }
 
-.moment-header h1 {
+.life-moment-header h1 {
   margin: 0;
 
-  font-size: clamp(42px, 5vw, 58px);
-  line-height: 1.17;
+  font-size: clamp(43px, 5vw, 59px);
+  line-height: 1.16;
+
+  color: #0f172a;
 
   font-weight: 850;
   letter-spacing: -0.045em;
-
-  color: #0f172a;
 }
 
-.moment-header p {
-  margin: 25px auto 0;
+.life-moment-header h1::after {
+  content: "";
 
-  max-width: 680px;
+  display: block;
+
+  width: 46px;
+  height: 4px;
+
+  margin: 23px auto 0;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0f6fff,
+      #ff8a3d
+    );
+}
+
+.life-moment-header p {
+  margin: 22px auto 0;
 
   color: #64748b;
 
   font-size: 17px;
-  line-height: 1.85;
-  font-weight: 450;
+  line-height: 1.8;
 }
 
-/* =========================
-   AGE SELECTOR
-========================= */
 
-.age-selector {
-  width: fit-content;
-  max-width: 100%;
+/* ========================================
+   AGE TIMELINE
+   20대 · 30대 · 40대
+======================================== */
 
-  margin: 0 auto 56px;
+.life-age-timeline {
+  position: relative;
+
+  width: min(720px, 100%);
+
+  margin: 0 auto 58px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* 세 노드를 연결하는 선 */
+
+.life-age-timeline::before {
+  content: "";
+
+  position: absolute;
+
+  top: 7px;
+
+  left: 16.666%;
+  right: 16.666%;
+
+  height: 2px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #9fc7ff 0%,
+      #dce5ef 55%,
+      #f1d5c2 100%
+    );
+
+  z-index: 0;
+}
+
+.life-age-node-wrap {
+  position: relative;
+  z-index: 1;
 
   display: flex;
-  align-items: center;
-  gap: 6px;
-
-  padding: 6px;
-
-  border: 1px solid #e6edf6;
-  border-radius: 18px;
-
-  background: rgba(255, 255, 255, 0.9);
-
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+  justify-content: center;
 }
 
-.age-button {
-  min-width: 104px;
+/* JSX에 남아있는 기존 line은 숨김 */
 
-  padding: 12px 24px;
+.life-age-line {
+  display: none;
+}
+
+.life-age-node {
+  padding: 0;
 
   border: none;
-  border-radius: 13px;
-
   background: transparent;
-  color: #64748b;
 
-  font-size: 15px;
-  font-weight: 750;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+
+  color: #94a3b8;
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
     color 0.2s ease,
-    box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
-.age-button:hover {
+.life-age-node:hover {
   color: #0f6fff;
-  background: #f4f8ff;
 }
 
-.age-button.active {
-  background: #0f6fff;
-  color: #ffffff;
-
-  box-shadow: 0 8px 20px rgba(15, 111, 255, 0.2);
+.life-age-node:hover .life-age-dot {
+  border-color: #9fc7ff;
 }
 
-/* =========================
-   SECTION
-========================= */
-
-.moment-section {
-  width: 100%;
+.life-age-node strong {
+  font-size: 15px;
+  font-weight: 800;
 }
 
-.moment-section-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+.life-age-dot {
+  width: 16px;
+  height: 16px;
 
-  gap: 32px;
+  box-sizing: border-box;
 
-  margin-bottom: 26px;
+  border-radius: 50%;
+
+  border: 3px solid #dbe4ee;
+
+  background: #ffffff;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.moment-section-heading > div > span {
+.life-age-node.active {
+  color: #0f6fff;
+}
+
+.life-age-node.active .life-age-dot {
+  transform: scale(1.08);
+
+  border-color: #0f6fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f6fff 10%,
+      #ff8a3d 120%
+    );
+
+  box-shadow:
+    0 0 0 7px rgba(15, 111, 255, 0.08),
+    0 5px 12px rgba(15, 111, 255, 0.18);
+}
+
+
+/* ========================================
+   AGE HEADING
+======================================== */
+
+.life-age-heading {
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+
+.life-age-heading > span {
   display: block;
 
   margin-bottom: 8px;
 
-  color: #0f6fff;
+  color: #ff7a2a;
 
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.01em;
 }
 
-.moment-section-heading h2 {
+.life-age-heading h2 {
   margin: 0;
-
-  font-size: 30px;
-  line-height: 1.35;
-
-  font-weight: 820;
-  letter-spacing: -0.03em;
 
   color: #0f172a;
+
+  font-size: 30px;
+  font-weight: 830;
+  letter-spacing: -0.03em;
 }
 
-.moment-section-heading > p {
-  max-width: 330px;
-
-  margin: 0;
+.life-age-heading p {
+  margin: 10px 0 0;
 
   color: #94a3b8;
 
   font-size: 14px;
-  line-height: 1.75;
-
-  text-align: right;
+  line-height: 1.7;
 }
 
-/* =========================
-   GRID
-========================= */
 
-.moment-grid {
+/* ========================================
+   MOMENT CAROUSEL
+======================================== */
+
+.life-carousel {
+  position: relative;
+
+  min-height: 455px;
+
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 22px;
+  grid-template-columns:
+    minmax(150px, 0.55fr)
+    minmax(420px, 1.35fr)
+    minmax(150px, 0.55fr);
+
+  align-items: center;
+
+  gap: 24px;
+
+  overflow: hidden;
 }
 
-/* =========================
-   CARD
-========================= */
 
-.moment-card {
-  min-height: 270px;
+/* ========================================
+   SIDE PLACEHOLDER
 
-  padding: 30px;
+   첫 번째 / 마지막 카드에서도
+   중앙 카드 위치가 움직이지 않게 함
+======================================== */
 
-  border: 1px solid #e8eef6;
-  border-radius: 25px;
+.life-side-placeholder {
+  height: 300px;
 
-  background: rgba(255, 255, 255, 0.97);
+  pointer-events: none;
+}
+
+
+/* ========================================
+   SIDE CARDS
+======================================== */
+
+.life-side-card {
+  height: 300px;
+
+  padding: 26px;
+
+  border: 1px solid #e6ebf1;
+  border-radius: 26px;
+
+  background:
+    rgba(255, 255, 255, 0.74);
+
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 9px 28px rgba(15, 23, 42, 0.035);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.life-side-card.previous {
+  transform:
+    translateX(-48px)
+    scale(0.88);
+
+  opacity: 0.31;
+}
+
+.life-side-card.next {
+  transform:
+    translateX(48px)
+    scale(0.88);
+
+  opacity: 0.31;
+}
+
+.life-side-card:hover {
+  opacity: 0.58;
+
+  border-color: #c8dcfa;
+
+  box-shadow:
+    0 13px 32px rgba(15, 111, 255, 0.07);
+}
+
+.life-side-card.previous:hover {
+  transform:
+    translateX(-35px)
+    scale(0.9);
+}
+
+.life-side-card.next:hover {
+  transform:
+    translateX(35px)
+    scale(0.9);
+}
+
+.life-side-icon {
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background: #edf5ff;
+  color: #0f6fff;
+}
+
+.life-side-card > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #a0a9b5;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.life-side-card h3 {
+  margin: 0;
+
+  color: #475569;
+
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+
+/* ========================================
+   MAIN CARD WRAPPER
+======================================== */
+
+.life-main-wrap {
+  position: relative;
+
+  z-index: 5;
+}
+
+
+/* ========================================
+   MAIN MOMENT CARD
+======================================== */
+
+.life-main-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 410px;
+
+  padding: 38px;
+
+  overflow: hidden;
+
+  border: 1px solid #dee8f4;
+  border-radius: 32px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fbfdff 60%,
+      #fffaf6 100%
+    );
 
   text-align: left;
 
@@ -251,197 +515,709 @@
 
   cursor: pointer;
 
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+  box-shadow:
+    0 24px 60px rgba(25, 46, 78, 0.09);
 
   transition:
-    transform 0.24s ease,
-    border-color 0.24s ease,
-    box-shadow 0.24s ease,
-    background 0.24s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.moment-card:hover {
+/* warm memory glow */
+
+.life-main-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 290px;
+  height: 290px;
+
+  top: -125px;
+  right: -105px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 138, 61, 0.15),
+      rgba(255, 138, 61, 0.035) 55%,
+      transparent 72%
+    );
+
+  pointer-events: none;
+}
+
+/* data blue glow */
+
+.life-main-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 240px;
+  height: 240px;
+
+  bottom: -145px;
+  left: -110px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(15, 111, 255, 0.09),
+      transparent 68%
+    );
+
+  pointer-events: none;
+}
+
+.life-main-card:hover {
   transform: translateY(-5px);
 
-  border-color: #bfd8ff;
+  border-color: #bcd7ff;
 
-  background: #ffffff;
-
-  box-shadow: 0 20px 46px rgba(15, 111, 255, 0.11);
+  box-shadow:
+    0 30px 68px rgba(15, 111, 255, 0.12),
+    0 8px 24px rgba(255, 138, 61, 0.045);
 }
 
-/* =========================
-   ICON
-========================= */
 
-.moment-icon {
-  width: 58px;
-  height: 58px;
+/* ========================================
+   MAIN CARD TOP
+======================================== */
 
-  border-radius: 17px;
+.life-main-top {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.life-main-icon {
+  width: 64px;
+  height: 64px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #eaf3ff;
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e9f3ff,
+      #fff2e9
+    );
+
   color: #0f6fff;
 
-  margin-bottom: 27px;
-
-  transition:
-    transform 0.24s ease,
-    background 0.24s ease;
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 111, 255, 0.05);
 }
 
-.moment-card:hover .moment-icon {
-  transform: scale(1.04);
+.life-main-year {
+  padding: 8px 13px;
 
-  background: #e2efff;
+  border-radius: 999px;
+
+  background: #fff2e8;
+  color: #e86d1e;
+
+  font-size: 12px;
+  font-weight: 850;
 }
 
-/* =========================
-   CONTENT
-========================= */
 
-.moment-card-content {
+/* ========================================
+   MAIN CONTENT
+======================================== */
+
+.life-main-content {
+  position: relative;
+
+  z-index: 2;
+
   flex: 1;
+
+  padding-top: 42px;
 }
 
-.moment-card-content h3 {
-  margin: 0 0 12px;
+.life-main-content > span {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #ff7a2a;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.life-main-content h2 {
+  margin: 0 0 16px;
 
   color: #0f172a;
 
-  font-size: 23px;
-  font-weight: 820;
-  letter-spacing: -0.025em;
+  font-size: 34px;
+  font-weight: 850;
+
+  letter-spacing: -0.035em;
 }
 
-.moment-card-content p {
-  margin: 0;
+.life-main-content p {
+  max-width: 550px;
 
-  max-width: 440px;
+  margin: 0;
 
   color: #64748b;
 
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
-/* =========================
-   CARD FOOTER
-========================= */
+.life-location {
+  display: inline-flex;
+  align-items: center;
 
-.moment-card-bottom {
-  margin-top: 28px;
-  padding-top: 20px;
+  margin-top: 20px;
 
-  border-top: 1px solid #eef2f7;
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  background: #eef5ff;
+  color: #0f6fff;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* ========================================
+   MAIN CARD FOOTER
+======================================== */
+
+.life-main-footer {
+  position: relative;
+
+  z-index: 2;
+
+  margin-top: 34px;
+  padding-top: 22px;
+
+  border-top: 1px solid #e7edf4;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  color: #475569;
+  color: #334155;
 
   font-size: 14px;
-  font-weight: 750;
+  font-weight: 800;
 }
 
-.moment-arrow {
-  color: #94a3b8;
+.life-main-arrow {
+  color: #9aa6b4;
 
   transition:
-    transform 0.22s ease,
-    color 0.22s ease;
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.moment-card:hover .moment-card-bottom {
+.life-main-card:hover .life-main-footer {
   color: #0f6fff;
 }
 
-.moment-card:hover .moment-arrow {
-  color: #0f6fff;
+.life-main-card:hover .life-main-arrow {
+  color: #ff7a2a;
+
   transform: translateX(4px);
 }
 
-/* =========================
+
+/* ========================================
+   COMING SOON BADGE
+======================================== */
+
+.life-coming-badge {
+  position: absolute;
+
+  top: 28px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 4;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  background: #fff3ea;
+  color: #e86d1e;
+
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+
+/* ========================================
+   CAROUSEL CONTROLS
+======================================== */
+
+.life-carousel-controls {
+  margin-top: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+}
+
+
+/* arrows */
+
+.life-carousel-controls > button {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #475569;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 14px rgba(15, 23, 42, 0.035);
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.life-carousel-controls > button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  color: #0f6fff;
+  border-color: #b9d6ff;
+
+  box-shadow:
+    0 8px 18px rgba(15, 111, 255, 0.08);
+}
+
+
+/* disabled arrows */
+
+.life-carousel-controls > button:disabled {
+  opacity: 0.28;
+
+  cursor: default;
+
+  box-shadow: none;
+}
+
+.life-carousel-controls > button:disabled:hover {
+  transform: none;
+
+  color: #475569;
+  border-color: #e2e8f0;
+
+  box-shadow: none;
+}
+
+
+/* ========================================
+   DOTS + COUNT
+======================================== */
+
+.life-carousel-position {
+  min-height: 42px;
+
+  padding: 0 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.life-carousel-dots {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.life-carousel-dot {
+  width: 8px;
+  height: 8px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #cbd5e1;
+
+  cursor: pointer;
+
+  transition:
+    width 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease;
+}
+
+.life-carousel-dot:hover {
+  transform: scale(1.15);
+
+  background: #9fc7ff;
+}
+
+.life-carousel-dot.active {
+  width: 25px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0f6fff,
+      #ff8a3d
+    );
+}
+
+
+/* count */
+
+.life-carousel-count {
+  display: flex;
+  align-items: baseline;
+
+  gap: 5px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.life-carousel-count strong {
+  color: #ff7a2a;
+
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.life-carousel-count span {
+  color: #cbd5e1;
+}
+
+
+/* ========================================
+   COMING SOON OVERLAY
+======================================== */
+
+.life-coming-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 999;
+
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(10, 22, 40, 0.5);
+
+  backdrop-filter: blur(8px);
+}
+
+
+/* ========================================
+   COMING SOON MODAL
+======================================== */
+
+.life-coming-modal {
+  width: min(470px, 100%);
+
+  padding: 42px;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      155deg,
+      #ffffff,
+      #fffaf6
+    );
+
+  text-align: center;
+
+  box-shadow:
+    0 30px 80px rgba(8, 25, 48, 0.22);
+}
+
+.life-coming-icon {
+  width: 60px;
+  height: 60px;
+
+  margin: 0 auto 18px;
+
+  border-radius: 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eaf3ff,
+      #fff0e5
+    );
+
+  color: #ff7a2a;
+}
+
+.life-coming-modal > span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #0f6fff;
+
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.life-coming-modal h2 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 29px;
+  line-height: 1.35;
+
+  letter-spacing: -0.03em;
+}
+
+.life-coming-modal p {
+  margin: 17px 0 27px;
+
+  color: #64748b;
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.life-coming-modal button {
+  width: 100%;
+  height: 54px;
+
+  border: none;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0f6fff,
+      #247eff
+    );
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 24px rgba(15, 111, 255, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.life-coming-modal button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(15, 111, 255, 0.24);
+}
+
+
+/* ========================================
    TABLET
-========================= */
+======================================== */
 
-@media (max-width: 900px) {
-  .moment-section-heading {
-    align-items: flex-start;
-    flex-direction: column;
+@media (max-width: 950px) {
 
-    gap: 12px;
+  .life-carousel {
+    grid-template-columns:
+      110px
+      minmax(0, 1fr)
+      110px;
+
+    gap: 16px;
   }
 
-  .moment-section-heading > p {
-    max-width: 520px;
-    text-align: left;
+  .life-side-card {
+    height: 260px;
+
+    padding: 18px;
   }
 
-  .moment-grid {
-    grid-template-columns: 1fr;
+  .life-side-placeholder {
+    height: 260px;
+  }
+
+  .life-side-card h3 {
+    font-size: 15px;
+  }
+
+  .life-main-card {
+    padding: 32px;
   }
 }
 
-/* =========================
+
+/* ========================================
    MOBILE
-========================= */
+======================================== */
 
-@media (max-width: 640px) {
-  .moment-page {
-    padding: 28px 17px 65px;
+@media (max-width: 700px) {
+
+  .life-moment-page {
+    padding: 28px 17px 70px;
   }
 
-  .moment-header {
+  .life-moment-back {
+    width: 42px;
+    height: 42px;
+  }
+
+  .life-moment-header {
     margin-top: 42px;
-    margin-bottom: 34px;
+    margin-bottom: 45px;
   }
 
-  .moment-header h1 {
+  .life-moment-header h1 {
     font-size: 38px;
   }
 
-  .moment-header p {
-    font-size: 15.5px;
+  .life-moment-header p {
+    font-size: 15px;
   }
 
-  .age-selector {
-    width: 100%;
-    margin-bottom: 42px;
+  .life-age-timeline {
+    margin-bottom: 48px;
   }
 
-  .age-button {
-    min-width: 0;
-    flex: 1;
-
-    padding: 11px 14px;
+  .life-age-node strong {
+    font-size: 13px;
   }
 
-  .moment-section-heading h2 {
+  .life-age-heading h2 {
     font-size: 25px;
   }
 
-  .moment-card {
-    min-height: 245px;
-
-    padding: 25px;
-
-    border-radius: 22px;
+  .life-age-heading p {
+    padding: 0 10px;
   }
 
-  .moment-icon {
-    width: 54px;
-    height: 54px;
+  .life-carousel {
+    display: block;
 
-    margin-bottom: 22px;
+    min-height: auto;
+
+    overflow: visible;
   }
 
-  .moment-card-content h3 {
-    font-size: 21px;
+  .life-side-card,
+  .life-side-placeholder {
+    display: none;
+  }
+
+  .life-main-card {
+    min-height: 400px;
+
+    padding: 27px;
+
+    border-radius: 25px;
+  }
+
+  .life-main-content {
+    padding-top: 34px;
+  }
+
+  .life-main-content h2 {
+    font-size: 29px;
+  }
+
+  .life-main-content p {
+    font-size: 14px;
+  }
+
+  .life-carousel-controls {
+    gap: 12px;
+  }
+
+  .life-carousel-position {
+    padding: 0 13px;
+
+    gap: 11px;
+  }
+
+  .life-carousel-controls > button {
+    width: 39px;
+    height: 39px;
+  }
+
+  .life-carousel-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .life-carousel-dot.active {
+    width: 19px;
+  }
+
+  .life-coming-modal {
+    padding: 32px 24px;
+  }
+
+  .life-coming-modal h2 {
+    font-size: 25px;
   }
 }
