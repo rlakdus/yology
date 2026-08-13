@@ -1,0 +1,97 @@
+.trace-chart {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 18px 20px 14px;
+  box-shadow: var(--shadow);
+}
+
+.trace-chart + .trace-chart {
+  margin-top: 14px;
+}
+
+.trace-chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.trace-chart-head h4 {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.trace-chart-range {
+  font-size: 12px;
+  color: var(--subtext);
+  white-space: nowrap;
+}
+
+.trace-chart-body {
+  position: relative;
+}
+
+.trace-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.trace-chart-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.trace-chart-tick {
+  fill: var(--subtext);
+  font-size: 11px;
+}
+
+.trace-chart-baseline {
+  stroke: var(--subtext);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.trace-chart-baseline-label {
+  fill: var(--subtext);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.trace-chart-peak-label {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.trace-chart-crosshair {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.trace-chart-tooltip {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: white;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.22);
+}
+
+.trace-chart-tooltip strong {
+  display: block;
+  font-size: 13px;
+}
+
+.trace-chart-tooltip span {
+  color: rgba(255, 255, 255, 0.7);
+}

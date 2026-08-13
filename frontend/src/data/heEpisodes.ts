@@ -37,6 +37,20 @@ export const formatTime = (value: string) => new Intl.DateTimeFormat("ko-KR", {
   hour: "2-digit", minute: "2-digit", hour12: false,
 }).format(parseTimestamp(value));
 
+/** start~end 구간에 count개 샘플을 균등 배치했을 때 각 샘플의 시각 레이블(HH:mm:ss). */
+export const interpolateTimestamps = (start: string, end: string, count: number) => {
+  if (count <= 0) return [];
+  const startMs = parseTimestamp(start).getTime();
+  const endMs = parseTimestamp(end).getTime();
+  const formatter = new Intl.DateTimeFormat("ko-KR", {
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
+  });
+  return Array.from({ length: count }, (_, i) => {
+    const t = count === 1 ? startMs : startMs + ((endMs - startMs) * i) / (count - 1);
+    return formatter.format(new Date(t));
+  });
+};
+
 export const value = (number: number | null, digits = 0) =>
   number === null ? "측정 없음" : number.toFixed(digits);
 

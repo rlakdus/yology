@@ -6,16 +6,23 @@ import SectionTitle from "../components/SectionTitle";
 import SensorCard from "../components/SensorCard";
 import SummaryCard from "../components/SummaryCard";
 import VrReconstruction from "../components/VrReconstruction";
-import { formatDate, formatTime, useHeEpisode, value } from "../data/heEpisodes";
+import EpisodeTraceChart from "../components/EpisodeTraceChart";
+import { formatDate, formatTime, interpolateTimestamps, useHeEpisode, value } from "../data/heEpisodes";
+import { useVrEvent } from "../data/vrEvent";
 import "../styles/heReconstruction.css";
 
 const HeReconstruction = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const { person, episode, error } = useHeEpisode(eventId);
+  const { event: vrEvent } = useVrEvent("he", "event_001");
 
   if (error) return <div className="he-message">{error}</div>;
   if (!person || !episode) return <div className="he-message">HE 생체 데이터를 불러오는 중입니다…</div>;
+
+  const heartRateSeries = vrEvent?.sensor.heart_rate ?? [];
+  const edaSeries = vrEvent?.sensor.eda ?? [];
+  const pointLabels = interpolateTimestamps(episode.start, episode.end, heartRateSeries.length);
 
   return (
     <>
@@ -44,6 +51,35 @@ const HeReconstruction = () => {
               <SensorCard icon={<Footprints size={24} />} title="직전 5분 걸음" value={`${value(episode.steps_5m)}걸음`} />
               <SensorCard icon={<Brain size={24} />} title="인근 HRV" value={episode.hrv_ms === null ? "측정 없음" : `${value(episode.hrv_ms, 1)} ms`} />
             </div>
+
+            {heartRateSeries.length > 0 && (
+              <>
+                <SectionTitle title="생체 신호 추이" />
+                <EpisodeTraceChart
+                  title="심박 (관측 vs 기대)"
+                  series={heartRateSeries}
+                  startLabel={formatTime(episode.start)}
+                  endLabel={formatTime(episode.end)}
+                  unit=" bpm"
+                  color="var(--primary)"
+                  baseline={{ value: episode.expected_hr, label: `기대 심박 ${value(episode.expected_hr, 1)}bpm` }}
+                  peakLabel={`+${value(episode.excess_bpm)}bpm`}
+                  pointLabels={pointLabels}
+                />
+                {edaSeries.length > 0 && (
+                  <EpisodeTraceChart
+                    title="피부반응(EDA) 긴장도"
+                    series={edaSeries}
+                    startLabel={formatTime(episode.start)}
+                    endLabel={formatTime(episode.end)}
+                    unit=" µS"
+                    color="#eb6834"
+                    formatValue={(raw) => raw.toFixed(2)}
+                    pointLabels={interpolateTimestamps(episode.start, episode.end, edaSeries.length)}
+                  />
+                )}
+              </>
+            )}
 
             <SectionTitle title="재현 시간축" />
             <div className="he-timeline">

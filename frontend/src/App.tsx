@@ -15,7 +15,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-
         <Route path="/how-it-works" element={<HowItWorks />} />
 
         <Route path="/moment" element={<Moment />} />
