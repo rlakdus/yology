@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
+import HowItWorks from "./pages/HowItWorks";
 import Moment from "./pages/Moment";
 import Persona from "./pages/Persona";
 import Event from "./pages/Event";
@@ -14,6 +15,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/how-it-works" element={<HowItWorks />} />
 
         <Route path="/moment" element={<Moment />} />
 

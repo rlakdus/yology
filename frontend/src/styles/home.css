@@ -113,14 +113,13 @@
 
 .home-brand {
   margin: 0;
+  line-height: 0;
+}
 
-  color: #0f172a;
-
-  font-size: clamp(68px, 10vw, 112px);
-  line-height: 0.95;
-
-  font-weight: 900;
-  letter-spacing: -0.06em;
+.home-brand img {
+  width: clamp(230px, 30vw, 420px);
+  height: auto;
+  margin: 0 auto;
 }
 
 .home-title {
@@ -803,8 +802,8 @@
       80px 18px 75px;
   }
 
-  .home-brand {
-    font-size: 70px;
+  .home-brand img {
+    width: 220px;
   }
 
   .home-title {
@@ -887,5 +886,352 @@
 
   .home-final-btn {
     width: 100%;
+  }
+}
+
+
+/* ========================================
+   SLOGAN
+======================================== */
+
+.home-slogan {
+  margin: 20px 0 0;
+
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: #475569;
+}
+
+.home-slogan .via {
+  color: #0f6fff;
+}
+
+.home-slogan .vivid {
+  color: #7c5cff;
+}
+
+.home-slogan .vita {
+  color: #ff7a2a;
+}
+
+
+/* ========================================
+   HERO FLOATING CARDS
+======================================== */
+
+.home-hero-float {
+  position: absolute;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 13px 16px;
+
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid #e6ecf5;
+  border-radius: 16px;
+
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.09);
+
+  animation: home-float 5s ease-in-out infinite;
+}
+
+.home-hero-float span {
+  display: block;
+  margin-bottom: 2px;
+
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.home-hero-float strong {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.float-signal {
+  top: 16%;
+  left: 5%;
+  color: #0f6fff;
+
+  animation-delay: 0s;
+}
+
+.float-moment {
+  top: 12%;
+  right: 4%;
+  color: #ff7a2a;
+
+  animation-delay: 1.4s;
+}
+
+.float-replay {
+  bottom: 10%;
+  right: 9%;
+  color: #7c5cff;
+
+  animation-delay: 2.8s;
+}
+
+@keyframes home-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+@media (max-width: 1180px) {
+  .home-hero-float {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-float {
+    animation: none;
+  }
+}
+
+
+/* ========================================
+   PHILOSOPHY
+======================================== */
+
+.home-philosophy {
+  padding: 110px 24px;
+  text-align: center;
+
+  background: linear-gradient(160deg, #081c3c 0%, #0a2a5c 100%);
+}
+
+.home-philosophy .home-section-label.light {
+  color: #7fb3ff;
+}
+
+.home-philosophy h2 {
+  margin: 0;
+
+  color: white;
+  font-size: 38px;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+}
+
+.home-philosophy > p {
+  width: min(560px, 100%);
+  margin: 18px auto 0;
+
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.home-pillars {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+
+  width: min(1000px, 100%);
+  margin: 60px auto 0;
+}
+
+.home-pillar-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.home-pillar-card {
+  flex: 1;
+
+  padding: 34px 26px;
+
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+
+  text-align: left;
+}
+
+.home-pillar-icon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f6fff, #7c5cff);
+  color: white;
+}
+
+.home-pillar-card h3 {
+  margin: 0 0 10px;
+
+  color: white;
+  font-size: 19px;
+  font-weight: 830;
+}
+
+.home-pillar-card p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+.home-pillar-arrow {
+  flex: none;
+  margin: 0 14px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 860px) {
+  .home-pillars {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .home-pillar-wrap {
+    flex-direction: column;
+  }
+
+  .home-pillar-arrow {
+    display: none;
+  }
+}
+
+
+/* ========================================
+   MY MOMENTS
+======================================== */
+
+.home-moments {
+  padding: 110px 24px;
+  background: #fbfdff;
+}
+
+.home-moments-grid {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.home-moment-card {
+  padding: 24px 22px;
+
+  border-radius: 22px;
+  border: 1px solid #e4eaf2;
+  background: white;
+
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
+
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.home-moment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+}
+
+.home-moment-tag {
+  display: inline-block;
+
+  padding: 5px 11px;
+  margin-bottom: 14px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.home-moment-card.blue .home-moment-tag {
+  background: #eaf3ff;
+  color: #0f6fff;
+}
+
+.home-moment-card.orange .home-moment-tag {
+  background: #fff1e8;
+  color: #ff7a2a;
+}
+
+.home-moment-card h3 {
+  margin: 0 0 4px;
+
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 830;
+}
+
+.home-moment-date {
+  display: block;
+
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.home-moment-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  margin-top: 18px;
+  padding-top: 16px;
+
+  border-top: 1px dashed #e5e7eb;
+}
+
+.home-moment-stats span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 650;
+}
+
+.home-moment-stats svg {
+  color: #94a3b8;
+  flex: none;
+}
+
+@media (max-width: 1000px) {
+  .home-moments-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .home-philosophy {
+    padding: 80px 18px;
+  }
+
+  .home-philosophy h2 {
+    font-size: 30px;
+  }
+
+  .home-moments {
+    padding: 80px 18px;
+  }
+
+  .home-moments-grid {
+    grid-template-columns: 1fr;
   }
 }
