@@ -17,8 +17,6 @@ button{font:inherit}
 .vh3-hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:.84fr 1.16fr;align-items:center;gap:36px;padding-top:28px;padding-bottom:58px}
 .vh3-hero-copy{max-width:660px;padding-left:2px}
 .vh3-eyebrow,.vh3-kicker{display:block;color:#57bcbf;font-weight:850;letter-spacing:.16em;font-size:11px;margin-bottom:18px}
-.vh3-hero h1{margin:0;color:var(--navy);font-size:clamp(52px,5.8vw,86px);line-height:1.06;letter-spacing:-.06em;font-weight:900}
-.vh3-hero h1 span{font-weight:850}
 .vh3-hero p{margin:28px 0 0;color:#667085;font-size:17px;line-height:1.82}
 .vh3-hero-actions{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap}
 .vh3-btn{height:50px;border-radius:999px;padding:0 21px;display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:14px;transition:.22s ease}
@@ -66,7 +64,7 @@ button{font:inherit}
 [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1)}[data-reveal].is-visible{opacity:1;transform:none}
 
 @media(max-width:1100px){.shell{width:min(100% - 40px,1320px)}.vh-side-dock{display:none}.vh3-hero-grid{grid-template-columns:1fr;padding-top:48px}.vh3-hero-media{height:520px}.vh3-about,.vh3-concept-inner,.vh3-story-band,.vh3-insight{grid-template-columns:1fr}.vh3-connect-panel{padding:42px 28px}.vh3-concept-cards,.vh3-insight-grid{grid-template-columns:repeat(2,1fr)}.vh3-story-band{gap:38px}.vh3-dark-copy{max-width:600px}.vh3-footer>.shell{grid-template-columns:1fr 1fr}}
-@media(max-width:760px){.shell{width:min(100% - 28px,1320px)}.vh3-hero{min-height:auto}.vh3-hero-grid{padding:44px 0 46px;gap:24px}.vh3-hero h1{font-size:45px}.vh3-hero p{font-size:14px}.vh3-hero-media{height:430px;min-height:0;border-radius:24px}.vh3-signal-card{width:155px}.vh3-signal-card.card-b{right:1%;top:36%}.vh3-signal-card.card-c{display:none}.vh3-scroll-cue{display:none}.vh3-about{padding:72px 0;gap:38px}.vh3-section-heading{grid-template-columns:1fr}.vh3-num{display:none}.vh3-brand-line{font-size:24px}.vh3-connect-grid{grid-template-columns:1fr;gap:8px}.vh3-link-arrow{transform:rotate(90deg);justify-self:center}.vh3-concept{padding:64px 0}.vh3-concept-cards,.vh3-insight-grid{grid-template-columns:1fr}.vh3-how{padding:70px 0}.vh3-inline-head{grid-template-columns:1fr;gap:18px}.vh3-inline-head .vh3-kicker{grid-column:auto}.vh3-inline-head button{justify-self:start}.vh3-steps{grid-template-columns:1fr 1fr}.vh3-step:not(:last-child):after{display:none}.vh3-step{padding:10px 18px}.vh3-story-band{padding:66px 0}.vh3-replay-preview{height:390px}.vh3-replay-copy{left:22px;right:22px;bottom:24px;top:auto;transform:none;width:auto}.vh3-big-play{left:50%;top:38%}.vh3-insight{padding:68px 0}.vh3-final-band .shell>div{flex-wrap:wrap}.vh3-footer>.shell{grid-template-columns:1fr}.vh3-footer .shell>div:not(.vh3-footer-brand){display:none}}
+@media(max-width:760px){.shell{width:min(100% - 28px,1320px)}.vh3-hero{min-height:auto}.vh3-hero-grid{padding:44px 0 46px;gap:24px}.vh3-hero p{font-size:14px}.vh3-hero-media{height:430px;min-height:0;border-radius:24px}.vh3-signal-card{width:155px}.vh3-signal-card.card-b{right:1%;top:36%}.vh3-signal-card.card-c{display:none}.vh3-scroll-cue{display:none}.vh3-about{padding:72px 0;gap:38px}.vh3-section-heading{grid-template-columns:1fr}.vh3-num{display:none}.vh3-brand-line{font-size:24px}.vh3-connect-grid{grid-template-columns:1fr;gap:8px}.vh3-link-arrow{transform:rotate(90deg);justify-self:center}.vh3-concept{padding:64px 0}.vh3-concept-cards,.vh3-insight-grid{grid-template-columns:1fr}.vh3-how{padding:70px 0}.vh3-inline-head{grid-template-columns:1fr;gap:18px}.vh3-inline-head .vh3-kicker{grid-column:auto}.vh3-inline-head button{justify-self:start}.vh3-steps{grid-template-columns:1fr 1fr}.vh3-step:not(:last-child):after{display:none}.vh3-step{padding:10px 18px}.vh3-story-band{padding:66px 0}.vh3-replay-preview{height:390px}.vh3-replay-copy{left:22px;right:22px;bottom:24px;top:auto;transform:none;width:auto}.vh3-big-play{left:50%;top:38%}.vh3-insight{padding:68px 0}.vh3-final-band .shell>div{flex-wrap:wrap}.vh3-footer>.shell{grid-template-columns:1fr}.vh3-footer .shell>div:not(.vh3-footer-brand){display:none}}
 
 /* ===== V6 warm signal palette ===== */
 .vivia-home-v3{background:linear-gradient(180deg,#fffdfa 0%,#fbfaf7 58%,#fff8f3 100%)}
@@ -80,3 +78,92 @@ button{font:inherit}
 .vh3-insight-grid article:hover{border-color:#f2b28d;box-shadow:0 20px 42px rgba(230,122,61,.11)}
 .vh3-text-link:hover{border-color:#ecab82;color:#d46d38}.vh3-btn.primary:hover{background:linear-gradient(100deg,#10204a,#1d4674)}
 .vh3-signal-card.card-b{border-color:rgba(255,151,91,.26)}.vh3-signal-card.card-b svg{color:#f08048}
+
+/* === Hero title emphasis patch === */
+
+.vh3-hero-copy {
+  position: relative;
+  z-index: 3;
+}
+
+.vh3-hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.04em;
+  margin: 20px 0 26px;
+  letter-spacing: -0.055em;
+}
+
+.vh3-hero-title-dark,
+.vh3-hero-title-accent {
+  display: inline-block;
+  width: fit-content;
+  word-break: keep-all;
+}
+
+.vh3-hero-title-dark {
+  color: #0f1f3d;
+  font-weight: 800;
+}
+
+.vh3-hero-title-accent {
+  position: relative;
+  color: #2387f5;
+  font-weight: 800;
+  padding-bottom: 0.2em;
+  white-space: nowrap;
+}
+
+.vh3-title-underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #33cbd0 0%,
+    #258cf3 38%,
+    #8b81ec 67%,
+    #ff8a61 100%
+  );
+  transform-origin: left center;
+  animation: viviaUnderlineIn 900ms cubic-bezier(.22,.8,.32,1) 240ms both;
+}
+
+@keyframes viviaUnderlineIn {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .vh3-hero-title {
+    font-size: clamp(45px, 4.15vw, 78px);
+    line-height: 1.13;
+  }
+}
+
+@media (max-width: 900px) {
+  .vh3-hero-title {
+    font-size: clamp(39px, 8.2vw, 58px);
+    line-height: 1.14;
+  }
+
+  .vh3-title-underline {
+    height: 3px;
+  }
+}
+
+@media (max-width: 380px) {
+  .vh3-hero-title {
+    font-size: clamp(28px, 10vw, 39px);
+  }
+}
