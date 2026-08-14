@@ -1,5 +1,5 @@
 {
-  "basis": "videos/horse-riding.mp4의 대표 프레임",
+  "basis": "source/mongolia-horse-riding.original.mp4의 대표 프레임",
   "evidence": "약 9초 분량의 1인칭 승마 영상과 영상에 기록된 몽골 초원, 구름, 지평선",
   "scene_status": "recorded_anchor",
   "warning": "정면 영상은 실제 기록이지만 좌우와 후면의 360도 주변 시야는 대표 프레임을 바탕으로 생성한 추정 환경입니다."

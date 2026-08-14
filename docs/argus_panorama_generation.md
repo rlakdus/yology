@@ -13,7 +13,7 @@ VR page displays the static panorama with a retryable video error.
 1. Use a Linux CUDA worker and install the three environments and checkpoints described
    by the official [Argus repository](https://github.com/Red-Fairy/argus-code): camera
    trajectory prediction, 360 video generation, and VEnhancer.
-2. Use `videos/horse-riding.mp4` as the source. Run the full-video sampling path at
+2. Use `source/mongolia-horse-riding.original.mp4` as the source. Run the full-video sampling path at
    1024x512 with 25-frame internal batches. Do not generate independent clips.
 3. Enhance the generated panorama to 2048x1024.
 4. Using Argus camera calibration and trajectory output, project the original source
@@ -34,7 +34,7 @@ Run this on the GPU worker, where `ffprobe` is installed:
 ```bash
 python scripts/validate_panorama_video.py \
   events/student/event_003/panorama/mongolia-horse-360.mp4 \
-  --source events/student/event_003/videos/horse-riding.mp4
+  --source events/student/event_003/source/mongolia-horse-riding.original.mp4
 ```
 
 Then visually inspect the 0°/360° seam, temporal batch boundaries, and the feather around

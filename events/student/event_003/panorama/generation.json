@@ -6,7 +6,7 @@
     "checkpoint": null
   },
   "source": {
-    "file": "../videos/horse-riding.mp4",
+    "file": "../source/mongolia-horse-riding.original.mp4",
     "sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70"
   },
   "generation": {
