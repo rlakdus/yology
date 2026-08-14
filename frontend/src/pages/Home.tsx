@@ -13,10 +13,19 @@ import {
   Waves,
 } from "lucide-react";
 import SiteNav from "../components/SiteNav";
+import { useLiveHeartRate } from "../hooks/useLiveHeartRate";
 import "../styles/home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { sample: liveHeartRate, connected: liveConnected } = useLiveHeartRate();
+
+  const liveBpm = liveHeartRate ? Math.round(liveHeartRate.bpm) : 72;
+  const momentDetected = Boolean(liveHeartRate?.is_anomaly);
+  const baselineBpm =
+    typeof liveHeartRate?.baseline === "number"
+      ? Math.round(liveHeartRate.baseline)
+      : null;
 
   useEffect(() => {
     const targets = Array.from(
@@ -134,22 +143,36 @@ const Home = () => {
               </svg>
 
               <button
-                className="vh3-signal-card card-a"
+                className={`vh3-signal-card card-a ${liveConnected ? "is-live" : ""}`}
                 onClick={() => navigate("/event")}
               >
-                <span>BODY SIGNAL</span>
+                <span>{liveConnected ? "BODY SIGNAL · LIVE" : "BODY SIGNAL"}</span>
                 <strong>
-                  72 <small>bpm</small>
+                  {liveBpm} <small>bpm</small>
                 </strong>
                 <HeartPulse size={19} />
               </button>
 
               <button
-                className="vh3-signal-card card-b"
+                className={`vh3-signal-card card-b ${momentDetected ? "is-detected" : ""}`}
                 onClick={() => navigate("/event")}
               >
-                <span>MOMENT DETECTED</span>
-                <strong>변화 구간 감지</strong>
+                <span>
+                  {momentDetected
+                    ? "MOMENT DETECTED"
+                    : liveConnected
+                    ? "LISTENING"
+                    : "DEMO MODE"}
+                </span>
+                <strong>
+                  {momentDetected
+                    ? "평소와 다른 신호 감지"
+                    : liveConnected
+                    ? baselineBpm
+                      ? `baseline ${baselineBpm} bpm`
+                      : "몸의 신호를 듣고 있어요"
+                    : "변화 구간 감지"}
+                </strong>
                 <Activity size={19} />
               </button>
 

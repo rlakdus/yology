@@ -167,3 +167,59 @@ button{font:inherit}
     font-size: clamp(28px, 10vw, 39px);
   }
 }
+
+/* ================================
+   Live Apple Watch demo states
+   ================================ */
+
+.vh3-signal-card.is-live {
+  border-color: rgba(53, 200, 197, 0.55);
+  box-shadow:
+    0 14px 34px rgba(16, 32, 74, 0.10),
+    0 0 0 4px rgba(53, 200, 197, 0.08);
+}
+
+.vh3-signal-card.is-live > span:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: #35c8c5;
+  box-shadow: 0 0 0 5px rgba(53, 200, 197, 0.12);
+  vertical-align: 1px;
+  animation: viviaLiveDot 1.5s ease-in-out infinite;
+}
+
+.vh3-signal-card.is-detected {
+  border-color: rgba(255, 126, 115, 0.72);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(255, 159, 92, 0.20), transparent 38%),
+    rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 18px 42px rgba(255, 126, 115, 0.22),
+    0 0 0 5px rgba(255, 126, 115, 0.09);
+  animation: viviaDetected 1.25s ease-in-out infinite;
+}
+
+.vh3-signal-card.is-detected > span:first-child {
+  color: #e86456;
+}
+
+@keyframes viviaLiveDot {
+  0%, 100% { opacity: .45; transform: scale(.86); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes viviaDetected {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.018); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vh3-signal-card.is-live > span:first-child::before,
+  .vh3-signal-card.is-detected {
+    animation: none;
+  }
+}
