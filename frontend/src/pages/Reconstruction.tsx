@@ -1,6 +1,5 @@
 import "../styles/reconstruction.css";
 
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -22,7 +21,6 @@ import {
   Plane,
   Sparkles,
   Video,
-  X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -544,9 +542,6 @@ const Reconstruction = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [showVrModal, setShowVrModal] =
-    useState(false);
-
   const {
     momentId = "exam-interview",
 
@@ -564,13 +559,13 @@ const Reconstruction = () => {
 
     momentLocation = "Campus",
 
+    demoSource = "student",
+
+    eventId = "event_001",
+
     eventTime,
 
     eventHeartRate,
-
-    eventSignal,
-
-    eventStress,
 
     eventSummary,
 
@@ -1067,9 +1062,10 @@ const Reconstruction = () => {
             </p>
 
             <button
+              type="button"
               className="vivia-reconstruction-vr-button"
               onClick={() =>
-                setShowVrModal(true)
+                navigate(`/vr/${encodeURIComponent(demoSource)}/${encodeURIComponent(eventId)}`)
               }
             >
               <Glasses size={20} />
@@ -1088,70 +1084,6 @@ const Reconstruction = () => {
         </section>
 
       </main>
-
-      {/* =========================
-          VR MODAL
-      ========================= */}
-
-      {showVrModal && (
-
-        <div
-          className="vivia-reconstruction-modal-overlay"
-          onClick={() =>
-            setShowVrModal(false)
-          }
-        >
-
-          <div
-            className="vivia-reconstruction-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
-
-            <button
-              className="vivia-reconstruction-modal-close"
-              onClick={() =>
-                setShowVrModal(false)
-              }
-            >
-              <X size={18} />
-            </button>
-
-            <div className="vivia-reconstruction-modal-icon">
-              <Glasses size={30} />
-            </div>
-
-            <span>
-              VIVIA · VR RECONSTRUCTION
-            </span>
-
-            <h2>
-              몰입형 재현을
-              <br />
-              준비하고 있습니다.
-            </h2>
-
-            <p>
-              현재 VR Reconstruction 모듈을
-              연결하는 중입니다.
-              완성 후 이 버튼에서 바로
-              재현 경험으로 이어집니다.
-            </p>
-
-            <button
-              onClick={() =>
-                setShowVrModal(false)
-              }
-            >
-              확인
-            </button>
-
-          </div>
-
-        </div>
-
-      )}
 
     </div>
   );

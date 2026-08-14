@@ -6,12 +6,10 @@ import {
   BookOpenText,
   BrainCircuit,
   HeartPulse,
-  MapPin,
   Play,
   RotateCcw,
   Sparkles,
   UserRound,
-  Video,
   Waves,
 } from "lucide-react";
 import SiteNav from "../components/SiteNav";
