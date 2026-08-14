@@ -1,17 +1,12 @@
 """
-VIVIA live heart-rate relay.
+VIVIA live signal + moment server.
 
 Data flow
 ---------
-Apple Watch / iPhone -> ws://<MAC_IP>:8000/ws/watch
-React frontend       <- ws://localhost:8000/ws/web
-
-Incoming watch JSON:
-{
-  "type": "heart_rate",
-  "bpm": 83,
-  "timestamp": 1786723200.123
-}
+Apple Watch -> HTTP POST http://<MAC_IP>:8000/heart-rate
+Apple Watch -> HTTP POST http://<MAC_IP>:8000/moments/watch   ("기록하기")
+React       <- WebSocket ws://localhost:8000/ws/web
+React       -> GET/POST/PATCH/DELETE http://localhost:8000/moments
 
 Run:
     pip install -r requirements-live.txt
@@ -21,12 +16,19 @@ Run:
 from __future__ import annotations
 
 from collections import deque
+from datetime import datetime, timezone
+from pathlib import Path
 from statistics import mean, pstdev
 from typing import Any
+import json
+import shutil
 import time
+import uuid
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 app = FastAPI(title="VIVIA Live Signal Server")
 
@@ -40,16 +42,28 @@ app.add_middleware(
 
 web_clients: set[WebSocket] = set()
 history: deque[float] = deque(maxlen=60)
+latest_signal: dict[str, Any] | None = None
 
 MIN_BASELINE_SAMPLES = 10
-Z_THRESHOLD = 2.0
+Z_THRESHOLD = 1.5
+
+MOMENTS_DIR = Path("data/live_moments")
+MOMENTS_DIR.mkdir(parents=True, exist_ok=True)
+MAX_PHOTO_BYTES = 10 * 1024 * 1024
+ALLOWED_PHOTO_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
+
+
+class HeartRatePayload(BaseModel):
+    bpm: float
+    timestamp: float | None = None
 
 
 def analyze_bpm(bpm: float) -> dict[str, Any]:
-    """
-    Demo-only online detector.
-    It detects deviation from the recent personal baseline; it does NOT infer emotion.
-    """
+    """Demo-only deviation detector; it does not infer emotion."""
     if len(history) < MIN_BASELINE_SAMPLES:
         baseline = mean(history) if history else bpm
         return {
@@ -71,7 +85,6 @@ def analyze_bpm(bpm: float) -> dict[str, Any]:
 
 async def broadcast(payload: dict[str, Any]) -> None:
     stale: list[WebSocket] = []
-
     for client in web_clients:
         try:
             await client.send_json(payload)
@@ -82,46 +95,259 @@ async def broadcast(payload: dict[str, Any]) -> None:
         web_clients.discard(client)
 
 
+def _moment_dir(moment_id: str) -> Path:
+    # Prevent path traversal; IDs created by this server contain only safe chars.
+    if not moment_id.startswith("moment_") or "/" in moment_id or ".." in moment_id:
+        raise HTTPException(status_code=400, detail="Invalid moment id")
+    return MOMENTS_DIR / moment_id
+
+
+def _read_moment(moment_dir: Path) -> dict[str, Any]:
+    metadata_path = moment_dir / "metadata.json"
+    if not metadata_path.exists():
+        raise HTTPException(status_code=404, detail="Moment not found")
+    return json.loads(metadata_path.read_text(encoding="utf-8"))
+
+
+def _write_moment(moment_dir: Path, metadata: dict[str, Any]) -> None:
+    (moment_dir / "metadata.json").write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def _new_moment_metadata(
+    *,
+    source: str,
+    note: str = "",
+    signal: dict[str, Any] | None = None,
+) -> tuple[Path, dict[str, Any]]:
+    moment_id = f"moment_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
+    moment_dir = MOMENTS_DIR / moment_id
+    moment_dir.mkdir(parents=True, exist_ok=False)
+    metadata = {
+        "id": moment_id,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "source": source,
+        "note": note.strip(),
+        "photo": None,
+        "status": "captured" if not note else "enriched",
+        "signal": signal or {},
+    }
+    _write_moment(moment_dir, metadata)
+    return moment_dir, metadata
+
+
+async def _save_photo(moment_dir: Path, photo: UploadFile | None) -> str | None:
+    if not photo or not photo.filename:
+        return None
+
+    content_type = (photo.content_type or "").lower()
+    if content_type not in ALLOWED_PHOTO_TYPES:
+        raise HTTPException(
+            status_code=415,
+            detail="사진은 JPG, PNG, WEBP 형식만 업로드할 수 있습니다.",
+        )
+
+    content = await photo.read(MAX_PHOTO_BYTES + 1)
+    if len(content) > MAX_PHOTO_BYTES:
+        raise HTTPException(status_code=413, detail="사진은 10MB 이하만 업로드할 수 있습니다.")
+    if not content:
+        raise HTTPException(status_code=400, detail="빈 이미지 파일입니다.")
+
+    # Remove an earlier photo if the user replaces it.
+    for old in moment_dir.glob("photo.*"):
+        old.unlink(missing_ok=True)
+
+    photo_name = f"photo{ALLOWED_PHOTO_TYPES[content_type]}"
+    (moment_dir / photo_name).write_bytes(content)
+    return photo_name
+
+
 @app.get("/health")
 def health() -> dict[str, Any]:
     return {
         "ok": True,
         "web_clients": len(web_clients),
         "baseline_samples": len(history),
+        "moment_count": sum(1 for p in MOMENTS_DIR.iterdir() if p.is_dir()),
+        "latest_signal": latest_signal,
     }
 
 
+@app.post("/heart-rate")
+async def receive_heart_rate(data: HeartRatePayload) -> dict[str, Any]:
+    global latest_signal
+
+    bpm = float(data.bpm)
+    if not 30 <= bpm <= 220:
+        raise HTTPException(status_code=400, detail="invalid_bpm")
+
+    analysis = analyze_bpm(bpm)
+    history.append(bpm)
+
+    payload = {
+        "type": "heart_rate",
+        "bpm": round(bpm, 2),
+        "timestamp": data.timestamp or time.time(),
+        **analysis,
+    }
+    latest_signal = payload
+
+    print(
+        f"❤️ WATCH BPM: {bpm:.0f} | baseline={analysis['baseline']} | "
+        f"z={analysis['z_score']} | anomaly={analysis['is_anomaly']}"
+    )
+
+    await broadcast(payload)
+    return {"ok": True, **payload}
+
+
+@app.post("/moments/watch")
+async def capture_moment_from_watch() -> dict[str, Any]:
+    """Called by the Watch when the user taps '기록하기'."""
+    signal = dict(latest_signal or {})
+    _, metadata = _new_moment_metadata(source="apple_watch", signal=signal)
+    print(f"⌚ MOMENT CAPTURED FROM WATCH: {metadata['id']}")
+    await broadcast({"type": "moment_saved", "moment": metadata})
+    return {"ok": True, "moment": metadata}
+
+
+@app.post("/moments")
+async def save_moment(
+    note: str = Form(""),
+    bpm: float | None = Form(None),
+    baseline: float | None = Form(None),
+    z_score: float | None = Form(None),
+    is_anomaly: bool = Form(False),
+    signal_timestamp: float | None = Form(None),
+    photo: UploadFile | None = File(None),
+) -> dict[str, Any]:
+    """Create a moment from the web and optionally enrich it with a photo."""
+    signal = {
+        "type": "heart_rate",
+        "bpm": bpm,
+        "baseline": baseline,
+        "z_score": z_score,
+        "is_anomaly": is_anomaly,
+        "timestamp": signal_timestamp,
+    }
+    moment_dir, metadata = _new_moment_metadata(source="web", note=note, signal=signal)
+    try:
+        photo_name = await _save_photo(moment_dir, photo)
+    except Exception:
+        # Do not leave half-created folders when upload validation fails.
+        for child in moment_dir.iterdir():
+            child.unlink(missing_ok=True)
+        moment_dir.rmdir()
+        raise
+
+    if photo_name:
+        metadata["photo"] = photo_name
+        metadata["status"] = "enriched"
+    _write_moment(moment_dir, metadata)
+    await broadcast({"type": "moment_saved", "moment": metadata})
+    print(f"💾 MOMENT SAVED: {metadata['id']}")
+    return {"ok": True, "moment": metadata}
+
+
+@app.patch("/moments/{moment_id}")
+async def enrich_moment(
+    moment_id: str,
+    note: str = Form(""),
+    photo: UploadFile | None = File(None),
+    remove_photo: bool = Form(False),
+) -> dict[str, Any]:
+    """Edit the memo/photo attached to an existing moment."""
+    moment_dir = _moment_dir(moment_id)
+    metadata = _read_moment(moment_dir)
+
+    metadata["note"] = note.strip()
+
+    if remove_photo:
+        for old in moment_dir.glob("photo.*"):
+            old.unlink(missing_ok=True)
+        metadata["photo"] = None
+
+    photo_name = await _save_photo(moment_dir, photo)
+    if photo_name:
+        metadata["photo"] = photo_name
+
+    metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
+    metadata["status"] = "enriched" if metadata.get("note") or metadata.get("photo") else "captured"
+
+    _write_moment(moment_dir, metadata)
+    await broadcast({"type": "moment_updated", "moment": metadata})
+    print(f"✍️ MOMENT ENRICHED: {moment_id}")
+    return {"ok": True, "moment": metadata}
+
+
+@app.delete("/moments/{moment_id}")
+async def delete_moment(moment_id: str) -> dict[str, Any]:
+    """Permanently remove one moment and its uploaded photo."""
+    moment_dir = _moment_dir(moment_id)
+    _read_moment(moment_dir)
+    shutil.rmtree(moment_dir)
+    await broadcast({"type": "moment_deleted", "moment_id": moment_id})
+    print(f"🗑️ MOMENT DELETED: {moment_id}")
+    return {"ok": True, "moment_id": moment_id}
+
+
+@app.get("/moments")
+def list_moments() -> dict[str, Any]:
+    moments: list[dict[str, Any]] = []
+    for path in sorted(MOMENTS_DIR.glob("*/metadata.json"), reverse=True):
+        try:
+            item = json.loads(path.read_text(encoding="utf-8"))
+            if item.get("photo"):
+                item["photo_url"] = f"/moments/{item['id']}/photo"
+            moments.append(item)
+        except Exception:
+            continue
+    return {"ok": True, "moments": moments}
+
+
+@app.get("/moments/{moment_id}/photo")
+def get_moment_photo(moment_id: str) -> FileResponse:
+    moment_dir = _moment_dir(moment_id)
+    metadata = _read_moment(moment_dir)
+    photo_name = metadata.get("photo")
+    if not photo_name:
+        raise HTTPException(status_code=404, detail="No photo")
+    photo_path = moment_dir / photo_name
+    if not photo_path.exists():
+        raise HTTPException(status_code=404, detail="Photo not found")
+    return FileResponse(photo_path)
+
+
+# Compatibility with the earlier Watch WebSocket prototype.
 @app.websocket("/ws/watch")
 async def watch_stream(websocket: WebSocket) -> None:
+    global latest_signal
     await websocket.accept()
-
     try:
         while True:
             data = await websocket.receive_json()
-
             if data.get("type") != "heart_rate":
                 continue
-
             try:
                 bpm = float(data["bpm"])
             except (KeyError, TypeError, ValueError):
                 continue
-
             if not 30 <= bpm <= 220:
                 continue
 
             analysis = analyze_bpm(bpm)
             history.append(bpm)
-
             payload = {
                 "type": "heart_rate",
                 "bpm": round(bpm, 2),
                 "timestamp": data.get("timestamp", time.time()),
                 **analysis,
             }
-
+            latest_signal = payload
             await broadcast(payload)
-
     except WebSocketDisconnect:
         return
 
@@ -130,9 +356,9 @@ async def watch_stream(websocket: WebSocket) -> None:
 async def web_stream(websocket: WebSocket) -> None:
     await websocket.accept()
     web_clients.add(websocket)
+    print(f"🌐 React connected. clients={len(web_clients)}")
 
     try:
-        # Keep the browser connection open. We do not require messages from it.
         while True:
             await websocket.receive_text()
     except WebSocketDisconnect:

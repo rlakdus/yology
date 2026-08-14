@@ -9,6 +9,7 @@ import Reconstruction from "./pages/Reconstruction";
 import HeEvents from "./pages/HeEvents";
 import HeReconstruction from "./pages/HeReconstruction";
 import VrScene from "./pages/VrScene";
+import LiveDemo from "./pages/LiveDemo";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
 
         <Route path="/moment" element={<Moment />} />
+        <Route path="/live-demo" element={<LiveDemo />} />
 
         <Route path="/persona" element={<Persona />} />
 
