@@ -110,6 +110,7 @@ interface SceneMediaPanelProps {
   event: VrEvent;
   playback: PlaybackRefs;
   videos: Map<string, HTMLVideoElement>;
+  running: boolean;
 }
 
 /**
@@ -119,7 +120,7 @@ interface SceneMediaPanelProps {
  * 크게 밀리는 진짜 시차가 생긴다. 균일 확대(Ken Burns)는 쓰지 않는다 —
  * 카메라 모션이 그 역할을 대신하고, 둘을 겹치면 어지럽다.
  */
-const SceneMediaPanel = ({ event, playback, videos }: SceneMediaPanelProps) => {
+const SceneMediaPanel = ({ event, playback, videos, running }: SceneMediaPanelProps) => {
   const camera = useThree((state) => state.camera);
   const backingRef = useRef<Mesh>(null);
   const backRef = useRef<Mesh>(null);
@@ -201,6 +202,11 @@ const SceneMediaPanel = ({ event, playback, videos }: SceneMediaPanelProps) => {
     const front = frontRef.current;
     if (!backing || !back || !front) return;
 
+    if (!running) {
+      videos.forEach((video) => video.pause());
+      playingRef.current = null;
+    }
+
     const pulse = playback.pulse.current;
     const tone = playback.tone.current;
     const cue = mediaCueAt(event, playback.progress.current);
@@ -213,14 +219,14 @@ const SceneMediaPanel = ({ event, playback, videos }: SceneMediaPanelProps) => {
 
     // 화면을 차지한 영상만 정속으로 재생하고, 벗어난 영상은 멈춘다.
     const active = cue.blend > 0.5 ? cue.next : cue.current;
-    const wanted = active?.kind === "video" ? active.src : null;
+    const wanted = running && active?.kind === "video" ? active.src : null;
     if (wanted !== playingRef.current) {
       const previous = playingRef.current ? videos.get(playingRef.current) : null;
       previous?.pause();
 
       const next = wanted ? videos.get(wanted) : null;
       if (next) {
-        next.currentTime = 0;
+        if (next.ended) next.currentTime = 0;
         void next.play().catch(() => undefined);
       }
       playingRef.current = wanted;

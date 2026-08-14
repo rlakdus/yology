@@ -207,6 +207,50 @@ def export_panorama(metadata: dict, event_dir: Path, target_dir: Path) -> dict |
     }
 
 
+def export_panorama_video(metadata: dict, event_dir: Path, target_dir: Path) -> dict | None:
+    """Export an optional mono equirectangular video descriptor and assets.
+
+    The descriptor is preserved even while an external GPU job is pending. This
+    makes a missing generated deliverable visible to the browser's retry flow
+    instead of silently falling back to the original flat video.
+    """
+    entry = metadata.get("panorama_video")
+    if not isinstance(entry, dict) or not entry.get("file"):
+        return None
+
+    relative = Path(entry["file"])
+    source = event_dir / relative
+    if is_usable(source):
+        destination = target_dir / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+    else:
+        print(f"  ! 360 video deliverable is missing: {entry['file']}")
+
+    fallback_relative = None
+    fallback_value = entry.get("fallback_image_file")
+    if fallback_value:
+        fallback_source = event_dir / fallback_value
+        if is_usable(fallback_source):
+            fallback_relative = fallback_source.relative_to(event_dir)
+            fallback_destination = target_dir / fallback_relative
+            fallback_destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(fallback_source, fallback_destination)
+        else:
+            print(f"  ! panorama video fallback is missing: {fallback_value}")
+
+    projection = str(entry.get("projection", "equirectangular"))
+    if projection != "equirectangular":
+        raise ValueError(f"Unsupported panorama video projection: {projection}")
+
+    return {
+        "src": relative.as_posix(),
+        "projection": projection,
+        "fallback_image": fallback_relative.as_posix() if fallback_relative else None,
+        "yaw_offset_deg": float(entry.get("yaw_offset_deg", 0)),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--persona", required=True, help="페르소나 식별자 (예: caregiver)")
@@ -234,6 +278,7 @@ def main():
     print(f"{event_dir} -> {target_dir}")
     media = build_media(metadata, event_dir, target_dir)
     panorama = export_panorama(metadata, event_dir, target_dir)
+    panorama_video = export_panorama_video(metadata, event_dir, target_dir)
 
     start = parse_time(metadata.get("start_time"))
     end = parse_time(metadata.get("end_time"))
@@ -251,6 +296,7 @@ def main():
         "end_time": metadata.get("end_time"),
         "duration_min": duration_min,
         "panorama": panorama,
+        "panorama_video": panorama_video,
         "media": media,
         "chats": read_chats(event_dir),
         "sensor": json.loads(sensor_path.read_text(encoding="utf-8")) if sensor_path.exists() else {},
@@ -267,6 +313,10 @@ def main():
         written.add(target_dir / panorama["src"])
         if panorama["depth"]:
             written.add(target_dir / panorama["depth"])
+    if panorama_video:
+        written.add(target_dir / panorama_video["src"])
+        if panorama_video["fallback_image"]:
+            written.add(target_dir / panorama_video["fallback_image"])
     for entry in media:
         written.add(target_dir / entry["src"])
         for sidecar_path in (entry["depth"], entry["fill"]):

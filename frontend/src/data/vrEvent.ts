@@ -29,6 +29,12 @@ export type VrEvent = {
     anchor_yaw_deg: number;
     source_note: string;
   } | null;
+  panorama_video: {
+    src: string;
+    projection: "equirectangular";
+    fallback_image: string | null;
+    yaw_offset_deg: number;
+  } | null;
   media: VrMedia[];
   chats: string[];
   sensor: {
@@ -122,7 +128,9 @@ const clamp = (value: number, low: number, high: number) =>
   Math.min(high, Math.max(low, value));
 
 export const playbackSeconds = (videoTotalSeconds = 0) =>
-  clamp(Math.max(PLAYBACK.seconds, videoTotalSeconds), PLAYBACK.seconds, PLAYBACK.hardMaxSeconds);
+  videoTotalSeconds > 0
+    ? clamp(videoTotalSeconds, 1, PLAYBACK.hardMaxSeconds)
+    : PLAYBACK.seconds;
 
 /** 센서 샘플 배열을 0~1 진행도에 균등 매핑한 뒤 선형 보간한다. */
 export const sampleAt = (series: number[] | undefined, progress: number) => {
@@ -240,6 +248,15 @@ export const useVrEvent = (persona?: string, eventId?: string) => {
                 src: `${base}/${payload.panorama.src}`,
                 depth: payload.panorama.depth
                   ? `${base}/${payload.panorama.depth}`
+                  : null,
+              }
+            : null,
+          panorama_video: payload.panorama_video
+            ? {
+                ...payload.panorama_video,
+                src: `${base}/${payload.panorama_video.src}`,
+                fallback_image: payload.panorama_video.fallback_image
+                  ? `${base}/${payload.panorama_video.fallback_image}`
                   : null,
               }
             : null,

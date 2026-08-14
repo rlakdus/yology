@@ -44,6 +44,7 @@ const wobble = (time: number, seed: number) =>
 interface LookAroundControlsProps {
   playback: PlaybackRefs;
   continuous?: boolean;
+  motionEnabled?: boolean;
 }
 
 /**
@@ -58,7 +59,11 @@ interface LookAroundControlsProps {
  * 인공적으로 움직이면 벡션으로 멀미가 난다. 대신 사용자의 실제 고개 움직임이
  * 진짜 6DoF 시차를 만든다 — 부조가 실제 지오메트리라 그대로 동작한다.
  */
-const LookAroundControls = ({ playback, continuous = false }: LookAroundControlsProps) => {
+const LookAroundControls = ({
+  playback,
+  continuous = false,
+  motionEnabled = true,
+}: LookAroundControlsProps) => {
   const camera = useThree((state) => state.camera);
   const domElement = useThree((state) => state.gl.domElement);
   const session = useXR((state) => state.session);
@@ -130,26 +135,30 @@ const LookAroundControls = ({ playback, continuous = false }: LookAroundControls
     }
 
     // 반경 7cm의 리사주. 세 축의 주기가 어긋나 있어 반복이 눈에 띄지 않는다.
-    const drift = MOTION.drift;
+    const drift = motionEnabled ? MOTION.drift : 0;
     let x = Math.sin(time * 0.11) * drift;
     let y = Math.sin(time * 0.17 + 1.3) * drift * 0.6;
     let z = Math.sin(time * 0.07 + 2.1) * drift * 0.5;
 
     // 누군가 그 자리에서 들고 찍는 듯한 미세 흔들림.
-    x += wobble(time, 0) * MOTION.handheldPosition;
-    y += wobble(time, 4.2) * MOTION.handheldPosition;
-    z += wobble(time, 8.7) * MOTION.handheldPosition * 0.5;
+    if (motionEnabled) {
+      x += wobble(time, 0) * MOTION.handheldPosition;
+      y += wobble(time, 4.2) * MOTION.handheldPosition;
+      z += wobble(time, 8.7) * MOTION.handheldPosition * 0.5;
+    }
 
     // 둘러보는 행위 자체가 시차를 만든다. 시야를 오른쪽으로 돌리면 머리도 오른쪽으로 옮겨간다.
-    x -= (continuous ? Math.sin(yaw.current) : yaw.current / yawLimit) * MOTION.swayYaw;
-    y -= (pitch.current / pitchLimit) * MOTION.swayPitch;
+    if (motionEnabled) {
+      x -= (continuous ? Math.sin(yaw.current) : yaw.current / yawLimit) * MOTION.swayYaw;
+      y -= (pitch.current / pitchLimit) * MOTION.swayPitch;
+    }
 
     // 심박마다 아주 작은 충격이 들어갔다 감쇠한다.
-    y += playback.pulse.current * MOTION.beatImpulse;
+    if (motionEnabled) y += playback.pulse.current * MOTION.beatImpulse;
 
     camera.position.set(x, EYE_HEIGHT + y, z);
 
-    const shake = MathUtils.degToRad(MOTION.handheldRotationDeg);
+    const shake = motionEnabled ? MathUtils.degToRad(MOTION.handheldRotationDeg) : 0;
     camera.rotation.order = "YXZ";
     camera.rotation.set(
       pitch.current + wobble(time, 1.9) * shake,

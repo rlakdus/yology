@@ -3,6 +3,7 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 interface SceneErrorBoundaryProps {
   children: ReactNode;
   onError?: (message: string) => void;
+  fallback?: ReactNode;
 }
 
 interface SceneErrorBoundaryState {
@@ -29,7 +30,7 @@ class SceneErrorBoundary extends Component<SceneErrorBoundaryProps, SceneErrorBo
   }
 
   render() {
-    return this.state.failed ? null : this.props.children;
+    return this.state.failed ? (this.props.fallback ?? null) : this.props.children;
   }
 }
 

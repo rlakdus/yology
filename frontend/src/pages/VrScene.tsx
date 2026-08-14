@@ -55,6 +55,7 @@ const VrScene = () => {
   const [phase, setPhase] = useState<ExperiencePhase>("gate");
   const [leaving, setLeaving] = useState(false);
   const [sceneError, setSceneError] = useState("");
+  const [playbackError, setPlaybackError] = useState("");
   const [baselineBpm, setBaselineBpm] = useState(72);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const [breathingOptIn, setBreathingOptIn] = useState(true);
@@ -77,6 +78,11 @@ const VrScene = () => {
   );
 
   const seconds = useMemo(() => playbackSeconds(videos.totalSeconds), [videos.totalSeconds]);
+  const primaryVideoSource = event?.panorama_video?.src
+    ?? event?.media.find((entry) => entry.kind === "video")?.src;
+  const primaryVideo = primaryVideoSource
+    ? videos.elements.get(primaryVideoSource)
+    : undefined;
   const heartRate = event?.sensor.heart_rate;
   const heartbeatConfig = event?.experience?.heartbeat;
   const heartbeatSource = useMemo(
@@ -132,15 +138,23 @@ const VrScene = () => {
     setPhase(next);
   }, []);
 
+  const resetVideos = useCallback(() => {
+    videos.elements.forEach((video) => {
+      video.pause();
+      if (video.readyState > 0) video.currentTime = 0;
+    });
+  }, [videos.elements]);
+
   const completeExit = useCallback(() => {
     if (leaving) return;
     setLeaving(true);
     stopHeartbeat();
     stopBreathing();
     stopHaptics();
+    resetVideos();
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
     exitTimerRef.current = window.setTimeout(() => navigate(-1), 600);
-  }, [leaving, navigate, stopBreathing, stopHaptics, stopHeartbeat]);
+  }, [leaving, navigate, resetVideos, stopBreathing, stopHaptics, stopHeartbeat]);
 
   const abort = useCallback(() => {
     void xrStore.getState().session?.end().catch(() => undefined);
@@ -148,6 +162,7 @@ const VrScene = () => {
   }, [completeExit]);
 
   const beginPrelude = useCallback(() => {
+    setPlaybackError("");
     progressRef.current = 0;
     targetBpmRef.current = baselineBpm;
     breathingPresenceRef.current = 0;
@@ -157,19 +172,44 @@ const VrScene = () => {
   }, [baselineBpm, breathingEnabled, enterPhase, startBreathing, startHeartbeat]);
 
   const beginVr = useCallback(() => {
+    setPlaybackError("");
     progressRef.current = 0;
     targetBpmRef.current = mappedBpmAt(0);
+    if (primaryVideo) {
+      if (primaryVideo.readyState > 0) primaryVideo.currentTime = 0;
+      if (primaryVideo.error) primaryVideo.load();
+      void primaryVideo.play().catch(() => {
+        resetVideos();
+        void xrStore.getState().session?.end().catch(() => undefined);
+        enterPhase("ready");
+        setPlaybackError("360° 영상을 재생하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.");
+      });
+    }
     enterPhase("vr");
     if (vrSupported) void xrStore.enterVR().catch(() => undefined);
-  }, [enterPhase, mappedBpmAt, vrSupported]);
+  }, [enterPhase, mappedBpmAt, primaryVideo, resetVideos, vrSupported]);
+
+  useEffect(() => {
+    if (!primaryVideo) return;
+    const handleError = () => {
+      if (phase !== "vr") return;
+      resetVideos();
+      void xrStore.getState().session?.end().catch(() => undefined);
+      enterPhase("ready");
+      setPlaybackError("360° 영상 연결이 중단되었습니다. 다시 시도해 주세요.");
+    };
+    primaryVideo.addEventListener("error", handleError);
+    return () => primaryVideo.removeEventListener("error", handleError);
+  }, [enterPhase, phase, primaryVideo, resetVideos]);
 
   const beginCooldown = useCallback(() => {
     if (phase === "cooldown" || leaving) return;
     cooldownStartBpmRef.current = targetBpmRef.current;
     cooldownStartBreathingRef.current = breathingPresenceRef.current;
+    resetVideos();
     void xrStore.getState().session?.end().catch(() => undefined);
     enterPhase("cooldown");
-  }, [enterPhase, leaving, phase]);
+  }, [enterPhase, leaving, phase, resetVideos]);
 
   useEffect(() => {
     if (phase === "gate") {
@@ -240,7 +280,8 @@ const VrScene = () => {
 
   useEffect(() => () => {
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
-  }, []);
+    resetVideos();
+  }, [resetVideos]);
 
   if (error) return <div className="vr-scene-message">{error}</div>;
   if (!event) return <div className="vr-scene-message">이벤트 자료를 불러오는 중입니다…</div>;
@@ -284,13 +325,15 @@ const VrScene = () => {
           eventTitle={event.title}
           eventDescription={event.description}
           eventLabel={`${event.persona.toUpperCase()} · ${event.event_id}`}
-          provenance={event.panorama?.generated
-            ? event.panorama.mode === "recorded_anchor"
-              ? "촬영된 정면을 기준으로 AI가 확장한 360° 추정 환경입니다."
-              : "생체신호와 페르소나 패턴을 바탕으로 AI가 생성한 장면 가설이며 실제 장소 기록이 아닙니다."
-            : undefined}
+          provenance={event.panorama_video
+            ? "정면은 원본 촬영 영상이며, 보이지 않던 주변 시야는 AI가 생성한 360° 재현입니다."
+            : event.panorama?.generated
+              ? event.panorama.mode === "recorded_anchor"
+                ? "촬영된 정면을 기준으로 AI가 확장한 360° 추정 환경입니다."
+                : "생체신호와 페르소나 패턴을 바탕으로 AI가 생성한 장면 가설이며 실제 장소 기록이 아닙니다."
+              : undefined}
           seconds={seconds}
-          mediaCount={event.media.length}
+          mediaCount={event.panorama_video ? 1 : event.media.length}
           chatCount={event.chats.length}
           mediaReady={videos.ready}
           vrSupported={vrSupported}
@@ -302,6 +345,7 @@ const VrScene = () => {
           hapticsLabel={hapticsLabel}
           breathingEnabled={breathingEnabled}
           breathingAvailable={breathingFeatureEnabled}
+          launchError={playbackError}
           onBaselineChange={setBaselineBpm}
           onHapticsChange={setHapticsEnabled}
           onBreathingChange={setBreathingOptIn}

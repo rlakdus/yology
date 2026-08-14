@@ -32,6 +32,7 @@ type PreExperienceFlowProps = {
   hapticsLabel: string;
   breathingEnabled: boolean;
   breathingAvailable: boolean;
+  launchError?: string;
   onBaselineChange: (bpm: number) => void;
   onHapticsChange: (enabled: boolean) => void;
   onBreathingChange: (enabled: boolean) => void;
@@ -176,9 +177,15 @@ const PreExperienceFlow = (props: PreExperienceFlowProps) => {
         </ol>
 
         {props.phase === "ready" ? (
-          <button className="vr-scene-start" onClick={props.onEnterVr}>
-            <Play size={18} /> 박동을 유지하고 VR 시작
-          </button>
+          <>
+            {props.launchError && (
+              <p className="vr-scene-launch-error" role="alert">{props.launchError}</p>
+            )}
+            <button className="vr-scene-start" onClick={props.onEnterVr}>
+              <Play size={18} />
+              {props.launchError ? "영상 재생 다시 시도" : "박동을 유지하고 VR 시작"}
+            </button>
+          </>
         ) : (
           <p className="vr-prelude-wait"><Loader2 size={15} /> 박동을 느끼며 잠시 기다려 주세요</p>
         )}
