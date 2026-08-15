@@ -1,0 +1,2 @@
+scripts/gpu360/*.sh text eol=lf
+gpu360/patches/*.patch text eol=lf

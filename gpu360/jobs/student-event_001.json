@@ -1,0 +1,28 @@
+{
+  "event": "student/event_001",
+  "label": "시험·면접 직전후",
+  "source": "events/student/event_001/source/exam-interview.original.mov",
+  "expected_source_sha256": "838c69ec82b4f1b1e37f028e5b653d0658b62ece13d680a1e90fcd7caebbb65f",
+  "output": "events/student/event_001/panorama/exam-interview-360.mp4",
+  "generation_record": "events/student/event_001/panorama/generation.json",
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "guidance_scale": 3.0,
+    "inference_steps": 25
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01
+  }
+}

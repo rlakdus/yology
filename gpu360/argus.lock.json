@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/Red-Fairy/argus-code.git",
+  "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
+  "license": "MIT",
+  "submodules": {
+    "mega-sam": "c6cf704b3cf0d3926dfef3fdbd1cdf1e113569f9",
+    "venhancer": "2682c9a996c0346734f6d623c8eb8bbc6e913113"
+  }
+}

@@ -1,0 +1,19 @@
+diff --git a/inference.py b/inference.py
+--- a/inference.py
++++ b/inference.py
+@@ -3,0 +4 @@
++import json
+@@ -240,0 +242,13 @@
++		# Yology composites the recorded front view after enhancement. Persist the
++		# exact calibration used by Argus so that reprojection stays aligned.
++		camera_metadata_path = out_file_path.replace(ext, '_camera.json')
++		with open(camera_metadata_path, 'w', encoding='utf-8') as camera_file:
++			json.dump({
++				"fov_x_deg": float(fov_x),
++				"height_width_ratio": float(hw_ratio),
++				"frame_rate": float(frame_rate),
++				"roll_rad": np.asarray(rolls).tolist(),
++				"pitch_rad": np.asarray(pitches).tolist(),
++				"yaw_rad": np.asarray(yaws).tolist(),
++			}, camera_file, ensure_ascii=False, indent=2)
++

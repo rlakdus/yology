@@ -1,0 +1,28 @@
+{
+  "event": "student/event_003",
+  "label": "몽골 승마 체험",
+  "source": "events/student/event_003/source/mongolia-horse-riding.original.mp4",
+  "expected_source_sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70",
+  "output": "events/student/event_003/panorama/mongolia-horse-360.mp4",
+  "generation_record": "events/student/event_003/panorama/generation.json",
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "guidance_scale": 3.0,
+    "inference_steps": 25
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01
+  }
+}

@@ -1,5 +1,9 @@
 # event_003 Argus panorama-video handoff
 
+> 재현 가능한 GPU 실행기와 환경 구성은
+> [`gpu_360_video_generation.md`](gpu_360_video_generation.md)를 따른다. 이 문서는
+> event_003의 결과 계약과 검수 기준을 설명한다.
+
 The web application consumes a completed mono equirectangular video at:
 
 `events/student/event_003/panorama/mongolia-horse-360.mp4`

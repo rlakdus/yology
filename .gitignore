@@ -5,3 +5,7 @@
 
 # estimate_depth.py가 내려받는 ONNX 모델 캐시
 /scripts/.models
+
+# 외부 CUDA 작업용 Argus 소스, 체크포인트와 중간 결과
+/.gpu360
+/gpu360/work
