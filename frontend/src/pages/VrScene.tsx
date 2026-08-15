@@ -1,13 +1,21 @@
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { XR, createXRStore } from "@react-three/xr";
-import { HeartPulse, Square } from "lucide-react";
+import { ArrowLeft, Square } from "lucide-react";
 
-import PreExperienceFlow, { type PreludePhase } from "../components/vr/PreExperienceFlow";
+import HeartbeatPrelude, {
+  type HeartbeatPreludePhase,
+} from "../components/vr/HeartbeatPrelude";
+import ImmersiveStopControl from "../components/vr/ImmersiveStopControl";
 import ReconstructionScene, { type PlaybackRefs } from "../components/vr/ReconstructionScene";
 import SceneErrorBoundary from "../components/vr/SceneErrorBoundary";
-import { heartbeatStats, mapRecordedBpm, mix, smoothstep } from "../heartbeat/heartbeatMapping";
+import { heartbeatStats, mix, smoothstep } from "../heartbeat/heartbeatMapping";
+import {
+  readHeartRateInput,
+  translateEventBpm,
+  type HeartRateInputSnapshot,
+} from "../heartbeat/heartRateInput";
 import { createRecordedHeartbeatSource } from "../heartbeat/heartbeatSource";
 import { playbackSeconds, useVrEvent } from "../data/vrEvent";
 import { useEventVideos } from "../vr/useEventVideos";
@@ -18,13 +26,18 @@ import "../styles/vrScene.css";
 
 const xrStore = createXRStore();
 
-/** HUD와 프리루드 상태는 초당 10회만 갱신한다. */
 const UI_INTERVAL = 100;
-const DEFAULT_ADAPTATION_SECONDS = 8;
-const DEFAULT_TRANSITION_SECONDS = 10;
+const INTRO_SECONDS = 4.2;
+const DEFAULT_LEAD_IN_BEATS = 8;
 const DEFAULT_COOLDOWN_SECONDS = 8;
+const NEUTRAL_COOLDOWN_BPM = 72;
 
-type ExperiencePhase = PreludePhase | "vr" | "cooldown";
+type ExperiencePhase = HeartbeatPreludePhase;
+
+const UNAVAILABLE_INPUT: HeartRateInputSnapshot = {
+  status: "unavailable",
+  baselineBpm: null,
+};
 
 /** 브라우저가 몰입형 VR 세션을 지원하는지 확인한다. */
 const useImmersiveVrSupport = () => {
@@ -52,16 +65,14 @@ const VrScene = () => {
   const videos = useEventVideos(event);
   const vrSupported = useImmersiveVrSupport();
 
-  const [phase, setPhase] = useState<ExperiencePhase>("gate");
+  const [phase, setPhase] = useState<ExperiencePhase>("intro");
   const [leaving, setLeaving] = useState(false);
   const [sceneError, setSceneError] = useState("");
   const [playbackError, setPlaybackError] = useState("");
-  const [baselineBpm, setBaselineBpm] = useState(72);
-  const [hapticsEnabled, setHapticsEnabled] = useState(true);
-  const [breathingOptIn, setBreathingOptIn] = useState(true);
+  const [retrying, setRetrying] = useState(false);
   const [phaseProgress, setPhaseProgress] = useState(0);
-  const [hud, setHud] = useState({ progress: 0, bpm: 72 });
 
+  const phaseRef = useRef<ExperiencePhase>("intro");
   const progressRef = useRef(0);
   const pulseRef = useRef(0);
   const toneRef = useRef(0.4);
@@ -71,6 +82,11 @@ const VrScene = () => {
   const breathingPresenceRef = useRef(0);
   const cooldownStartBreathingRef = useRef(0);
   const exitTimerRef = useRef<number | null>(null);
+  const mediaStartPendingRef = useRef(false);
+  const leadInBeatCountRef = useRef(0);
+  const startMediaRef = useRef<() => void>(() => undefined);
+  const primingPromiseRef = useRef<Promise<void> | null>(null);
+  const listenerInputRef = useRef<HeartRateInputSnapshot>(UNAVAILABLE_INPUT);
 
   const playback = useMemo<PlaybackRefs>(
     () => ({ progress: progressRef, pulse: pulseRef, tone: toneRef }),
@@ -83,47 +99,49 @@ const VrScene = () => {
   const primaryVideo = primaryVideoSource
     ? videos.elements.get(primaryVideoSource)
     : undefined;
-  const heartRate = event?.sensor.heart_rate;
   const heartbeatConfig = event?.experience?.heartbeat;
   const heartbeatSource = useMemo(
-    () => createRecordedHeartbeatSource(heartRate, seconds * 1000),
-    [heartRate, seconds],
+    () => createRecordedHeartbeatSource(event?.sensor.heart_rate, seconds * 1000),
+    [event?.sensor.heart_rate, seconds],
   );
   const sourceStats = useMemo(
     () => heartbeatStats(heartbeatSource.values(), heartbeatConfig?.source_baseline_bpm),
     [heartbeatConfig?.source_baseline_bpm, heartbeatSource],
   );
-  const selfSyncSeconds = heartbeatConfig?.adaptation_seconds
-    ?? heartbeatConfig?.prelude_seconds
-    ?? DEFAULT_ADAPTATION_SECONDS;
-  const transitionSeconds = heartbeatConfig?.transition_seconds ?? DEFAULT_TRANSITION_SECONDS;
+  const leadInBeats = Math.max(
+    1,
+    Math.round(event?.experience?.intro?.lead_in_beats ?? DEFAULT_LEAD_IN_BEATS),
+  );
   const cooldownSeconds = heartbeatConfig?.cooldown_seconds ?? DEFAULT_COOLDOWN_SECONDS;
-  const mappingGain = heartbeatConfig?.gain ?? 0.85;
-  const breathingFeatureEnabled = event?.experience?.breathing?.enabled ?? false;
-  const breathingEnabled = breathingFeatureEnabled && breathingOptIn;
+  const breathingEnabled = event?.experience?.breathing?.enabled ?? false;
   const breathingGain = Math.min(1, Math.max(0, event?.experience?.breathing?.gain ?? 0.8));
 
-  const mappedBpmAt = useCallback((progress: number) => {
-    const sourceBpm = heartbeatSource.sample(progress)?.bpm ?? sourceStats.baseline;
-    if (heartbeatConfig?.mode === "recorded-absolute") return sourceBpm;
-    return mapRecordedBpm(sourceBpm, sourceStats, {
-      userBaseline: baselineBpm,
-      gain: mappingGain,
-    });
-  }, [baselineBpm, heartbeatConfig?.mode, heartbeatSource, mappingGain, sourceStats]);
+  const sourceBpmAt = useCallback(
+    (progress: number) => heartbeatSource.sample(progress)?.bpm ?? sourceStats.baseline,
+    [heartbeatSource, sourceStats.baseline],
+  );
+  const experienceBpmAt = useCallback(
+    (progress: number) => translateEventBpm(
+      sourceBpmAt(progress),
+      sourceStats,
+      listenerInputRef.current,
+    ),
+    [sourceBpmAt, sourceStats],
+  );
+  const firstSourceBpm = sourceBpmAt(0);
 
-  const firstMappedBpm = mappedBpmAt(0);
-  const {
-    available: hapticsAvailable,
-    label: hapticsLabel,
-    pulse: pulseHaptics,
-    stop: stopHaptics,
-  } = useHeartbeatHaptics(hapticsEnabled);
+  const { pulse: pulseHaptics, stop: stopHaptics } = useHeartbeatHaptics(true);
   const { start: startHeartbeat, stop: stopHeartbeat } = useHeartbeatAudio({
     getBpm: () => targetBpmRef.current,
     onBeat: (bpm) => {
       pulseRef.current = 1;
       pulseHaptics(bpm);
+      if (phaseRef.current === "prelude") {
+        leadInBeatCountRef.current += 1;
+        if (leadInBeatCountRef.current >= leadInBeats) {
+          window.setTimeout(() => startMediaRef.current(), 0);
+        }
+      }
     },
   });
   const { start: startBreathing, stop: stopBreathing } = useBreathingAudio({
@@ -133,8 +151,9 @@ const VrScene = () => {
   });
 
   const enterPhase = useCallback((next: ExperiencePhase) => {
+    phaseRef.current = next;
     phaseStartedAtRef.current = performance.now();
-    setPhaseProgress(next === "ready" ? 1 : 0);
+    setPhaseProgress(next === "waiting" || next === "vr" ? 1 : 0);
     setPhase(next);
   }, []);
 
@@ -143,6 +162,7 @@ const VrScene = () => {
       video.pause();
       if (video.readyState > 0) video.currentTime = 0;
     });
+    primingPromiseRef.current = null;
   }, [videos.elements]);
 
   const completeExit = useCallback(() => {
@@ -152,114 +172,204 @@ const VrScene = () => {
     stopBreathing();
     stopHaptics();
     resetVideos();
+    void xrStore.getState().session?.end().catch(() => undefined);
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
     exitTimerRef.current = window.setTimeout(() => navigate(-1), 600);
   }, [leaving, navigate, resetVideos, stopBreathing, stopHaptics, stopHeartbeat]);
 
   const abort = useCallback(() => {
-    void xrStore.getState().session?.end().catch(() => undefined);
     completeExit();
   }, [completeExit]);
 
-  const beginPrelude = useCallback(() => {
-    setPlaybackError("");
-    progressRef.current = 0;
-    targetBpmRef.current = baselineBpm;
-    breathingPresenceRef.current = 0;
-    startHeartbeat();
-    if (breathingEnabled) startBreathing();
-    enterPhase("self-sync");
-  }, [baselineBpm, breathingEnabled, enterPhase, startBreathing, startHeartbeat]);
+  const failPlayback = useCallback((message: string) => {
+    mediaStartPendingRef.current = false;
+    setRetrying(false);
+    stopHeartbeat();
+    stopBreathing();
+    stopHaptics();
+    resetVideos();
+    void xrStore.getState().session?.end().catch(() => undefined);
+    leadInBeatCountRef.current = 0;
+    enterPhase("waiting");
+    setPlaybackError(message);
+  }, [enterPhase, resetVideos, stopBreathing, stopHaptics, stopHeartbeat]);
 
-  const beginVr = useCallback(() => {
-    setPlaybackError("");
+  const markPlaybackStarted = useCallback(() => {
+    mediaStartPendingRef.current = false;
+    setRetrying(false);
     progressRef.current = 0;
-    targetBpmRef.current = mappedBpmAt(0);
-    if (primaryVideo) {
-      if (primaryVideo.readyState > 0) primaryVideo.currentTime = 0;
-      if (primaryVideo.error) primaryVideo.load();
-      void primaryVideo.play().catch(() => {
-        resetVideos();
-        void xrStore.getState().session?.end().catch(() => undefined);
-        enterPhase("ready");
-        setPlaybackError("360° 영상을 재생하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.");
-      });
-    }
+    breathingPresenceRef.current = breathingEnabled ? 0.18 : 0;
+    if (breathingEnabled) startBreathing();
     enterPhase("vr");
+  }, [breathingEnabled, enterPhase, startBreathing]);
+
+  const startMediaFromBeginning = useCallback(() => {
+    if (mediaStartPendingRef.current || phaseRef.current !== "prelude") return;
+    mediaStartPendingRef.current = true;
+    progressRef.current = 0;
+
+    if (!primaryVideo) {
+      markPlaybackStarted();
+      return;
+    }
+
+    const startVideo = async () => {
+      try {
+        await primingPromiseRef.current?.catch(() => undefined);
+        if (phaseRef.current !== "prelude") return;
+        if (primaryVideo.error) primaryVideo.load();
+        if (primaryVideo.readyState > 0) primaryVideo.currentTime = 0;
+        await primaryVideo.play();
+        if (phaseRef.current === "prelude") markPlaybackStarted();
+      } catch {
+        failPlayback("영상을 자동으로 이어가지 못했습니다.");
+      }
+    };
+
+    void startVideo();
+  }, [failPlayback, markPlaybackStarted, primaryVideo]);
+
+  useEffect(() => {
+    startMediaRef.current = startMediaFromBeginning;
+  }, [startMediaFromBeginning]);
+
+  const beginPrelude = useCallback(() => {
+    if (!videos.ready) return;
+    setPlaybackError("");
+    setRetrying(false);
+    leadInBeatCountRef.current = 0;
+    progressRef.current = 0;
+    pulseRef.current = 0;
+    mediaStartPendingRef.current = false;
+    listenerInputRef.current = readHeartRateInput();
+    targetBpmRef.current = translateEventBpm(
+      firstSourceBpm,
+      sourceStats,
+      listenerInputRef.current,
+    );
+    breathingPresenceRef.current = 0;
+    resetVideos();
+    enterPhase("prelude");
+
+    // XR 세션과 미디어 권한 요청은 반드시 같은 사용자 입력 안에서 시작한다.
     if (vrSupported) void xrStore.enterVR().catch(() => undefined);
-  }, [enterPhase, mappedBpmAt, primaryVideo, resetVideos, vrSupported]);
+
+    if (primaryVideo) {
+      const prime = primaryVideo.play();
+      primingPromiseRef.current = prime;
+      void prime.then(() => {
+        if (phaseRef.current !== "prelude") return;
+        primaryVideo.pause();
+        if (primaryVideo.readyState > 0) primaryVideo.currentTime = 0;
+      }).catch(() => undefined);
+    }
+
+    startHeartbeat();
+  }, [
+    enterPhase,
+    firstSourceBpm,
+    primaryVideo,
+    resetVideos,
+    sourceStats,
+    startHeartbeat,
+    videos.ready,
+    vrSupported,
+  ]);
+
+  const retryPlayback = useCallback(() => {
+    if (!videos.ready) return;
+    setPlaybackError("");
+    setRetrying(true);
+    progressRef.current = 0;
+    mediaStartPendingRef.current = true;
+    listenerInputRef.current = readHeartRateInput();
+    targetBpmRef.current = translateEventBpm(
+      firstSourceBpm,
+      sourceStats,
+      listenerInputRef.current,
+    );
+    resetVideos();
+    startHeartbeat();
+    if (vrSupported) void xrStore.enterVR().catch(() => undefined);
+
+    if (!primaryVideo) {
+      markPlaybackStarted();
+      return;
+    }
+
+    void primaryVideo.play()
+      .then(markPlaybackStarted)
+      .catch(() => failPlayback("영상 재생을 시작하지 못했습니다."));
+  }, [
+    failPlayback,
+    firstSourceBpm,
+    markPlaybackStarted,
+    primaryVideo,
+    resetVideos,
+    sourceStats,
+    startHeartbeat,
+    videos.ready,
+    vrSupported,
+  ]);
+
+  const beginCooldown = useCallback(() => {
+    if (phaseRef.current === "cooldown" || leaving) return;
+    cooldownStartBpmRef.current = targetBpmRef.current;
+    cooldownStartBreathingRef.current = breathingPresenceRef.current;
+    resetVideos();
+    enterPhase("cooldown");
+  }, [enterPhase, leaving, resetVideos]);
 
   useEffect(() => {
     if (!primaryVideo) return;
     const handleError = () => {
-      if (phase !== "vr") return;
-      resetVideos();
-      void xrStore.getState().session?.end().catch(() => undefined);
-      enterPhase("ready");
-      setPlaybackError("360° 영상 연결이 중단되었습니다. 다시 시도해 주세요.");
+      if (phaseRef.current !== "vr") return;
+      failPlayback("영상 연결이 중단되었습니다.");
     };
     primaryVideo.addEventListener("error", handleError);
     return () => primaryVideo.removeEventListener("error", handleError);
-  }, [enterPhase, phase, primaryVideo, resetVideos]);
-
-  const beginCooldown = useCallback(() => {
-    if (phase === "cooldown" || leaving) return;
-    cooldownStartBpmRef.current = targetBpmRef.current;
-    cooldownStartBreathingRef.current = breathingPresenceRef.current;
-    resetVideos();
-    void xrStore.getState().session?.end().catch(() => undefined);
-    enterPhase("cooldown");
-  }, [enterPhase, leaving, phase, resetVideos]);
+  }, [failPlayback, primaryVideo]);
 
   useEffect(() => {
-    if (phase === "gate") {
-      targetBpmRef.current = baselineBpm;
-      return;
-    }
-
-    if (phase === "ready") {
-      targetBpmRef.current = firstMappedBpm;
-      return;
-    }
+    if (!event) return;
+    if (phaseStartedAtRef.current === 0) phaseStartedAtRef.current = performance.now();
 
     const update = () => {
       const elapsedSeconds = (performance.now() - phaseStartedAtRef.current) / 1000;
 
-      if (phase === "self-sync") {
-        const progress = Math.min(1, elapsedSeconds / selfSyncSeconds);
-        targetBpmRef.current = baselineBpm;
+      if (phaseRef.current === "intro") {
+        const progress = Math.min(1, elapsedSeconds / INTRO_SECONDS);
+        targetBpmRef.current = firstSourceBpm;
         breathingPresenceRef.current = 0;
         setPhaseProgress(progress);
-        setHud({ progress: 0, bpm: baselineBpm });
-        if (progress >= 1) enterPhase("transition");
+        if (progress >= 1) enterPhase("waiting");
         return;
       }
 
-      if (phase === "transition") {
-        const progress = Math.min(1, elapsedSeconds / transitionSeconds);
-        const mapped = mix(baselineBpm, firstMappedBpm, smoothstep(progress));
-        targetBpmRef.current = mapped;
-        breathingPresenceRef.current = smoothstep(progress) * 0.18;
-        setPhaseProgress(progress);
-        setHud({ progress: 0, bpm: mapped });
-        if (progress >= 1) enterPhase("ready");
+      if (phaseRef.current === "waiting") {
+        targetBpmRef.current = firstSourceBpm;
         return;
       }
 
-      if (phase === "vr") {
-        const mapped = mappedBpmAt(progressRef.current);
-        targetBpmRef.current = mapped;
+      if (phaseRef.current === "prelude") {
+        targetBpmRef.current = experienceBpmAt(0);
+        return;
+      }
+
+      if (phaseRef.current === "vr") {
+        targetBpmRef.current = experienceBpmAt(progressRef.current);
         breathingPresenceRef.current = 0.18 + toneRef.current * 0.42;
-        setHud({ progress: progressRef.current, bpm: mapped });
         return;
       }
 
       const progress = Math.min(1, elapsedSeconds / cooldownSeconds);
-      const mapped = mix(cooldownStartBpmRef.current, baselineBpm, smoothstep(progress));
-      targetBpmRef.current = mapped;
+      targetBpmRef.current = mix(
+        cooldownStartBpmRef.current,
+        NEUTRAL_COOLDOWN_BPM,
+        smoothstep(progress),
+      );
       breathingPresenceRef.current = cooldownStartBreathingRef.current * (1 - smoothstep(progress));
       setPhaseProgress(progress);
-      setHud((current) => ({ ...current, bpm: mapped }));
       if (progress >= 1) completeExit();
     };
 
@@ -267,16 +377,23 @@ const VrScene = () => {
     const timer = window.setInterval(update, UI_INTERVAL);
     return () => window.clearInterval(timer);
   }, [
-    baselineBpm,
     completeExit,
     cooldownSeconds,
     enterPhase,
-    firstMappedBpm,
-    mappedBpmAt,
-    phase,
-    selfSyncSeconds,
-    transitionSeconds,
+    event,
+    experienceBpmAt,
+    firstSourceBpm,
   ]);
+
+  useEffect(() => {
+    const handleKeyDown = (keyboardEvent: KeyboardEvent) => {
+      if (keyboardEvent.key !== "Escape") return;
+      if (phaseRef.current === "vr") beginCooldown();
+      else if (phaseRef.current !== "cooldown") abort();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [abort, beginCooldown]);
 
   useEffect(() => () => {
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
@@ -287,14 +404,7 @@ const VrScene = () => {
   if (!event) return <div className="vr-scene-message">이벤트 자료를 불러오는 중입니다…</div>;
 
   const running = phase === "vr";
-  const displayedBpm = phase === "gate"
-    ? baselineBpm
-    : phase === "ready"
-      ? firstMappedBpm
-      : hud.bpm;
-  const preludePhase = phase === "gate" || phase === "self-sync" || phase === "transition" || phase === "ready"
-    ? phase
-    : null;
+  const canStop = phase === "prelude" || running;
 
   return (
     <div className={`vr-scene${leaving ? " is-leaving" : ""}`}>
@@ -302,7 +412,7 @@ const VrScene = () => {
         className="vr-scene-canvas"
         camera={{ position: [0, 1.6, 0], fov: 55 }}
       >
-        <color attach="background" args={["#0a1526"]} />
+        <color attach="background" args={["#000000"]} />
         <XR store={xrStore}>
           <SceneErrorBoundary onError={setSceneError}>
             <Suspense fallback={null}>
@@ -314,85 +424,46 @@ const VrScene = () => {
                 running={running}
                 onFinish={beginCooldown}
               />
+              <HeartbeatPrelude
+                event={event}
+                phase={phase}
+                phaseProgress={phaseProgress}
+                pulse={pulseRef}
+              />
+              <ImmersiveStopControl visible={canStop} onStop={running ? beginCooldown : abort} />
             </Suspense>
           </SceneErrorBoundary>
         </XR>
       </Canvas>
 
-      {preludePhase && (
-        <PreExperienceFlow
-          phase={preludePhase}
-          eventTitle={event.title}
-          eventDescription={event.description}
-          eventLabel={`${event.persona.toUpperCase()} · ${event.event_id}`}
-          provenance={event.panorama_video
-            ? "정면은 원본 촬영 영상이며, 보이지 않던 주변 시야는 AI가 생성한 360° 재현입니다."
-            : event.panorama?.generated
-              ? event.panorama.mode === "recorded_anchor"
-                ? "촬영된 정면을 기준으로 AI가 확장한 360° 추정 환경입니다."
-                : "생체신호와 페르소나 패턴을 바탕으로 AI가 생성한 장면 가설이며 실제 장소 기록이 아닙니다."
-              : undefined}
-          seconds={seconds}
-          mediaCount={event.panorama_video ? 1 : event.media.length}
-          chatCount={event.chats.length}
-          mediaReady={videos.ready}
-          vrSupported={vrSupported}
-          baselineBpm={baselineBpm}
-          currentBpm={displayedBpm}
-          phaseProgress={phaseProgress}
-          hapticsEnabled={hapticsEnabled}
-          hapticsAvailable={hapticsAvailable}
-          hapticsLabel={hapticsLabel}
-          breathingEnabled={breathingEnabled}
-          breathingAvailable={breathingFeatureEnabled}
-          launchError={playbackError}
-          onBaselineChange={setBaselineBpm}
-          onHapticsChange={setHapticsEnabled}
-          onBreathingChange={setBreathingOptIn}
-          onStartPrelude={beginPrelude}
-          onEnterVr={beginVr}
-          onBack={abort}
-        />
+      {(phase === "intro" || phase === "waiting") && (
+        <button className="vr-spatial-back" onClick={abort} aria-label="체험 종료">
+          <ArrowLeft size={21} />
+        </button>
       )}
 
-      {sceneError && phase !== "vr" && <p className="vr-scene-floating-error">씬을 그리지 못했습니다 — {sceneError}</p>}
-
-      {running && (
-        <div className="vr-scene-hud">
-          <div className="vr-scene-bpm">
-            <HeartPulse size={18} />
-            <strong>{Math.round(hud.bpm)}</strong>
-            <small>체감 bpm</small>
-          </div>
-
-          <div className="vr-scene-progress">
-            <span style={{ width: `${hud.progress * 100}%` }} />
-          </div>
-
-          <button className="vr-scene-stop" onClick={beginCooldown}>
-            <Square size={16} /> 재현 종료
+      {phase === "waiting" && videos.ready && !retrying && (
+        <div className="vr-spatial-prompt">
+          {playbackError && <p role="alert">{playbackError}</p>}
+          <button onClick={playbackError ? retryPlayback : beginPrelude}>
+            {playbackError ? "탭하여 이어가기" : "심장박동 느끼기"}
           </button>
         </div>
       )}
 
-      {phase === "cooldown" && (
-        <div className="vr-scene-gate vr-cooldown">
-          <div className="vr-scene-gate-card vr-prelude-card">
-            <p className="vr-scene-eyebrow">COOLDOWN</p>
-            <h1>설정한 기준 박동으로 돌아옵니다</h1>
-            <p className="vr-scene-desc">햅틱과 심음을 갑자기 끊지 않고 안정적으로 마무리합니다.</p>
-            <div
-              className="vr-prelude-heart"
-              style={{ "--beat-duration": `${60 / Math.max(35, hud.bpm)}s` } as CSSProperties}
-            >
-              <span><HeartPulse size={36} /></span>
-              <strong>{Math.round(hud.bpm)}</strong>
-              <small>체감 bpm</small>
-            </div>
-            <div className="vr-prelude-progress"><span style={{ width: `${phaseProgress * 100}%` }} /></div>
-            <button className="vr-scene-stop vr-cooldown-stop" onClick={completeExit}>바로 종료</button>
-          </div>
-        </div>
+      {sceneError && phase === "waiting" && (
+        <p className="vr-scene-floating-error">장면을 불러오지 못했습니다. {sceneError}</p>
+      )}
+
+      {canStop && (
+        <button
+          className="vr-scene-stop-icon"
+          onClick={running ? beginCooldown : abort}
+          aria-label="체험 종료"
+          title="체험 종료"
+        >
+          <Square size={16} aria-hidden="true" />
+        </button>
       )}
     </div>
   );

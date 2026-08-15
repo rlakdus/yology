@@ -303,6 +303,8 @@ def main():
     }
     if metadata.get("experience"):
         payload["experience"] = metadata["experience"]
+    if metadata.get("data_provenance"):
+        payload["data_provenance"] = metadata["data_provenance"]
 
     output = target_dir / "vr-event.json"
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

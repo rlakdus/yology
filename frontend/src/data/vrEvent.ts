@@ -21,6 +21,13 @@ export type VrEvent = {
   start_time: string | null;
   end_time: string | null;
   duration_min: number;
+  data_provenance?: {
+    person: string;
+    vitals_file: string;
+    timezone: string;
+    window_start: string;
+    window_end: string;
+  };
   panorama: {
     src: string;
     depth: string | null;
@@ -39,19 +46,26 @@ export type VrEvent = {
   chats: string[];
   sensor: {
     heart_rate?: number[];
+    heart_rate_source?: "recorded" | "placeholder";
+    heart_rate_timestamps?: string[];
+    hrv_sdnn?: number[];
+    hrv_sdnn_timestamps?: string[];
+    source_person?: string;
+    source_file?: string;
+    timezone?: string;
     eda?: number[];
     temperature?: number[];
   };
   experience?: {
+    intro?: {
+      /** 장면 정보를 설명하지 않고 신체 감각으로 진입시키는 두 문장. */
+      guidance_lines: [string, string];
+      /** 실제 BPM 간격으로 재생할 프리루드 박동 수. */
+      lead_in_beats?: number;
+    };
     heartbeat?: {
-      mode?: "recorded-relative" | "recorded-absolute";
       /** 원본 사건의 안정 구간에서 계산한 기준 심박. */
       source_baseline_bpm?: number;
-      gain?: number;
-      /** 기준 박동에 익숙해지는 시간. prelude_seconds는 구형 매니페스트 호환용이다. */
-      adaptation_seconds?: number;
-      prelude_seconds?: number;
-      transition_seconds?: number;
       cooldown_seconds?: number;
     };
     breathing?: {

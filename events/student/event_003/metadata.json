@@ -21,9 +21,14 @@
     "yaw_offset_deg": 0
   },
   "experience": {
+    "intro": {
+      "guidance_lines": [
+        "숨을 고르고, 말 위에서 빨라지던 박동의 간격을 느껴봅니다.",
+        "여덟 번의 박동을 따라가면, 초원의 움직임 속으로 들어갑니다."
+      ],
+      "lead_in_beats": 8
+    },
     "heartbeat": {
-      "adaptation_seconds": 3,
-      "transition_seconds": 4,
       "cooldown_seconds": 4
     },
     "breathing": {

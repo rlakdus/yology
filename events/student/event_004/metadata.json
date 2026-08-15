@@ -1,0 +1,39 @@
+{
+  "event_id": "event_004",
+  "title": "좋아하는 영화 관람",
+  "persona": "student",
+  "emotion": "emotional_immersion",
+  "description": "영화를 관람하며 안정적인 박동 속에서 장면에 따라 감정적 각성이 나타났던 순간",
+  "start_time": "2026-08-12T16:00:00+09:00",
+  "end_time": "2026-08-12T18:00:00+09:00",
+  "vr_scene": "favorite_movie",
+  "data_provenance": {
+    "person": "he",
+    "vitals_file": "data/output/export_he_vitals.csv",
+    "timezone": "Asia/Seoul",
+    "window_start": "2026-08-12T16:00:00+09:00",
+    "window_end": "2026-08-12T18:00:00+09:00"
+  },
+  "experience": {
+    "intro": {
+      "guidance_lines": [
+        "호흡을 고르고, 어두운 상영관에서 이어지던 박동을 느껴봅니다.",
+        "여덟 번의 박동을 따라가면, 기억 속 장면이 천천히 열립니다."
+      ],
+      "lead_in_beats": 8
+    },
+    "heartbeat": {
+      "source_baseline_bpm": 89,
+      "cooldown_seconds": 8
+    },
+    "breathing": {
+      "enabled": false
+    }
+  },
+  "assets": [
+    {
+      "file": "source/favorite-movie.original.mov",
+      "taken_at": "2026-08-12T16:00:00+09:00"
+    }
+  ]
+}

@@ -1,19 +1,39 @@
 {
   "event_id": "event_001",
-  "title": "Late-night Study",
+  "title": "시험·면접 직전후",
   "persona": "student",
-  "emotion": "sustained_arousal",
-  "description": "새벽 1시 21분 정지 상태에서 심박이 급발현한 대표 이벤트의 추정 장면",
-  "start_time": "2026-07-22T01:21:20+09:00",
-  "end_time": "2026-07-22T01:23:20+09:00",
-  "vr_scene": "night_study_room",
-  "panorama": {
-    "file": "panorama/night_study_360.generated.png",
-    "depth": "panorama/night_study_360.generated.png.depth.png",
-    "generated": true,
-    "mode": "scenario_hypothesis",
-    "anchor_yaw_deg": 0,
-    "source_note": "Fully AI-generated scenario hypothesis based on the student persona's representative physiological event; not a recorded location"
+  "emotion": "anticipation_relief",
+  "description": "면접 결과를 확인하며 긴장과 안도가 교차하고 심박이 크게 상승했던 순간",
+  "start_time": "2026-08-12T15:00:00+09:00",
+  "end_time": "2026-08-12T15:10:00+09:00",
+  "vr_scene": "interview_result_check",
+  "data_provenance": {
+    "person": "he",
+    "vitals_file": "data/output/export_he_vitals.csv",
+    "timezone": "Asia/Seoul",
+    "window_start": "2026-08-12T15:00:00+09:00",
+    "window_end": "2026-08-12T15:10:00+09:00"
   },
-  "assets": []
+  "experience": {
+    "intro": {
+      "guidance_lines": [
+        "숨을 고르고, 결과를 확인하던 순간의 빠른 박동에 귀 기울여 봅니다.",
+        "여덟 번의 박동을 따라가면, 그때의 긴장과 안도가 천천히 돌아옵니다."
+      ],
+      "lead_in_beats": 8
+    },
+    "heartbeat": {
+      "source_baseline_bpm": 89,
+      "cooldown_seconds": 8
+    },
+    "breathing": {
+      "enabled": false
+    }
+  },
+  "assets": [
+    {
+      "file": "source/exam-interview.original.mov",
+      "taken_at": "2026-08-12T15:05:00+09:00"
+    }
+  ]
 }
