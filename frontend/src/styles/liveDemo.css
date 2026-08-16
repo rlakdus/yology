@@ -2296,3 +2296,105 @@ button:disabled {
   }
 
 }
+
+/* ========================================
+   FOOTER
+   Home / Moments / Event와 동일
+======================================== */
+
+.live-footer {
+  margin-top: 20px;
+
+  padding:
+    52px
+    0
+    58px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #07152f,
+      #0b224a
+    );
+
+  color: white;
+}
+
+
+.live-footer-inner {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 48px;
+}
+
+
+.live-footer-brand img {
+  width: 124px;
+
+  filter:
+    brightness(0)
+    invert(1);
+
+  opacity: .95;
+}
+
+
+.live-footer-brand p {
+  margin-top: 14px;
+
+  color: #aebdd0;
+
+  font-size: 11px;
+}
+
+
+.live-footer-team {
+  display: grid;
+
+  justify-items: end;
+
+  gap: 7px;
+
+  text-align: right;
+}
+
+
+.live-footer-team strong {
+  margin-bottom: 4px;
+
+  color: #d9e4ef;
+
+  font-size: 9px;
+
+  letter-spacing: .14em;
+}
+
+
+.live-footer-team span {
+  color: #9fadc0;
+
+  font-size: 11px;
+}
+
+
+@media (max-width: 620px) {
+
+  .live-footer-inner {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 30px;
+  }
+
+
+  .live-footer-team {
+    justify-items: end;
+
+    text-align: right;
+  }
+
+}

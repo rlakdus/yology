@@ -324,37 +324,37 @@ const Event = () => {
     ageLabel = "20대",
 
     momentId =
-      "exam-interview",
+    "exam-interview",
 
     momentTitle =
-      "시험·면접 직전후",
+    "시험·면접 직전후",
 
     momentSubtitle =
-      "긴장과 몰입이 가장 높았던 순간",
+    "긴장과 몰입이 가장 높았던 순간",
 
     momentDescription =
-      "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
+    "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
 
     momentDate =
-      "2026.04",
+    "2026.04",
 
     momentExactDate,
 
     momentLocation =
-      "Campus",
+    "Campus",
 
     demoSource =
-      "student",
+    "student",
 
     eventId =
-      "event_001",
+    "event_001",
   } = location.state || {};
 
 
   const detail =
     eventDetails[momentId] ??
     eventDetails[
-      "exam-interview"
+    "exam-interview"
     ];
 
 
@@ -452,10 +452,9 @@ const Event = () => {
           onClick={() =>
             navigate("/moment")
           }
+          aria-label="My Moments로 돌아가기"
         >
-          <ArrowLeft size={16} />
-
-          My Moments
+          <ArrowLeft size={18} />
         </button>
 
 

@@ -514,6 +514,48 @@ const LiveDemo = () => {
         </section>
       </section>
 
+            {/* ========================================
+          FOOTER
+      ======================================== */}
+
+      <footer className="live-footer">
+
+        <div className="shell live-footer-inner">
+
+          <div className="live-footer-brand">
+
+            <img
+              src="/assets/logo.png"
+              alt="VIVIA"
+            />
+
+            <p>
+              몸의 신호가 삶의 이야기가 됩니다.
+            </p>
+
+          </div>
+
+
+          <div className="live-footer-team">
+
+            <strong>
+              TEAM YOLOGY
+            </strong>
+
+            <span>
+              Samsung Life Lifenology Lab
+            </span>
+
+            <span>
+              2026
+            </span>
+
+          </div>
+
+        </div>
+
+      </footer>
+
       {recordOpen && (
         <div className="record-backdrop" role="presentation" onMouseDown={(e) => { if (e.currentTarget === e.target) resetRecorder(); }}>
           <form className="record-modal" onSubmit={saveMoment}>

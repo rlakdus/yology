@@ -699,15 +699,14 @@ const Reconstruction = () => {
       <main className="recon-shell">
 
         {/* BACK */}
-
         <button
           className="recon-back"
           onClick={() =>
             navigate(-1)
           }
+          aria-label="Event로 돌아가기"
         >
-          <ArrowLeft size={16} />
-          Event
+          <ArrowLeft size={18} />
         </button>
 
 
