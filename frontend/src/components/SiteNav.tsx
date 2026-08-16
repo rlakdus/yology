@@ -19,10 +19,8 @@ const SiteNav = () => {
           <NavLink to="/" end className={({ isActive }) => (isActive ? "is-active" : "")}>Home</NavLink>
           <NavLink to="/how-it-works" className={({ isActive }) => (isActive ? "is-active" : "")}>How it works</NavLink>
           <NavLink to="/moment" className={({ isActive }) => (isActive ? "is-active" : "")}>My Moments</NavLink>
-          <NavLink to="/persona/he/events" className={({ isActive }) => (isActive ? "is-active" : "")}>Live Demo</NavLink>
+          <NavLink to="/live-demo" className={({ isActive }) => (isActive ? "is-active" : "")}>Live Demo</NavLink>
         </div>
-
-        <button className="site-start" onClick={() => navigate("/moment")}>시작하기</button>
       </nav>
     </header>
   );

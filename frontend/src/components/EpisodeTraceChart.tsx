@@ -18,6 +18,10 @@ interface EpisodeTraceChartProps {
   peakLabel?: string;
   pointLabels?: string[];
   height?: number;
+  /** 피크 외에 별도로 표시할 지점(예: 이상 탐지 샘플). 기본은 없음. */
+  highlightIndices?: number[];
+  /** highlightIndices 마커 색상. 기본값은 series color. */
+  highlightColor?: string;
 }
 
 const VIEW_W = 600;
@@ -37,6 +41,8 @@ const EpisodeTraceChart = ({
   peakLabel,
   pointLabels,
   height = 160,
+  highlightIndices,
+  highlightColor,
 }: EpisodeTraceChartProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
@@ -136,6 +142,14 @@ const EpisodeTraceChart = ({
               {peakLabel}
             </text>
           )}
+
+          {highlightIndices?.map((i) => (
+            <circle
+              key={i}
+              cx={points[i].x} cy={points[i].y} r={4}
+              fill={highlightColor ?? color} stroke="var(--surface)" strokeWidth={2}
+            />
+          ))}
 
           {hover && (
             <g>

@@ -1,13 +1,18 @@
 import "../styles/moment.css";
+
 import SiteNav from "../components/SiteNav";
 
-import { useRef, useState, type CSSProperties } from "react";
+import {
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import {
   ArrowRight,
   CalendarDays,
-  MapPin,
   GraduationCap,
   Heart,
   House,
@@ -25,7 +30,16 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-type AgeGroup = "20s" | "30s" | "40s";
+
+/* ========================================
+   TYPES
+======================================== */
+
+type AgeGroup =
+  | "20s"
+  | "30s"
+  | "40s";
+
 
 type MomentItem = {
   id: string;
@@ -50,13 +64,30 @@ type MomentItem = {
   eventId?: string;
 };
 
-const ageLabels: Record<AgeGroup, string> = {
+
+/* ========================================
+   AGE LABELS
+======================================== */
+
+const ageLabels: Record<
+  AgeGroup,
+  string
+> = {
   "20s": "20대",
   "30s": "30대",
   "40s": "40대",
 };
 
-const momentData: Record<AgeGroup, MomentItem[]> = {
+
+/* ========================================
+   MOMENT DATA
+======================================== */
+
+const momentData: Record<
+  AgeGroup,
+  MomentItem[]
+> = {
+
   /* =========================
      20대
      2026 실제 수집 기록
@@ -70,7 +101,9 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       exactDate: "",
 
       title: "시험·면접 직전후",
-      subtitle: "긴장과 몰입이 가장 높았던 순간",
+
+      subtitle:
+        "긴장과 몰입이 가장 높았던 순간",
 
       description:
         "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
@@ -82,6 +115,7 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       available: true,
 
       demoSource: "student",
+
       eventId: "event_001",
     },
 
@@ -91,8 +125,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       date: "2026.05",
       exactDate: "",
 
-      title: "대학 입학 후 첫 콘서트",
-      subtitle: "처음 마주한 공연장의 열기",
+      title:
+        "대학 입학 후 첫 콘서트",
+
+      subtitle:
+        "처음 마주한 공연장의 열기",
 
       description:
         "좋아하는 음악과 사람들 사이에서 설렘과 몰입이 높아졌던 순간을 다시 떠올립니다.",
@@ -104,6 +141,7 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       available: true,
 
       demoSource: "student",
+
       eventId: "event_002",
     },
 
@@ -114,7 +152,9 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       exactDate: "",
 
       title: "몽골 여행",
-      subtitle: "초원을 달리던 여름",
+
+      subtitle:
+        "초원을 달리던 여름",
 
       description:
         "끝없이 펼쳐진 초원에서 말을 타며 느꼈던 자유와 설렘을 몸의 신호와 함께 다시 경험합니다.",
@@ -126,6 +166,7 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       available: true,
 
       demoSource: "student",
+
       eventId: "event_003",
     },
 
@@ -135,8 +176,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       date: "2026.08",
       exactDate: "",
 
-      title: "좋아하는 영화 관람",
-      subtitle: "오래 기억하고 싶은 한 장면",
+      title:
+        "좋아하는 영화 관람",
+
+      subtitle:
+        "오래 기억하고 싶은 한 장면",
 
       description:
         "영화를 보며 느꼈던 몰입과 감정의 변화를 몸의 신호와 함께 다시 꺼내봅니다.",
@@ -148,9 +192,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       available: true,
 
       demoSource: "student",
+
       eventId: "event_004",
     },
   ],
+
 
   /* =========================
      30대
@@ -162,7 +208,9 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       id: "important-work",
 
       title: "중요한 업무",
-      subtitle: "커리어의 중요한 전환점",
+
+      subtitle:
+        "커리어의 중요한 전환점",
 
       description:
         "중요한 미팅이나 발표처럼 오래 기억에 남을 업무 순간입니다.",
@@ -176,7 +224,9 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
       id: "first-home",
 
       title: "첫 집",
-      subtitle: "새로운 삶의 공간",
+
+      subtitle:
+        "새로운 삶의 공간",
 
       description:
         "처음 나만의 공간을 마련하며 느꼈던 감정을 기록합니다.",
@@ -189,8 +239,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "old-friends",
 
-      title: "오랜만의 친구 모임",
-      subtitle: "시간을 넘어 다시 만난 사람들",
+      title:
+        "오랜만의 친구 모임",
+
+      subtitle:
+        "시간을 넘어 다시 만난 사람들",
 
       description:
         "오랜만에 만난 친구들과 다시 추억을 나누었던 순간입니다.",
@@ -203,8 +256,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "special-memory",
 
-      title: "잊고 싶지 않은 기억",
-      subtitle: "시간이 지나도 남는 순간",
+      title:
+        "잊고 싶지 않은 기억",
+
+      subtitle:
+        "시간이 지나도 남는 순간",
 
       description:
         "나에게 특별했던 기억을 다시 꺼내볼 수 있습니다.",
@@ -215,6 +271,7 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     },
   ],
 
+
   /* =========================
      40대
      Future Archive
@@ -224,8 +281,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "health-check",
 
-      title: "건강을 확인한 날",
-      subtitle: "결과를 기다리던 시간",
+      title:
+        "건강을 확인한 날",
+
+      subtitle:
+        "결과를 기다리던 시간",
 
       description:
         "건강검진 결과를 기다리며 여러 생각이 스쳤던 순간입니다.",
@@ -238,8 +298,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "parents",
 
-      title: "부모님과의 순간",
-      subtitle: "시간이 지날수록 소중해지는 기억",
+      title:
+        "부모님과의 순간",
+
+      subtitle:
+        "시간이 지날수록 소중해지는 기억",
 
       description:
         "부모님과 함께한 평범하지만 오래 남는 순간을 기록합니다.",
@@ -252,8 +315,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "family-trip",
 
-      title: "가족과의 여행",
-      subtitle: "함께해서 더 특별했던 시간",
+      title:
+        "가족과의 여행",
+
+      subtitle:
+        "함께해서 더 특별했던 시간",
 
       description:
         "가족과 함께한 여행의 분위기와 감정을 다시 경험합니다.",
@@ -266,8 +332,11 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
     {
       id: "child-milestone",
 
-      title: "가족의 새로운 시작",
-      subtitle: "삶의 또 다른 전환점",
+      title:
+        "가족의 새로운 시작",
+
+      subtitle:
+        "삶의 또 다른 전환점",
 
       description:
         "입학이나 졸업처럼 가족 모두에게 의미가 컸던 순간입니다.",
@@ -279,252 +348,856 @@ const momentData: Record<AgeGroup, MomentItem[]> = {
   ],
 };
 
-const monthNumber = (value?: string) => {
-  if (!value) return 1;
-  const match = value.match(/\.(\d{2})$/);
-  return match ? Number(match[1]) : 1;
+
+/* ========================================
+   MONTH PARSER
+======================================== */
+
+const monthNumber = (
+  value?: string
+) => {
+  if (!value) {
+    return 1;
+  }
+
+  const match =
+    value.match(/\.(\d{2})$/);
+
+  return match
+    ? Number(match[1])
+    : 1;
 };
 
+
+/* ========================================
+   MOMENT PAGE
+======================================== */
+
 const Moment = () => {
-  const navigate = useNavigate();
-  const [selectedAge, setSelectedAge] = useState<AgeGroup>("20s");
-  const [selectedId, setSelectedId] = useState(momentData["20s"][0].id);
-  const [showComingSoon, setShowComingSoon] = useState(false);
-  const [timelineZoom, setTimelineZoom] = useState(1);
-  const [showIntro, setShowIntro] = useState(true);
-  const timelineRef = useRef<HTMLDivElement>(null);
+  const navigate =
+    useNavigate();
 
-  const moments = momentData[selectedAge];
-  const activeMoment = moments.find((item) => item.id === selectedId) ?? moments[0];
-  const ActiveIcon = activeMoment.icon;
+  const timelineRef =
+    useRef<HTMLDivElement>(null);
 
-  const changeAge = (age: AgeGroup) => {
+
+  /* =========================
+     STATE
+  ========================= */
+
+  const [
+    selectedAge,
+    setSelectedAge,
+  ] = useState<AgeGroup>("20s");
+
+
+  const [
+    selectedId,
+    setSelectedId,
+  ] = useState(
+    momentData["20s"][0].id
+  );
+
+
+  const [
+    showComingSoon,
+    setShowComingSoon,
+  ] = useState(false);
+
+
+  const [
+    timelineZoom,
+    setTimelineZoom,
+  ] = useState(1);
+
+
+  /* =========================
+     CURRENT DATA
+  ========================= */
+
+  const moments =
+    momentData[selectedAge];
+
+
+  const activeMoment =
+    moments.find(
+      (item) =>
+        item.id === selectedId
+    ) ?? moments[0];
+
+
+  /* =========================
+     AGE CHANGE
+  ========================= */
+
+  const changeAge = (
+    age: AgeGroup
+  ) => {
     setSelectedAge(age);
-    setSelectedId(momentData[age][0].id);
+
+    setSelectedId(
+      momentData[age][0].id
+    );
+
     setShowComingSoon(false);
   };
 
-  const scrollTimeline = (direction: "left" | "right") => {
-    timelineRef.current?.scrollBy({
-      left: direction === "left" ? -520 : 520,
-      behavior: "smooth",
-    });
+
+  /* =========================
+     TIMELINE SCROLL
+  ========================= */
+
+  const scrollTimeline = (
+    direction:
+      | "left"
+      | "right"
+  ) => {
+    timelineRef.current?.scrollBy(
+      {
+        left:
+          direction === "left"
+            ? -520
+            : 520,
+
+        behavior: "smooth",
+      }
+    );
   };
 
-  const changeTimelineZoom = (delta: number) => {
-    setTimelineZoom((current) => Math.min(1.35, Math.max(0.85, Number((current + delta).toFixed(2)))));
+
+  /* =========================
+     TIMELINE ZOOM
+  ========================= */
+
+  const changeTimelineZoom = (
+    delta: number
+  ) => {
+    setTimelineZoom(
+      (current) =>
+        Math.min(
+          1.35,
+
+          Math.max(
+            0.85,
+
+            Number(
+              (
+                current +
+                delta
+              ).toFixed(2)
+            )
+          )
+        )
+    );
   };
 
-  const openMoment = (moment: MomentItem) => {
+
+  /* =========================
+     OPEN MOMENT
+  ========================= */
+
+  const openMoment = (
+    moment: MomentItem
+  ) => {
     setSelectedId(moment.id);
 
     if (!moment.available) {
       setShowComingSoon(true);
+
       return;
     }
 
     navigate("/event", {
       state: {
-        ageGroup: selectedAge,
-        ageLabel: ageLabels[selectedAge],
-        momentId: moment.id,
-        momentTitle: moment.title,
-        momentSubtitle: moment.subtitle,
-        momentDescription: moment.description,
-        momentDate: moment.date,
-        momentExactDate: moment.exactDate,
-        momentLocation: moment.location,
-        demoSource: moment.demoSource,
-        eventId: moment.eventId,
+        ageGroup:
+          selectedAge,
+
+        ageLabel:
+          ageLabels[
+            selectedAge
+          ],
+
+        momentId:
+          moment.id,
+
+        momentTitle:
+          moment.title,
+
+        momentSubtitle:
+          moment.subtitle,
+
+        momentDescription:
+          moment.description,
+
+        momentDate:
+          moment.date,
+
+        momentExactDate:
+          moment.exactDate,
+
+        momentLocation:
+          moment.location,
+
+        demoSource:
+          moment.demoSource,
+
+        eventId:
+          moment.eventId,
       },
     });
   };
 
+
+  /* ========================================
+     RENDER
+  ========================================= */
+
   return (
     <div className="life-moment-page">
+
+      {/* =========================
+          NAV
+      ========================= */}
+
       <SiteNav />
 
-      <main className="life-moment-container">
-        {showIntro && (
-          <section className="life-demo-intro" aria-label="My Moments demo introduction">
-            <div className="life-demo-intro-orbit orbit-a" />
-            <div className="life-demo-intro-orbit orbit-b" />
-            <div className="life-demo-persona">
-              <span className="life-demo-badge">DEMO PERSONA · 20s</span>
-              <div className="life-demo-avatar">YO</div>
-              <div className="life-demo-copy">
-                <p className="life-demo-hello">안녕하세요, 저는 <strong>욜로지</strong>입니다.</p>
-                <h1>라놀랩 대학교에 다니며,<br />평범한 하루 속 특별한 순간들을 모으고 있어요.</h1>
-                <p>이번 데모에서는 제 일상에서 몸의 신호가 크게 달라졌던 순간을 따라가며, VIVIA가 그 장면을 어떻게 발견하고 이야기로 다시 연결하는지 보여드릴게요.</p>
-                <div className="life-demo-actions">
-                  <button className="life-demo-enter" onClick={() => setShowIntro(false)}>욜로지의 순간 따라가기 <ArrowRight size={17} /></button>
-                  <button className="life-demo-skip" onClick={() => setShowIntro(false)}>바로 아카이브 보기</button>
-                </div>
-              </div>
-            </div>
-            <div className="life-demo-signal-strip">
-              <span>2026.04 <b>시험·면접</b></span>
-              <i />
-              <span>2026.05 <b>첫 콘서트</b></span>
-              <i />
-              <span>2026.07 <b>몽골 여행</b></span>
-              <i />
-              <span>2026.08 <b>영화 관람</b></span>
-            </div>
-          </section>
-        )}
 
-        <div className={showIntro ? "life-moments-content is-behind-intro" : "life-moments-content is-ready"}>
-        <header className="life-moment-header life-reveal">
-          <span className="life-moment-eyebrow">MY MOMENTS · LIFE ARCHIVE</span>
-          <h1>당신의 삶을 따라,<br />순간들이 하나의 이야기로 쌓입니다.</h1>
-          <p>몸의 신호와 함께 남겨진 순간을 시간의 흐름 위에서 탐색하고,<br />다시 만나고 싶은 장면을 선택해보세요.</p>
+      {/* =========================
+          MAIN
+      ========================= */}
+
+      <main className="life-moment-container">
+
+        {/* =====================
+            HEADER
+        ===================== */}
+
+        <header className="life-moment-header">
+
+          <span className="life-moment-eyebrow">
+
+            MY MOMENTS · LIFE ARCHIVE
+
+          </span>
+
+          <h1>
+
+            당신의 삶을 따라,
+            <br />
+
+            순간들이 쌓여갑니다.
+
+          </h1>
+
+          <p>
+
+            몸의 신호와 함께
+            남겨진 순간을
+            탐색하고,
+
+            <br />
+
+            다시 만나고 싶은
+            장면을 선택해보세요.
+
+          </p>
+
         </header>
 
-        <section className="life-age-switch" aria-label="연령대 선택">
-          {(Object.keys(ageLabels) as AgeGroup[]).map((age) => (
+
+        {/* =====================
+            AGE SWITCH
+        ===================== */}
+
+        <section
+          className="life-age-switch"
+          aria-label="연령대 선택"
+        >
+
+          {(
+            Object.keys(
+              ageLabels
+            ) as AgeGroup[]
+          ).map((age) => (
+
             <button
               key={age}
-              className={age === selectedAge ? "active" : ""}
-              onClick={() => changeAge(age)}
+              className={
+                age ===
+                selectedAge
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                changeAge(age)
+              }
             >
-              <span>{ageLabels[age]}</span>
-              <small>{age === "20s" ? "NOW" : "FUTURE"}</small>
+
+              <span>
+                {ageLabels[age]}
+              </span>
+
+              <small>
+
+                {age === "20s"
+                  ? "NOW"
+                  : "FUTURE"}
+
+              </small>
+
             </button>
+
           ))}
+
         </section>
+
+
+        {/* ========================================
+            20대 · ACTUAL ARCHIVE
+        ======================================== */}
 
         {selectedAge === "20s" ? (
-          <>
-            <section className="life-year-panel life-reveal">
-              <div className="life-year-title">
-                <div>
-                  <span>2026 · YOUR LIFE TIMELINE</span>
-                  <h2>올해, 어떤 순간들이 남았나요?</h2>
-                </div>
-                <div className="life-timeline-tools">
-                  <div className="life-year-status">
-                    <CalendarDays size={17} />
-                    <span>{moments.length} moments archived</span>
-                  </div>
-                  <div className="life-timeline-nav" aria-label="타임라인 탐색 도구">
-                    <button type="button" onClick={() => scrollTimeline("left")} aria-label="이전 시점"><ChevronLeft size={17} /></button>
-                    <button type="button" onClick={() => changeTimelineZoom(-0.1)} aria-label="타임라인 축소"><Minus size={16} /></button>
-                    <span>{Math.round(timelineZoom * 100)}%</span>
-                    <button type="button" onClick={() => changeTimelineZoom(0.1)} aria-label="타임라인 확대"><Plus size={16} /></button>
-                    <button type="button" onClick={() => scrollTimeline("right")} aria-label="다음 시점"><ChevronRight size={17} /></button>
-                  </div>
-                </div>
+
+          <section className="life-year-panel">
+
+            {/* =====================
+                TITLE
+            ===================== */}
+
+            <div className="life-year-title">
+
+              <div>
+
+                <span>
+                  2026 · YOUR LIFE TIMELINE
+                </span>
+
+                <h2>
+                  어떤 순간을 다시 보시겠습니까?
+                </h2>
+
               </div>
 
-              <div className="life-timeline-viewport">
+
+              {/* =====================
+                  TIMELINE TOOLS
+              ===================== */}
+
+              <div className="life-timeline-tools">
+
+                <div className="life-year-status">
+
+                  <CalendarDays
+                    size={17}
+                  />
+
+                  <span>
+
+                    {moments.length}
+                    {" "}
+                    moments archived
+
+                  </span>
+
+                </div>
+
+
                 <div
-                  className="life-year-track"
-                  ref={timelineRef}
-                  aria-label="2026 월별 타임라인"
-                  style={{ "--timeline-zoom": timelineZoom } as CSSProperties}
+                  className="life-timeline-nav"
+                  aria-label="타임라인 탐색 도구"
                 >
-                  <div className="life-year-line" />
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                  <div className="life-month-tick" key={month} style={{ gridColumn: month }}>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      scrollTimeline(
+                        "left"
+                      )
+                    }
+                    aria-label="이전 시점"
+                  >
+
+                    <ChevronLeft
+                      size={17}
+                    />
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      changeTimelineZoom(
+                        -0.1
+                      )
+                    }
+                    aria-label="타임라인 축소"
+                  >
+
+                    <Minus
+                      size={16}
+                    />
+
+                  </button>
+
+
+                  <span>
+
+                    {Math.round(
+                      timelineZoom *
+                        100
+                    )}
+                    %
+
+                  </span>
+
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      changeTimelineZoom(
+                        0.1
+                      )
+                    }
+                    aria-label="타임라인 확대"
+                  >
+
+                    <Plus
+                      size={16}
+                    />
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      scrollTimeline(
+                        "right"
+                      )
+                    }
+                    aria-label="다음 시점"
+                  >
+
+                    <ChevronRight
+                      size={17}
+                    />
+
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* =====================
+                TIMELINE
+            ===================== */}
+
+            <div className="life-timeline-viewport">
+
+              <div
+                className="life-year-track"
+                ref={timelineRef}
+                aria-label="2026 월별 타임라인"
+                style={
+                  {
+                    "--timeline-zoom":
+                      timelineZoom,
+                  } as CSSProperties
+                }
+              >
+
+                {/* LINE */}
+
+                <div className="life-year-line" />
+
+
+                {/* MONTH TICKS */}
+
+                {Array.from(
+                  {
+                    length: 12,
+                  },
+                  (_, index) =>
+                    index + 1
+                ).map((month) => (
+
+                  <div
+                    className="life-month-tick"
+                    key={month}
+                    style={{
+                      gridColumn:
+                        month,
+                    }}
+                  >
+
                     <i />
-                    <span>{month}월</span>
+
+                    <span>
+                      {month}월
+                    </span>
+
                   </div>
+
                 ))}
 
-                {moments.map((moment, index) => {
-                  const Icon = moment.icon;
-                  const month = monthNumber(moment.date);
-                  const selected = activeMoment.id === moment.id;
+
+                {/* EVENTS */}
+
+                {moments.map(
+                  (
+                    moment,
+                    index
+                  ) => {
+
+                    const Icon =
+                      moment.icon;
+
+                    const month =
+                      monthNumber(
+                        moment.date
+                      );
+
+                    const selected =
+                      activeMoment.id ===
+                      moment.id;
+
+                    return (
+
+                      <button
+                        key={
+                          moment.id
+                        }
+                        className={`
+                          life-timeline-event
+                          ${
+                            index %
+                              2 ===
+                            0
+                              ? "event-top"
+                              : "event-bottom"
+                          }
+                          ${
+                            selected
+                              ? "active"
+                              : ""
+                          }
+                          event-${index + 1}
+                        `}
+                        style={{
+                          gridColumn:
+                            `${month} / span 2`,
+                        }}
+                        onMouseEnter={() =>
+                          setSelectedId(
+                            moment.id
+                          )
+                        }
+                        onFocus={() =>
+                          setSelectedId(
+                            moment.id
+                          )
+                        }
+                        onClick={() =>
+                          openMoment(
+                            moment
+                          )
+                        }
+                      >
+
+                        {/* PIN */}
+
+                        <span className="life-timeline-pin">
+
+                          <Icon
+                            size={18}
+                          />
+
+                        </span>
+
+
+                        {/* MONTH */}
+
+                        <small>
+
+                          {moment.date?.replace(
+                            "2026.",
+                            ""
+                          )}
+                          월
+
+                        </small>
+
+
+                        {/* TITLE */}
+
+                        <strong>
+
+                          {moment.title}
+
+                        </strong>
+
+
+                        {/* DESCRIPTION */}
+
+                        <em>
+
+                          {moment.subtitle}
+
+                        </em>
+
+
+                        {/* OPEN */}
+
+                        <span className="life-timeline-open">
+
+                          자세히 보기
+
+                          <ArrowRight
+                            size={14}
+                          />
+
+                        </span>
+
+                      </button>
+
+                    );
+                  }
+                )}
+
+              </div>
+
+            </div>
+
+
+            {/* =====================
+                HINT
+            ===================== */}
+
+            <p className="life-timeline-hint">
+
+              좌우로 스와이프해
+              시간대를 이동하고,
+              + / − 버튼으로
+              타임라인을
+              확대·축소해보세요.
+
+            </p>
+
+          </section>
+
+        ) : (
+
+          /* ========================================
+             30대 / 40대
+             FUTURE ARCHIVE
+          ======================================== */
+
+          <section className="life-future-panel">
+
+            <div className="life-future-heading">
+
+              <span>
+
+                VIVIA · FUTURE ARCHIVE
+
+              </span>
+
+              <h2>
+
+                {ageLabels[
+                  selectedAge
+                ]}
+                의 삶에도 기록은
+                계속됩니다.
+
+              </h2>
+
+              <p>
+
+                아직 오지 않은
+                삶의 순간들을
+                VIVIA의 미래
+                아카이브로
+                미리 만나보세요.
+
+              </p>
+
+            </div>
+
+
+            {/* =====================
+                FUTURE CARDS
+            ===================== */}
+
+            <div className="life-future-grid">
+
+              {moments.map(
+                (moment) => {
+
+                  const Icon =
+                    moment.icon;
 
                   return (
+
                     <button
-                      key={moment.id}
-                      className={`life-timeline-event ${index % 2 === 0 ? "event-top" : "event-bottom"} ${selected ? "active" : ""} event-${index + 1}`}
-                      style={{ gridColumn: `${month} / span 2` }}
-                      onMouseEnter={() => setSelectedId(moment.id)}
-                      onFocus={() => setSelectedId(moment.id)}
-                      onClick={() => openMoment(moment)}
+                      key={
+                        moment.id
+                      }
+                      onClick={() =>
+                        openMoment(
+                          moment
+                        )
+                      }
                     >
-                      <span className="life-timeline-pin"><Icon size={18} /></span>
-                      <small>{moment.date?.replace("2026.", "")}월</small>
-                      <strong>{moment.title}</strong>
-                      <em>{moment.subtitle}</em>
-                      <span className="life-timeline-open">자세히 보기 <ArrowRight size={14} /></span>
+
+                      <div>
+
+                        <Icon
+                          size={24}
+                        />
+
+                      </div>
+
+                      <span>
+
+                        FUTURE MOMENT
+
+                      </span>
+
+                      <h3>
+
+                        {moment.title}
+
+                      </h3>
+
+                      <p>
+
+                        {
+                          moment.description
+                        }
+
+                      </p>
+
+                      <small>
+
+                        Coming soon
+
+                      </small>
+
                     </button>
+
                   );
-                })}
-                </div>
-              </div>
-              <p className="life-timeline-hint">좌우로 스와이프해 시간대를 이동하고, + / − 버튼으로 타임라인을 확대·축소해보세요.</p>
-            </section>
+                }
+              )}
 
-            <section className="life-selected-preview life-reveal">
-              <div className="life-selected-copy">
-                <span>SELECTED MOMENT</span>
-                <div className="life-selected-icon"><ActiveIcon size={27} /></div>
-                <h2>{activeMoment.title}</h2>
-                <h3>{activeMoment.subtitle}</h3>
-                <p>{activeMoment.description}</p>
-                <div className="life-selected-meta">
-                  <span><CalendarDays size={15} /> {activeMoment.date}</span>
-                  {activeMoment.location && <span><MapPin size={15} /> {activeMoment.location}</span>}
-                </div>
-                <button onClick={() => openMoment(activeMoment)}>이 순간 열어보기 <ArrowRight size={16} /></button>
-              </div>
+            </div>
 
-              <div className="life-selected-visual">
-                <div className="life-signal-orbit orbit-one" />
-                <div className="life-signal-orbit orbit-two" />
-                <div className="life-selected-center"><ActiveIcon size={38} /></div>
-                <span className="life-signal-chip chip-heart">Heart rate</span>
-                <span className="life-signal-chip chip-context">Context</span>
-                <span className="life-signal-chip chip-story">Story</span>
-              </div>
-            </section>
-          </>
-        ) : (
-          <section className="life-future-panel life-reveal">
-            <div className="life-future-heading">
-              <span>VIVIA · FUTURE ARCHIVE</span>
-              <h2>{ageLabels[selectedAge]}의 삶에도 기록은 계속됩니다.</h2>
-              <p>아직 오지 않은 삶의 순간들을 VIVIA의 미래 아카이브로 미리 만나보세요.</p>
-            </div>
-            <div className="life-future-grid">
-              {moments.map((moment) => {
-                const Icon = moment.icon;
-                return (
-                  <button key={moment.id} onClick={() => openMoment(moment)}>
-                    <div><Icon size={24} /></div>
-                    <span>FUTURE MOMENT</span>
-                    <h3>{moment.title}</h3>
-                    <p>{moment.description}</p>
-                    <small>Coming soon</small>
-                  </button>
-                );
-              })}
-            </div>
           </section>
+
         )}
 
-        <section className="life-dark-band life-reveal">
-          <div>
-            <span>FROM MOMENT TO MEMORY</span>
-            <h2>시간 위의 한 점이,<br />당신만의 이야기로 이어집니다.</h2>
-          </div>
-          <button onClick={() => navigate("/persona/he/events")}>실제 감지 이벤트 보기 <ArrowRight size={16} /></button>
-          <div className="life-band-wave"><i /><i /><i /></div>
-        </section>
-        </div>
       </main>
 
-      {showComingSoon && (
-        <div className="life-coming-toast" role="status">
-          <Sparkles size={18} />
-          <span>이 순간은 Future Archive 데모입니다.</span>
-          <button onClick={() => setShowComingSoon(false)}>닫기</button>
+
+      {/* ========================================
+          FOOTER
+          Home과 동일한 구성
+      ======================================== */}
+
+      <footer className="life-footer">
+
+        <div className="life-footer-inner">
+
+          {/* BRAND */}
+
+          <div className="life-footer-brand">
+
+            <img
+              src="/assets/logo.png"
+              alt="VIVIA"
+            />
+
+            <p>
+
+              몸의 신호가
+              삶의 이야기가 됩니다.
+
+            </p>
+
+          </div>
+
+
+          {/* TEAM */}
+
+          <div className="life-footer-team">
+
+            <strong>
+
+              TEAM YOLOGY
+
+            </strong>
+
+            <span>
+
+              Samsung Life
+              Lifenology Lab
+
+            </span>
+
+            <span>
+              2026
+            </span>
+
+          </div>
+
         </div>
+
+      </footer>
+
+
+      {/* ========================================
+          COMING SOON TOAST
+      ======================================== */}
+
+      {showComingSoon && (
+
+        <div
+          className="life-coming-toast"
+          role="status"
+        >
+
+          <Sparkles
+            size={18}
+          />
+
+          <span>
+
+            이 순간은
+            Future Archive
+            데모입니다.
+
+          </span>
+
+          <button
+            onClick={() =>
+              setShowComingSoon(
+                false
+              )
+            }
+          >
+
+            닫기
+
+          </button>
+
+        </div>
+
       )}
+
     </div>
   );
 };

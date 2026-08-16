@@ -1,4 +1,6 @@
 import "../styles/reconstruction.css";
+import BodySignature, { type SignatureMetric, type SnapshotItem } from "../components/BodySignature";
+import AINarrative, { type NarrativePayload } from "../components/AINarrative";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -538,6 +540,50 @@ const reconstructionData: Record<
   },
 };
 
+
+
+type BodyProfilePreset = {
+  intensity: number;
+  movement: number;
+  persistence: number;
+  recovery: number;
+  stability: number;
+  baseline: number;
+  zScore: number;
+  motion: number;
+  energy: number;
+  oxygen?: number;
+  respiration?: number;
+};
+
+const bodyProfilePresets: Record<string, BodyProfilePreset> = {
+  "exam-interview": {
+    intensity: 84, movement: 18, persistence: 76, recovery: 42, stability: 71,
+    baseline: 74, zScore: 2.4, motion: 0.024, energy: 1.8, oxygen: 97, respiration: 22,
+  },
+  "first-concert": {
+    intensity: 93, movement: 78, persistence: 88, recovery: 55, stability: 67,
+    baseline: 76, zScore: 2.9, motion: 0.138, energy: 6.7, oxygen: 98, respiration: 24,
+  },
+  "mongolia-trip": {
+    intensity: 88, movement: 94, persistence: 81, recovery: 64, stability: 73,
+    baseline: 72, zScore: 2.5, motion: 0.172, energy: 9.3, oxygen: 96, respiration: 25,
+  },
+  "favorite-movie": {
+    intensity: 58, movement: 9, persistence: 66, recovery: 79, stability: 91,
+    baseline: 71, zScore: 1.4, motion: 0.012, energy: 0.5, oxygen: 98, respiration: 20,
+  },
+};
+
+const parseBpm = (value: unknown, fallback: number) => {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const match = value.match(/[\d.]+/);
+    if (match) return Number(match[0]);
+  }
+  return fallback;
+};
+
 const Reconstruction = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -570,6 +616,16 @@ const Reconstruction = () => {
     eventSummary,
 
     evidenceCount,
+
+    eventBaseline,
+    eventZScore,
+    eventMotion,
+    eventMovementState,
+    eventActiveEnergy,
+    eventDistance,
+    eventOxygenSaturation,
+    eventRespiratoryRate,
+    momentNote,
   } = location.state || {};
 
   const detail =
@@ -581,6 +637,138 @@ const Reconstruction = () => {
     momentDate;
 
   const MomentIcon = detail.icon;
+
+  const preset =
+    bodyProfilePresets[momentId] ??
+    bodyProfilePresets["exam-interview"];
+
+  const currentHeartRate = parseBpm(
+    eventHeartRate ?? detail.sensorItems.find((item) => item.label === "Heart Rate")?.value,
+    preset.baseline
+  );
+  const currentBaseline = typeof eventBaseline === "number" ? eventBaseline : preset.baseline;
+  const currentZScore = typeof eventZScore === "number" ? eventZScore : preset.zScore;
+  const currentMotion = typeof eventMotion === "number" ? eventMotion : preset.motion;
+  const currentEnergy = typeof eventActiveEnergy === "number" ? eventActiveEnergy : preset.energy;
+  const currentOxygen = typeof eventOxygenSaturation === "number" ? eventOxygenSaturation : preset.oxygen;
+  const currentRespiration = typeof eventRespiratoryRate === "number" ? eventRespiratoryRate : preset.respiration;
+
+  const motionLabel =
+    eventMovementState ||
+    (currentMotion < 0.035 ? "STILL" : currentMotion < 0.12 ? "LIGHT" : "ACTIVE");
+
+  const signatureMetrics: SignatureMetric[] = [
+    { label: "INTENSITY", value: preset.intensity, hint: currentZScore >= 2 ? "높은 변화" : "중간 변화" },
+    { label: "MOVEMENT", value: preset.movement, hint: motionLabel },
+    { label: "PERSISTENCE", value: preset.persistence, hint: "지속 패턴" },
+    { label: "RECOVERY", value: preset.recovery, hint: preset.recovery >= 70 ? "빠른 회복" : "완만한 회복" },
+    { label: "STABILITY", value: preset.stability, hint: "신호 안정도" },
+  ];
+
+  const narrativeFallbacks: Record<string, { title: string; lead: string; paragraphs: string[]; closing: string; mode: "preview" }> = {
+    "exam-interview": {
+      title: "문 앞에서, 몸이 먼저 알고 있던 것",
+      lead: "14시 25분, 움직임은 크지 않았지만 심박은 평소 기준선보다 뚜렷하게 올라가 있었습니다. 몸은 조용히 앉아 있었고, 신호만 조금 더 빠르게 움직이고 있었습니다.",
+      paragraphs: [
+        "시험과 면접이 예정된 오후. 일정 기록과 시간대가 겹치는 동안 심박은 112 bpm까지 올라갔고, 개인 기준선과의 차이는 +2.4σ로 커졌습니다. 큰 움직임이 함께 나타나지 않았다는 점은 이 변화가 단순한 신체 활동만으로 설명되지는 않는다는 단서를 남깁니다.",
+        "VIVIA는 이 숫자에 감정의 이름을 붙이지 않습니다. 대신 그때의 몸이 평소와 달랐다는 사실, 그리고 그 변화가 시험 직전의 맥락과 같은 시간 위에 놓여 있었다는 것을 기억의 재료로 남깁니다."
+      ],
+      closing: "기억은 장면으로만 남지 않습니다. 때로는 문을 열기 직전, 몸이 먼저 남긴 작은 속도 차이로 남습니다.",
+      mode: "preview",
+    },
+    "first-concert": {
+      title: "첫 소절이 시작되기 전부터",
+      lead: "공연장 안에서 움직임과 심박이 함께 높아졌고, 무대가 시작된 뒤 신호의 밀도도 빠르게 커졌습니다.",
+      paragraphs: [
+        "19시 42분 무렵, 심박은 126 bpm까지 올랐고 움직임 역시 평소보다 활발했습니다. 영상과 사진에는 공연장의 빛과 군중이 남았고, 몸의 기록에는 빠르게 올라간 리듬이 남았습니다.",
+        "이 기록만으로 어떤 감정이었다고 단정할 수는 없습니다. 다만 시각적 기록, 시간, 움직임, 심박의 궤적을 포개면 그 순간이 일상의 평범한 구간과는 달랐다는 사실은 선명해집니다."
+      ],
+      closing: "사진은 무대를 기억하고, 몸은 그 순간의 리듬을 기억했습니다.",
+      mode: "preview",
+    },
+    "mongolia-trip": {
+      title: "낯선 풍경 속에서 길어진 하루",
+      lead: "이동량은 컸고 심박의 변화도 길게 이어졌습니다. 하나의 피크보다, 하루 전체에 퍼진 움직임이 이 순간의 특징이었습니다.",
+      paragraphs: [
+        "여행 중 기록된 높은 움직임과 활동 에너지는 심박 상승의 상당 부분을 설명합니다. 동시에 사진과 위치 기록은 이 변화가 익숙한 일상이 아닌 새로운 장소에서 발생했다는 맥락을 더합니다.",
+        "VIVIA는 활동으로 설명되는 변화와 그렇지 않은 변화를 나눠 바라봅니다. 그래서 이 순간은 '강한 감정'이라는 한 단어보다, 많이 걷고 오래 바라보고 낯선 장면을 지나온 하루의 신체적 흔적으로 복원됩니다."
+      ],
+      closing: "그날의 기억은 한 장의 사진보다, 오래 움직였던 몸의 궤적에 더 넓게 남아 있었습니다.",
+      mode: "preview",
+    },
+    "favorite-movie": {
+      title: "가만히 있었지만, 아주 조금 달라진 순간",
+      lead: "움직임은 거의 없었고 전체 신호도 안정적이었습니다. 다만 특정 구간에서 작은 심박 변화가 반복되었습니다.",
+      paragraphs: [
+        "영화가 이어지는 동안 몸은 대부분 안정적인 범위에 머물렀습니다. 20시 31분 전후로 나타난 작은 변화는 큰 피크는 아니었지만, 움직임이 거의 없는 상태에서 반복되었다는 점 때문에 하나의 흔적으로 남았습니다.",
+        "상영 시간과 콘텐츠 맥락을 함께 놓으면 그 구간을 다시 찾아볼 이유가 생깁니다. VIVIA는 그것을 감정의 증거가 아니라, 다시 기억해 볼 만한 작은 표시로 남깁니다."
+      ],
+      closing: "선명한 순간은 언제나 크게 뛰지 않습니다. 때로는 아주 작은 흔들림으로만 남습니다.",
+      mode: "preview",
+    },
+  };
+
+  const narrativePayload: NarrativePayload = {
+    momentId,
+    title: momentTitle,
+    date: displayDate,
+    time: eventTime ?? detail.sensorItems[2].value,
+    location: momentLocation,
+    description: momentDescription,
+    note: momentNote,
+    heartRate: currentHeartRate,
+    baseline: currentBaseline,
+    zScore: currentZScore,
+    movement: motionLabel,
+    motion: currentMotion,
+    activeEnergy: currentEnergy,
+    oxygen: currentOxygen,
+    respiration: currentRespiration,
+    evidence: detail.evidence.map((item) => `${item.type}: ${item.title} — ${item.description}`),
+  };
+
+  const narrativeFallback = narrativeFallbacks[momentId] ?? narrativeFallbacks["exam-interview"];
+
+  const snapshotItems: SnapshotItem[] = [
+    {
+      label: "Heart Rate",
+      value: `${Math.round(currentHeartRate)} bpm`,
+      note: `개인 baseline ${Math.round(currentBaseline)} bpm`,
+      icon: "heart",
+    },
+    {
+      label: "Deviation",
+      value: `+${currentZScore.toFixed(1)}σ`,
+      note: "개인 기준선 대비 변화",
+      icon: "deviation",
+    },
+    {
+      label: "Movement",
+      value: motionLabel,
+      note: `${currentMotion.toFixed(3)} g`,
+      icon: "motion",
+    },
+    {
+      label: "Active Energy",
+      value: `${currentEnergy.toFixed(1)} kcal`,
+      note: typeof eventDistance === "number" ? `${Math.round(eventDistance)} m 이동` : "해당 구간 누적",
+      icon: "energy",
+    },
+    {
+      label: "Blood Oxygen",
+      value: currentOxygen ? `${currentOxygen.toFixed(0)}%` : "",
+      note: currentOxygen ? "가장 가까운 측정값" : "이 순간 주변 측정 없음",
+      icon: "oxygen",
+      available: Boolean(currentOxygen),
+    },
+    {
+      label: "Respiratory Rate",
+      value: currentRespiration ? `${currentRespiration.toFixed(1)} /min` : "",
+      note: currentRespiration ? "가장 가까운 측정값" : "이 순간 주변 측정 없음",
+      icon: "respiration",
+      available: Boolean(currentRespiration),
+    },
+  ];
 
   return (
     <div className="vivia-reconstruction-page">
@@ -747,6 +935,33 @@ const Reconstruction = () => {
             )}
 
           </div>
+
+        </section>
+
+        {/* =========================
+            BODY SIGNATURE
+        ========================= */}
+
+        <section className="vivia-reconstruction-section">
+
+          <div className="vivia-reconstruction-section-head">
+            <div>
+              <span>01.5 · BODY TRACE</span>
+              <h2>
+                그 순간, 몸에 남은 신호
+              </h2>
+            </div>
+
+            <p>
+              심박·움직임·호흡·산소포화도 등 서로 다른 신호를 한 장면에 겹쳐 보고,
+              변화의 패턴을 이 순간만의 Body Signature로 남깁니다.
+            </p>
+          </div>
+
+          <BodySignature
+            metrics={signatureMetrics}
+            snapshot={snapshotItems}
+          />
 
         </section>
 
@@ -962,6 +1177,31 @@ const Reconstruction = () => {
             )}
 
           </div>
+
+        </section>
+
+        {/* =========================
+            AI NARRATIVE
+        ========================= */}
+
+        <section className="vivia-reconstruction-section">
+
+          <div className="vivia-reconstruction-section-head">
+            <div>
+              <span>05 · AI NARRATIVE</span>
+              <h2>신호가 한 편의 기억이 되는 순간</h2>
+            </div>
+
+            <p>
+              관측된 Body Trace와 시간·장소·주변 기록을 연결해,
+              감정을 단정하지 않는 서사로 다시 씁니다.
+            </p>
+          </div>
+
+          <AINarrative
+            payload={narrativePayload}
+            fallback={narrativeFallback}
+          />
 
         </section>
 
