@@ -1,6 +1,12 @@
 {
-  "heart_rate": [79, 82, 116, 119, 118, 117],
-  "expected_heart_rate": [78, 78, 78, 78, 78, 78],
-  "score": 6.52,
-  "steps_5m": 9
+  "heart_rate_source": "recorded",
+  "source_person": "he",
+  "source_file": "data/output/export_he_vitals.csv",
+  "timezone": "Asia/Seoul",
+  "heart_rate_timestamps": [
+    "2026-08-12T15:01:05+09:00",
+    "2026-08-12T15:03:36+09:00",
+    "2026-08-12T15:07:39+09:00"
+  ],
+  "heart_rate": [110, 98, 154]
 }

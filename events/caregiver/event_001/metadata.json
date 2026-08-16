@@ -9,12 +9,15 @@
   "end_time": "2026-08-01T14:35:00",
   "vr_scene": "hospital_room",
   "experience": {
+    "intro": {
+      "guidance_lines": [
+        "호흡을 가다듬고, 기다림 속에서 이어지던 박동을 느껴봅니다.",
+        "여덟 번의 박동을 따라가면, 그때의 공간이 천천히 열립니다."
+      ],
+      "lead_in_beats": 8
+    },
     "heartbeat": {
-      "mode": "recorded-relative",
       "source_baseline_bpm": 72,
-      "gain": 0.85,
-      "adaptation_seconds": 8,
-      "transition_seconds": 10,
       "cooldown_seconds": 8
     },
     "breathing": {

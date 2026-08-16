@@ -1,0 +1,9 @@
+{
+  "basis": "he의 2026-08-12 16:00~18:00 Apple Watch 생체 데이터와 영화 관람 영상",
+  "evidence": "관람 구간에서 심박 40개가 기록되었고 대부분 80~93bpm으로 안정적이지만 16:16:00에 163bpm의 일시적 각성이 나타남. 16:27:39 HRV SDNN은 24.5607ms임",
+  "scene_status": "recorded_anchor",
+  "selected_videos": [
+    "source/favorite-movie.original.mov"
+  ],
+  "warning": "영상은 해당 순간의 원본 기록이며, 향후 확장되는 주변 360° 시야는 AI 재현 영역으로 구분해야 한다."
+}

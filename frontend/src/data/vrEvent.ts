@@ -21,6 +21,13 @@ export type VrEvent = {
   start_time: string | null;
   end_time: string | null;
   duration_min: number;
+  data_provenance?: {
+    person: string;
+    vitals_file: string;
+    timezone: string;
+    window_start: string;
+    window_end: string;
+  };
   panorama: {
     src: string;
     depth: string | null;
@@ -29,23 +36,36 @@ export type VrEvent = {
     anchor_yaw_deg: number;
     source_note: string;
   } | null;
+  panorama_video: {
+    src: string;
+    projection: "equirectangular";
+    fallback_image: string | null;
+    yaw_offset_deg: number;
+  } | null;
   media: VrMedia[];
   chats: string[];
   sensor: {
     heart_rate?: number[];
+    heart_rate_source?: "recorded" | "placeholder";
+    heart_rate_timestamps?: string[];
+    hrv_sdnn?: number[];
+    hrv_sdnn_timestamps?: string[];
+    source_person?: string;
+    source_file?: string;
+    timezone?: string;
     eda?: number[];
     temperature?: number[];
   };
   experience?: {
+    intro?: {
+      /** 장면 정보를 설명하지 않고 신체 감각으로 진입시키는 두 문장. */
+      guidance_lines: [string, string];
+      /** 실제 BPM 간격으로 재생할 프리루드 박동 수. */
+      lead_in_beats?: number;
+    };
     heartbeat?: {
-      mode?: "recorded-relative" | "recorded-absolute";
       /** 원본 사건의 안정 구간에서 계산한 기준 심박. */
       source_baseline_bpm?: number;
-      gain?: number;
-      /** 기준 박동에 익숙해지는 시간. prelude_seconds는 구형 매니페스트 호환용이다. */
-      adaptation_seconds?: number;
-      prelude_seconds?: number;
-      transition_seconds?: number;
       cooldown_seconds?: number;
     };
     breathing?: {
@@ -122,7 +142,9 @@ const clamp = (value: number, low: number, high: number) =>
   Math.min(high, Math.max(low, value));
 
 export const playbackSeconds = (videoTotalSeconds = 0) =>
-  clamp(Math.max(PLAYBACK.seconds, videoTotalSeconds), PLAYBACK.seconds, PLAYBACK.hardMaxSeconds);
+  videoTotalSeconds > 0
+    ? clamp(videoTotalSeconds, 1, PLAYBACK.hardMaxSeconds)
+    : PLAYBACK.seconds;
 
 /** 센서 샘플 배열을 0~1 진행도에 균등 매핑한 뒤 선형 보간한다. */
 export const sampleAt = (series: number[] | undefined, progress: number) => {
@@ -240,6 +262,15 @@ export const useVrEvent = (persona?: string, eventId?: string) => {
                 src: `${base}/${payload.panorama.src}`,
                 depth: payload.panorama.depth
                   ? `${base}/${payload.panorama.depth}`
+                  : null,
+              }
+            : null,
+          panorama_video: payload.panorama_video
+            ? {
+                ...payload.panorama_video,
+                src: `${base}/${payload.panorama_video.src}`,
+                fallback_image: payload.panorama_video.fallback_image
+                  ? `${base}/${payload.panorama_video.fallback_image}`
                   : null,
               }
             : null,

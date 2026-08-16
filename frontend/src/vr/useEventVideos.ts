@@ -4,7 +4,7 @@ import type { VrEvent } from "../data/vrEvent";
 
 export type EventVideos = {
   elements: Map<string, HTMLVideoElement>;
-  /** 모든 영상 길이의 합. 재현 길이를 정하는 데 쓰인다. */
+  /** 파노라마 영상 또는 기존 타임라인 영상의 재현 길이. */
   totalSeconds: number;
   ready: boolean;
 };
@@ -26,30 +26,43 @@ export const useEventVideos = (event: VrEvent | null): EventVideos => {
     let cancelled = false;
     const elements = new Map<string, HTMLVideoElement>();
 
-    const sources = event.media
+    const mediaSources = event.media
       .filter((entry) => entry.kind === "video")
       .map((entry) => entry.src);
+    const panoramaSource = event.panorama_video?.src;
+    const sources = [...new Set([
+      ...(panoramaSource ? [panoramaSource] : []),
+      ...mediaSources,
+    ])];
 
-    const loads = sources.map((src) => new Promise<number>((resolve) => {
+    const loads = sources.map((src) => new Promise<[string, number]>((resolve) => {
       const element = document.createElement("video");
       element.src = src;
-      element.preload = "metadata";
+      element.preload = src === panoramaSource ? "auto" : "metadata";
       element.playsInline = true;
       element.crossOrigin = "anonymous";
-      // 현장음은 합성 심박음 아래로 깔린다.
-      element.volume = 0.55;
+      // 파노라마에는 원본 현장음을 그대로 사용한다.
+      element.volume = src === panoramaSource ? 1 : 0.55;
       elements.set(src, element);
 
-      element.addEventListener("loadedmetadata", () => resolve(element.duration || 0), { once: true });
-      element.addEventListener("error", () => resolve(0), { once: true });
+      element.addEventListener(
+        "loadedmetadata",
+        () => resolve([src, element.duration || 0]),
+        { once: true },
+      );
+      element.addEventListener("error", () => resolve([src, 0]), { once: true });
+      element.load();
     }));
 
     // 영상이 없으면 Promise.all([])이 곧바로 resolve되어 ready만 켜진다.
-    void Promise.all(loads).then((durations) => {
+    void Promise.all(loads).then((loaded) => {
       if (cancelled) return;
+      const durations = new Map(loaded);
       setVideos({
         elements,
-        totalSeconds: durations.reduce((sum, seconds) => sum + seconds, 0),
+        totalSeconds: panoramaSource
+          ? durations.get(panoramaSource) ?? 0
+          : mediaSources.reduce((sum, src) => sum + (durations.get(src) ?? 0), 0),
         ready: true,
       });
     });

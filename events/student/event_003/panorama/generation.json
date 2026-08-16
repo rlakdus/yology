@@ -1,0 +1,34 @@
+{
+  "status": "pending_external_gpu",
+  "model": {
+    "name": "Beyond the Frame (Argus)",
+    "repository": "https://github.com/Red-Fairy/argus-code",
+    "checkpoint": null
+  },
+  "source": {
+    "file": "../source/mongolia-horse-riding.original.mp4",
+    "sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70"
+  },
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "full_sampling": true,
+    "batch_frames": 25,
+    "preserve_source_timeline": true,
+    "generated_region": "outside_recorded_front_view"
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_wrap": true
+  },
+  "output": {
+    "file": "mongolia-horse-360.mp4",
+    "width": 2048,
+    "height": 1024,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": "original_aac",
+    "faststart": true
+  }
+}

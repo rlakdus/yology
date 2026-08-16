@@ -1,6 +1,9 @@
 {
-  "basis": "persona/student/feelback_residual_episodes.csv 대표 야간 이벤트",
-  "evidence": "기대 78bpm 대비 실제 최고 116bpm, 급발현 +37bpm, 느린 회복, 야간",
-  "scene_status": "hypothesis",
-  "warning": "시험 공부 장면은 생체신호와 페르소나 패턴을 바탕으로 생성한 추정이며 실제 장소 기록이 아니다."
+  "basis": "he의 2026-08-12 15:00~15:10 Apple Watch 생체 데이터와 면접 결과 확인 영상",
+  "evidence": "15:01:05 110bpm, 15:03:36 98bpm, 15:07:39 154bpm으로 결과 확인 구간에서 급격한 심박 상승이 기록됨",
+  "scene_status": "recorded_anchor",
+  "selected_videos": [
+    "source/exam-interview.original.mov"
+  ],
+  "warning": "영상은 해당 순간의 원본 기록이며, 향후 확장되는 주변 360° 시야는 AI 재현 영역으로 구분해야 한다."
 }

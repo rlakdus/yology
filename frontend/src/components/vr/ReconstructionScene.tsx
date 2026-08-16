@@ -1,4 +1,4 @@
-import { useMemo, useRef, type RefObject } from "react";
+import { useEffect, useMemo, useRef, type RefObject } from "react";
 import { useFrame } from "@react-three/fiber";
 
 import { activeChat, chatCues, toneAt, type VrEvent } from "../../data/vrEvent";
@@ -41,6 +41,13 @@ const ReconstructionScene = ({
   const blurred = useBlurredTextures(event);
   const cues = useMemo(() => chatCues(event, seconds), [event, seconds]);
   const finishedRef = useRef(false);
+  const panoramaVideo = event.panorama_video
+    ? videos.get(event.panorama_video.src)
+    : undefined;
+
+  useEffect(() => {
+    if (running) finishedRef.current = false;
+  }, [running]);
 
   // 음수 우선순위는 자동 렌더를 유지하면서 다른 useFrame보다 먼저 돈다.
   // 아래 컴포넌트들이 항상 갱신된 진행도를 읽도록 여기서 시계를 먼저 돌린다.
@@ -48,10 +55,14 @@ const ReconstructionScene = ({
     playback.pulse.current = Math.max(0, playback.pulse.current - PULSE_DECAY * delta);
 
     if (running && seconds > 0) {
-      const next = playback.progress.current + delta / seconds;
+      const videoDuration = panoramaVideo?.duration;
+      const next = panoramaVideo && typeof videoDuration === "number"
+        && Number.isFinite(videoDuration) && videoDuration > 0
+        ? panoramaVideo.currentTime / videoDuration
+        : playback.progress.current + delta / seconds;
       playback.progress.current = Math.min(1, next);
 
-      if (next >= 1 && !finishedRef.current) {
+      if ((panoramaVideo?.ended || next >= 1) && !finishedRef.current) {
         finishedRef.current = true;
         onFinish();
       }
@@ -63,11 +74,25 @@ const ReconstructionScene = ({
 
   return (
     <>
-      <LookAroundControls playback={playback} continuous={Boolean(event.panorama)} />
-      <SurroundBackdrop event={event} playback={playback} blurred={blurred} />
-      {!event.panorama && (
-        <SceneMediaPanel event={event} playback={playback} videos={videos} />
-      )}
+      <LookAroundControls
+        playback={playback}
+        continuous={Boolean(event.panorama || event.panorama_video)}
+        motionEnabled={!event.panorama_video}
+      />
+      <SurroundBackdrop
+        event={event}
+        playback={playback}
+        blurred={blurred}
+        videos={videos}
+      />
+      {!event.panorama_video && event.media.length > 0 ? (
+        <SceneMediaPanel
+          event={event}
+          playback={playback}
+          videos={videos}
+          running={running}
+        />
+      ) : null}
     </>
   );
 };
