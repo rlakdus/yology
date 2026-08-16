@@ -1,36 +1,75 @@
+:root {
+  --rc-navy: #0d1c44;
+  --rc-navy-soft: #1f3155;
+
+  --rc-blue: #4b9ed2;
+  --rc-aqua: #35c8c5;
+
+  --rc-orange: #f4874d;
+  --rc-coral: #ff7e73;
+
+  --rc-lav: #9388ee;
+
+  --rc-muted: #7d8798;
+  --rc-line: #e8e8e4;
+
+  --rc-white: #ffffff;
+}
+
+
 /* ========================================
-   VIVIA · RECONSTRUCTION PAGE
+   BASE
 ======================================== */
 
-.vivia-reconstruction-page {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.recon-page {
   min-height: 100vh;
 
-  padding: 38px 24px 100px;
+  overflow-x: hidden;
+
+  color: var(--rc-navy);
 
   background:
     radial-gradient(
-      circle at 8% 2%,
-      rgba(15, 111, 255, 0.08),
-      transparent 23%
+      circle at 7% 4%,
+      rgba(76, 177, 232, 0.09),
+      transparent 27%
     ),
     radial-gradient(
-      circle at 94% 9%,
-      rgba(255, 138, 61, 0.09),
-      transparent 22%
+      circle at 93% 6%,
+      rgba(255, 145, 88, 0.11),
+      transparent 29%
     ),
     linear-gradient(
       180deg,
-      #fbfdff 0%,
-      #f5f8fc 100%
+      #fffdfa 0%,
+      #fbfaf7 45%,
+      #fffaf6 100%
     );
-
-  color: #0f172a;
 }
 
-.vivia-reconstruction-container {
-  width: min(1120px, 100%);
+.recon-shell {
+  width:
+    min(
+      1320px,
+      calc(100% - 64px)
+    );
 
   margin: 0 auto;
+
+  padding:
+    42px
+    0
+    108px;
 }
 
 
@@ -38,337 +77,452 @@
    BACK
 ======================================== */
 
-.vivia-reconstruction-back {
-  width: 46px;
-  height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.95);
-
-  color: #334155;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 7px 20px rgba(15, 23, 42, 0.045);
-
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.vivia-reconstruction-back:hover {
-  transform: translateX(-2px);
-
-  color: #0f6fff;
-  border-color: #b9d5ff;
-}
-
-
-/* ========================================
-   HEADER
-======================================== */
-
-.vivia-reconstruction-header {
-  max-width: 760px;
-
-  margin: 56px auto 52px;
-
-  text-align: center;
-}
-
-.vivia-reconstruction-eyebrow {
+.recon-back {
   display: inline-flex;
   align-items: center;
 
   gap: 7px;
 
-  padding: 9px 17px;
+  margin-bottom: 30px;
 
-  margin-bottom: 20px;
+  padding:
+    9px
+    13px;
+
+  border:
+    1px solid #e4e8ed;
 
   border-radius: 999px;
 
   background:
-    linear-gradient(
-      90deg,
-      rgba(15, 111, 255, 0.1),
-      rgba(255, 138, 61, 0.11)
-    );
+    rgba(255,255,255,.82);
 
-  color: #0f6fff;
+  color: #667389;
 
   font-size: 12px;
-  font-weight: 850;
+  font-weight: 800;
 
-  letter-spacing: 0.09em;
+  cursor: pointer;
+
+  transition:
+    transform .2s ease,
+    color .2s ease,
+    background .2s ease;
 }
 
-.vivia-reconstruction-header h1 {
-  margin: 0;
+.recon-back:hover {
+  transform:
+    translateX(-3px);
 
-  color: #0f172a;
+  color: var(--rc-blue);
 
-  font-size: clamp(43px, 5vw, 59px);
-  line-height: 1.16;
-
-  font-weight: 850;
-  letter-spacing: -0.045em;
-}
-
-.vivia-reconstruction-header p {
-  margin: 22px 0 0;
-
-  color: #64748b;
-
-  font-size: 17px;
-  line-height: 1.8;
+  background: white;
 }
 
 
-/* ========================================
-   HERO
-======================================== */
+.recon-context-bar {
+  min-height: 72px;
 
-.vivia-reconstruction-hero {
-  position: relative;
+  padding: 17px 22px;
 
-  overflow: hidden;
-
-  padding: 42px;
-
-  border: 1px solid #dfe8f3;
-  border-radius: 32px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff 0%,
-      #f9fcff 58%,
-      #fff8f3 100%
-    );
-
-  box-shadow:
-    0 22px 60px rgba(25, 46, 78, 0.08);
-}
-
-.vivia-reconstruction-hero-glow {
-  position: absolute;
-
-  border-radius: 50%;
-
-  pointer-events: none;
-}
-
-.vivia-reconstruction-hero-glow.blue {
-  width: 300px;
-  height: 300px;
-
-  left: -150px;
-  bottom: -180px;
-
-  background:
-    rgba(15, 111, 255, 0.1);
-}
-
-.vivia-reconstruction-hero-glow.orange {
-  width: 320px;
-  height: 320px;
-
-  right: -150px;
-  top: -180px;
-
-  background:
-    rgba(255, 138, 61, 0.12);
-}
-
-.vivia-reconstruction-hero-top,
-.vivia-reconstruction-hero-content,
-.vivia-reconstruction-hero-meta {
-  position: relative;
-
-  z-index: 2;
-}
-
-.vivia-reconstruction-hero-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
 
-.vivia-reconstruction-main-icon {
-  width: 66px;
-  height: 66px;
+  gap: 24px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 21px;
+  border: 1px solid #e8e7e2;
+  border-radius: 20px;
 
   background:
     linear-gradient(
-      145deg,
-      #e9f3ff,
-      #fff0e6
+      100deg,
+      rgba(255,255,255,.95),
+      rgba(255,249,244,.9)
     );
 
-  color: #0f6fff;
+  box-shadow:
+    0 10px 28px
+    rgba(25,45,75,.04);
 }
 
-.vivia-reconstruction-category {
-  padding: 8px 13px;
 
-  border-radius: 999px;
+.recon-context-title {
+  display: flex;
+  align-items: center;
 
-  background: #eef5ff;
-
-  color: #0f6fff;
-
-  font-size: 11px;
-  font-weight: 850;
-
-  letter-spacing: 0.08em;
+  gap: 10px;
 }
 
-.vivia-reconstruction-hero-content {
-  max-width: 720px;
 
-  padding-top: 46px;
+.recon-context-title svg {
+  color: #438cc6;
 }
 
-.vivia-reconstruction-date {
-  display: inline-block;
 
-  margin-bottom: 10px;
+.recon-context-title span {
+  color: #438cc6;
 
-  color: #ff7a2a;
+  font-size: 9px;
+  font-weight: 900;
 
-  font-size: 13px;
-  font-weight: 850;
+  letter-spacing: .12em;
 }
 
-.vivia-reconstruction-hero-content h2 {
-  margin: 0;
 
-  color: #0f172a;
+.recon-context-title strong {
+  padding-left: 10px;
 
-  font-size: 39px;
-  font-weight: 850;
+  border-left:
+    1px solid #e4e5e2;
 
-  letter-spacing: -0.04em;
+  color: #0d1c44;
+
+  font-size: 14px;
+  font-weight: 820;
 }
 
-.vivia-reconstruction-hero-content strong {
-  display: block;
 
-  margin-top: 10px;
+.recon-context-meta {
+  display: flex;
+  align-items: center;
 
-  color: #ff7a2a;
-
-  font-size: 15px;
+  gap: 8px;
 }
 
-.vivia-reconstruction-hero-content p {
-  margin: 17px 0 0;
 
-  color: #64748b;
+.recon-context-meta span {
+  display: inline-flex;
+  align-items: center;
 
-  font-size: 15px;
-  line-height: 1.85;
+  gap: 5px;
+
+  color: #788397;
+
+  font-size: 10px;
+  font-weight: 700;
 }
 
-.vivia-reconstruction-hero-meta {
-  margin-top: 34px;
 
-  padding-top: 23px;
+.recon-context-meta svg {
+  color: #ef7a47;
+}
 
-  border-top: 1px solid #e7edf4;
+
+@media (max-width: 720px) {
+
+  .recon-context-bar {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .recon-context-title {
+    flex-wrap: wrap;
+  }
+
+
+  .recon-context-meta {
+    flex-wrap: wrap;
+  }
+
+}
+
+/* ========================================
+   META
+======================================== */
+
+.recon-meta {
+  margin-top: 27px;
 
   display: flex;
   flex-wrap: wrap;
 
-  gap: 11px;
+  gap: 8px;
 }
 
-.vivia-reconstruction-hero-meta > div {
-  display: flex;
+.recon-meta span {
+  display: inline-flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 6px;
 
-  padding: 9px 13px;
+  padding:
+    8px
+    11px;
+
+  border:
+    1px solid #e7e9e9;
 
   border-radius: 999px;
 
-  background: white;
+  background:
+    rgba(255,255,255,.82);
 
-  color: #475569;
+  color: #657188;
 
-  font-size: 12px;
-  font-weight: 750;
+  font-size: 11px;
+  font-weight: 700;
+}
 
-  border: 1px solid #e7edf4;
+.recon-meta svg {
+  color: var(--rc-blue);
 }
 
 
 /* ========================================
-   COMMON SECTION
+   HERO VISUAL
 ======================================== */
 
-.vivia-reconstruction-section {
-  margin-top: 76px;
+.recon-hero-visual {
+  position: relative;
+  z-index: 3;
+
+  min-height: 360px;
+
+  display: grid;
+  place-items: center;
 }
 
-.vivia-reconstruction-section-head {
+.recon-core {
+  position: relative;
+  z-index: 4;
+
+  width: 105px;
+  height: 105px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(53, 200, 197, .23);
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f4fbfb
+    );
+
+  color: var(--rc-aqua);
+
+  box-shadow:
+    0 0 0 18px
+      rgba(53,200,197,.035),
+    0 15px 40px
+      rgba(24,53,75,.08);
+}
+
+.recon-orbit {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  border-radius: 50%;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.recon-orbit-a {
+  width: 245px;
+  height: 245px;
+
+  border:
+    1px solid
+    rgba(53,200,197,.19);
+}
+
+.recon-orbit-b {
+  width: 340px;
+  height: 215px;
+
+  border:
+    1px solid
+    rgba(244,135,77,.22);
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-15deg);
+}
+
+.recon-chip {
+  position: absolute;
+  z-index: 5;
+
+  padding:
+    8px
+    12px;
+
+  border:
+    1px solid #e5e7e7;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255,255,255,.91);
+
+  color: #68758a;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 22px
+    rgba(30,45,70,.05);
+}
+
+.recon-chip-a {
+  left: 11%;
+  top: 29%;
+}
+
+.recon-chip-b {
+  right: 7%;
+  top: 44%;
+}
+
+.recon-chip-c {
+  left: 24%;
+  bottom: 17%;
+}
+
+
+/* ========================================
+   SECTION
+======================================== */
+
+.recon-section {
+  margin-top: 94px;
+}
+
+.recon-section-head {
+  margin-bottom: 27px;
+
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 
-  gap: 30px;
-
-  margin-bottom: 27px;
+  gap: 45px;
 }
 
-.vivia-reconstruction-section-head span {
+.recon-section-head > div > span {
   display: block;
 
-  margin-bottom: 7px;
+  margin-bottom: 8px;
 
-  color: #ff7a2a;
+  color: var(--rc-orange);
 
-  font-size: 12px;
-  font-weight: 850;
+  font-size: 11px;
+  font-weight: 900;
 
-  letter-spacing: 0.08em;
+  letter-spacing: .11em;
 }
 
-.vivia-reconstruction-section-head h2 {
+.recon-section-head h2 {
+  max-width: 650px;
+
   margin: 0;
 
-  color: #0f172a;
+  color: var(--rc-navy);
 
-  font-size: 30px;
-  font-weight: 840;
+  font-size: 34px;
+  line-height: 1.25;
 
-  letter-spacing: -0.03em;
+  font-weight: 850;
+
+  letter-spacing: -.04em;
+
+  word-break: keep-all;
 }
 
-.vivia-reconstruction-section-head > p {
+.recon-section-head > p {
+  max-width: 390px;
+
+  margin: 0;
+
+  color: #8e98a8;
+
+  font-size: 12px;
+  line-height: 1.7;
+
+  text-align: right;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   BODY TRACE
+======================================== */
+
+.body-trace-card {
+  overflow: hidden;
+
+  padding:
+    31px
+    32px
+    34px;
+
+  border:
+    1px solid #e7e8e5;
+
+  border-radius: 28px;
+
+  background:
+    rgba(255,255,255,.94);
+
+  box-shadow:
+    0 20px 54px
+    rgba(27,48,75,.055);
+}
+
+.body-trace-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 30px;
+
+  margin-bottom: 25px;
+}
+
+.body-trace-heading span {
+  color: #75849c;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: .13em;
+}
+
+.body-trace-heading h3 {
+  margin:
+    7px
+    0
+    0;
+
+  color: var(--rc-navy);
+
+  font-size: 24px;
+  font-weight: 830;
+
+  letter-spacing: -.035em;
+}
+
+.body-trace-heading > p {
   max-width: 330px;
 
   margin: 0;
 
-  color: #94a3b8;
+  color: #8d97a7;
 
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.7;
 
   text-align: right;
@@ -376,520 +530,392 @@
 
 
 /* ========================================
-   SENSOR
+   BODY TRACE STAGE
 ======================================== */
 
-.vivia-reconstruction-sensor-grid {
+.body-trace-stage {
+  min-height: 520px;
+
+  padding:
+    32px
+    26px;
+
   display: grid;
+
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    minmax(220px, 1fr)
+    minmax(250px, .82fr)
+    minmax(220px, 1fr);
 
-  gap: 15px;
-}
+  gap: 34px;
 
-.vivia-reconstruction-sensor-card {
-  min-height: 150px;
-
-  padding: 22px;
-
-  border: 1px solid #e5ebf3;
-  border-radius: 21px;
-
-  background: white;
-
-  box-shadow:
-    0 9px 25px rgba(15, 23, 42, 0.04);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.vivia-reconstruction-sensor-card:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 14px 30px rgba(15, 111, 255, 0.07);
-}
-
-.vivia-reconstruction-sensor-icon {
-  width: 45px;
-  height: 45px;
-
-  margin-bottom: 22px;
-
-  display: flex;
   align-items: center;
-  justify-content: center;
 
-  border-radius: 14px;
-}
-
-.vivia-reconstruction-sensor-icon.blue {
-  color: #0f6fff;
-  background: #eaf3ff;
-}
-
-.vivia-reconstruction-sensor-icon.orange {
-  color: #ff7a2a;
-  background: #fff1e8;
-}
-
-.vivia-reconstruction-sensor-card > span {
-  display: block;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-  font-weight: 750;
-}
-
-.vivia-reconstruction-sensor-card > strong {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #1e293b;
-
-  font-size: 18px;
-  font-weight: 840;
-}
-
-
-/* ========================================
-   EVIDENCE
-======================================== */
-
-.vivia-reconstruction-evidence-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 17px;
-}
-
-.vivia-reconstruction-evidence-card {
-  padding: 25px;
-
-  border: 1px solid #e5ebf3;
   border-radius: 23px;
 
+  background:
+    radial-gradient(
+      circle at 50% 47%,
+      rgba(53,200,197,.055),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #fbfcfd,
+      #fafbfc
+    );
+}
+
+.body-trace-column {
+  display: grid;
+
+  gap: 14px;
+
+  align-content: center;
+}
+
+
+/* ========================================
+   BODY METRIC
+======================================== */
+
+.body-metric-card {
+  min-width: 0;
+
+  padding:
+    15px
+    16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border:
+    1px solid #e8ebed;
+
+  border-radius: 17px;
+
   background: white;
 
   box-shadow:
-    0 10px 26px rgba(15, 23, 42, 0.04);
+    0 8px 24px
+    rgba(28,48,74,.045);
 }
 
-.vivia-reconstruction-evidence-icon {
-  width: 50px;
-  height: 50px;
-
-  margin-bottom: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #eaf3ff,
-      #fff1e8
-    );
-
-  color: #0f6fff;
-}
-
-.vivia-reconstruction-evidence-card > span {
-  color: #ff7a2a;
-
-  font-size: 11px;
-  font-weight: 850;
-}
-
-.vivia-reconstruction-evidence-card h3 {
-  margin: 7px 0 9px;
-
-  color: #0f172a;
-
-  font-size: 18px;
-  font-weight: 830;
-}
-
-.vivia-reconstruction-evidence-card p {
-  margin: 0;
-
-  min-height: 48px;
-
-  color: #64748b;
-
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.vivia-reconstruction-evidence-footer {
-  margin-top: 23px;
-  padding-top: 16px;
-
-  border-top: 1px solid #edf1f5;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-  font-weight: 750;
-}
-
-.vivia-reconstruction-evidence-count {
-  margin-top: 16px;
-
-  padding: 13px 17px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  border-radius: 14px;
-
-  background: #f7faff;
-
-  color: #64748b;
-
-  font-size: 12px;
-}
-
-
-/* ========================================
-   TIMELINE
-======================================== */
-
-.vivia-reconstruction-timeline {
-  padding: 10px 4px;
-}
-
-.vivia-reconstruction-timeline-item {
-  display: grid;
-
-  grid-template-columns:
-    70px
-    34px
-    1fr;
-
-  min-height: 110px;
-}
-
-.vivia-reconstruction-time {
-  padding-top: 2px;
-
-  color: #64748b;
-
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.vivia-reconstruction-timeline-axis {
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.vivia-reconstruction-timeline-axis > span {
-  position: relative;
-
-  z-index: 2;
-
-  width: 14px;
-  height: 14px;
-
-  border: 3px solid white;
-  border-radius: 50%;
-
-  box-shadow:
-    0 0 0 1px #dce5ef;
-}
-
-.vivia-reconstruction-timeline-axis > span.blue {
-  background: #0f6fff;
-}
-
-.vivia-reconstruction-timeline-axis > span.orange {
-  background: #ff8a3d;
-}
-
-.vivia-reconstruction-timeline-axis > i {
-  position: absolute;
-
-  top: 14px;
-  bottom: -5px;
-
-  width: 1px;
-
-  background: #dce5ef;
-}
-
-.vivia-reconstruction-timeline-content {
-  padding-bottom: 28px;
-}
-
-.vivia-reconstruction-timeline-content h3 {
-  margin: 0 0 7px;
-
-  color: #0f172a;
-
-  font-size: 17px;
-  font-weight: 820;
-}
-
-.vivia-reconstruction-timeline-content p {
-  margin: 0;
-
-  color: #64748b;
-
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-
-/* ========================================
-   AI REASONING
-======================================== */
-
-.vivia-reconstruction-reasoning {
-  display: grid;
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 14px;
-}
-
-.vivia-reconstruction-reasoning-step {
-  position: relative;
-
-  min-height: 145px;
-
-  padding: 22px;
-
-  border: 1px solid #e5ebf3;
-  border-radius: 21px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #f8fbff
-    );
-}
-
-.vivia-reconstruction-reasoning-number {
-  color: #ff7a2a;
-
-  font-size: 11px;
-  font-weight: 850;
-}
-
-.vivia-reconstruction-reasoning-step small {
-  display: block;
-
-  margin-top: 25px;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-  font-weight: 750;
-}
-
-.vivia-reconstruction-reasoning-step strong {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #0f172a;
-
-  font-size: 15px;
-  font-weight: 820;
-}
-
-.vivia-reconstruction-reasoning-arrow {
-  position: absolute;
-
-  right: -17px;
-  top: 50%;
-
-  z-index: 5;
-
-  transform: translateY(-50%);
-
-  color: #b7c2cf;
-}
-
-
-/* ========================================
-   RESULT
-======================================== */
-
-.vivia-reconstruction-result {
-  margin-top: 82px;
-
-  padding: 40px;
-
-  display: flex;
-  align-items: flex-start;
-
-  gap: 25px;
-
-  border: 1px solid #d8e7fa;
-  border-radius: 29px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #eef6ff,
-      #ffffff 62%,
-      #fff7f1
-    );
-
-  box-shadow:
-    0 18px 50px rgba(15, 111, 255, 0.07);
-}
-
-.vivia-reconstruction-result-icon {
-  width: 60px;
-  height: 60px;
+.body-metric-icon {
+  width: 39px;
+  height: 39px;
 
   flex-shrink: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 
-  border-radius: 19px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #0f6fff,
-      #247eff
-    );
-
-  color: white;
-
-  box-shadow:
-    0 12px 28px rgba(15, 111, 255, 0.2);
+  border-radius: 13px;
 }
 
-.vivia-reconstruction-result-content {
-  width: 100%;
+.body-metric-icon.blue {
+  color: #4c98d0;
+  background: #eef7fc;
 }
 
-.vivia-reconstruction-result-content > span {
+.body-metric-icon.aqua {
+  color: #2db7b8;
+  background: #ebf9f8;
+}
+
+.body-metric-icon.orange {
+  color: #ef7547;
+  background: #fff0e8;
+}
+
+.body-metric-icon.lavender {
+  color: #8279df;
+  background: #f2efff;
+}
+
+.body-metric-card span {
   display: block;
 
-  margin-bottom: 8px;
+  color: #8b96a6;
 
-  color: #ff7a2a;
+  font-size: 9px;
+  font-weight: 800;
 
-  font-size: 11px;
-  font-weight: 850;
+  text-transform: uppercase;
 
-  letter-spacing: 0.08em;
+  letter-spacing: .05em;
 }
 
-.vivia-reconstruction-result-content h2 {
-  margin: 0;
+.body-metric-card strong {
+  display: block;
 
-  color: #0f172a;
+  margin-top: 2px;
 
-  font-size: 28px;
-  line-height: 1.35;
+  color: var(--rc-navy);
 
-  font-weight: 840;
+  font-size: 17px;
+  line-height: 1.2;
 }
 
-.vivia-reconstruction-result-content > p {
-  max-width: 800px;
+.body-metric-card small {
+  display: block;
 
-  margin: 17px 0 0;
+  margin-top: 3px;
 
-  color: #475569;
+  color: #a1a9b5;
 
-  font-size: 14px;
-  line-height: 1.9;
-}
+  font-size: 9px;
 
-.vivia-reconstruction-result-highlight {
-  margin-top: 22px;
-
-  padding: 15px 17px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  border-radius: 15px;
-
-  background: white;
-
-  color: #ff7a2a;
-
-  border: 1px solid #f0e5dc;
-}
-
-.vivia-reconstruction-result-highlight strong {
-  color: #1e293b;
-
-  font-size: 14px;
+  white-space: normal;
 }
 
 
 /* ========================================
-   CONFIDENCE
+   BODY FIGURE
 ======================================== */
 
-.vivia-reconstruction-confidence {
-  margin-top: 25px;
+.body-figure-wrap {
+  position: relative;
+
+  min-width: 0;
+
+  display: grid;
+  justify-items: center;
+
+  align-self: stretch;
+
+  padding-top: 12px;
 }
 
-.vivia-reconstruction-confidence > div:first-child {
+.body-figure {
+  width: 235px;
+  max-width: 100%;
+
+  height: 455px;
+
+  overflow: visible;
+}
+
+.body-figure > ellipse,
+.body-figure > path {
+  fill:
+    rgba(229,234,238,.54);
+
+  stroke: #aeb9c7;
+
+  stroke-width: 1.3;
+}
+
+.body-guide {
+  fill: none !important;
+
+  stroke:
+    rgba(53,200,197,.34) !important;
+
+  stroke-dasharray:
+    5 5;
+}
+
+.body-guide-two {
+  stroke:
+    rgba(147,136,238,.25) !important;
+}
+
+.body-heart {
+  fill: #f18b72 !important;
+
+  stroke: none !important;
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(241,139,114,.5)
+    );
+}
+
+.body-heart-pulse {
+  position: absolute;
+
+  left: 50%;
+  top: 186px;
+
+  width: 34px;
+  height: 34px;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    rgba(244,135,77,.07);
+
+  box-shadow:
+    0 0 0 20px
+    rgba(244,135,77,.025);
+}
+
+.body-figure-caption {
+  margin-top: -7px;
+
+  color: #98a2b2;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: .15em;
+}
+
+
+/* ========================================
+   SIGNATURE
+======================================== */
+
+.body-signature-card {
+  margin-top: 18px;
+
+  padding:
+    28px
+    30px;
+
+  border:
+    1px solid #e7e8e5;
+
+  border-radius: 25px;
+
+  background:
+    rgba(255,255,255,.95);
+
+  box-shadow:
+    0 18px 48px
+    rgba(27,48,75,.045);
+}
+
+.signature-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.signature-head span {
+  color: #7b8798;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: .13em;
+}
+
+.signature-head h3 {
+  margin:
+    5px
+    0
+    0;
+
+  color: var(--rc-navy);
+
+  font-size: 22px;
+}
+
+.signature-head > svg {
+  color: #7586a1;
+}
+
+.signature-layout {
+  margin-top: 23px;
+
+  display: grid;
+
+  grid-template-columns:
+    390px
+    minmax(0, 1fr);
+
+  gap: 38px;
+}
+
+
+/* tags */
+
+.signature-tags {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 9px;
+
+  align-content: start;
+}
+
+.signature-tags > div {
+  padding:
+    11px
+    12px;
+
+  border:
+    1px solid #e7e9eb;
+
+  border-radius: 13px;
+
+  background: #fbfcfd;
+}
+
+.signature-tags span {
+  display: block;
+
+  color: #8792a3;
+
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.signature-tags strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #36465f;
+
+  font-size: 10px;
+}
+
+
+/* bars */
+
+.signature-bars {
+  display: grid;
+
+  gap: 12px;
+}
+
+.signature-label {
+  display: flex;
   justify-content: space-between;
 
-  margin-bottom: 9px;
+  margin-bottom: 4px;
 }
 
-.vivia-reconstruction-confidence span {
-  color: #64748b;
+.signature-label span,
+.signature-label strong {
+  color: #58677e;
 
-  font-size: 12px;
+  font-size: 9px;
+  font-weight: 850;
 }
 
-.vivia-reconstruction-confidence strong {
-  color: #0f6fff;
-
-  font-size: 14px;
-}
-
-.vivia-reconstruction-confidence-track {
-  height: 7px;
+.signature-track {
+  height: 5px;
 
   overflow: hidden;
 
   border-radius: 999px;
 
-  background: #dce6f2;
+  background: #edf0f2;
 }
 
-.vivia-reconstruction-confidence-track > span {
+.signature-track i {
   display: block;
 
   height: 100%;
@@ -899,298 +925,558 @@
   background:
     linear-gradient(
       90deg,
-      #0f6fff,
-      #ff8a3d
+      #35c8c5,
+      #6abbd8 36%,
+      #9388ee 69%,
+      #ff806d 100%
     );
 }
 
+.signature-note {
+  margin:
+    24px
+    0
+    0;
 
-/* ========================================
-   VR CTA
-======================================== */
+  padding-top: 17px;
 
-.vivia-reconstruction-vr {
-  position: relative;
+  border-top:
+    1px solid #edf0f2;
 
-  margin-top: 75px;
-
-  overflow: hidden;
-
-  border-radius: 32px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #071a39 0%,
-      #0b3a79 57%,
-      #0f6fff 100%
-    );
-
-  box-shadow:
-    0 27px 70px rgba(6, 34, 76, 0.2);
-}
-
-.vivia-reconstruction-vr-glow {
-  position: absolute;
-
-  width: 420px;
-  height: 420px;
-
-  right: -120px;
-  top: -190px;
-
-  border-radius: 50%;
-
-  background:
-    rgba(255, 138, 61, 0.23);
-
-  filter: blur(25px);
-}
-
-.vivia-reconstruction-vr-content {
-  position: relative;
-
-  z-index: 2;
-
-  padding: 65px 24px;
-
-  text-align: center;
-}
-
-.vivia-reconstruction-vr-icon {
-  width: 68px;
-  height: 68px;
-
-  margin: 0 auto 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 21px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.16);
-
-  background:
-    rgba(255, 255, 255, 0.11);
-
-  color: #ffb27c;
-}
-
-.vivia-reconstruction-vr-content > span {
-  color: #9fcaff;
-
-  font-size: 11px;
-  font-weight: 850;
-
-  letter-spacing: 0.1em;
-}
-
-.vivia-reconstruction-vr h2 {
-  margin: 13px 0 0;
-
-  color: white;
-
-  font-size: 38px;
-  line-height: 1.28;
-
-  font-weight: 850;
-}
-
-.vivia-reconstruction-vr p {
-  margin: 17px auto 28px;
-
-  color:
-    rgba(255, 255, 255, 0.68);
-
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.vivia-reconstruction-vr-button {
-  min-width: 270px;
-  height: 58px;
-
-  padding: 0 26px;
-
-  border: none;
-  border-radius: 17px;
-
-  background: white;
-
-  color: #0b438d;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 9px;
-
-  font-size: 15px;
-  font-weight: 820;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 13px 30px rgba(0, 0, 0, 0.15);
-
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
-}
-
-.vivia-reconstruction-vr-button:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 18px 36px rgba(0, 0, 0, 0.2);
-}
-
-.vivia-reconstruction-vr-content small {
-  display: block;
-
-  margin-top: 16px;
-
-  color:
-    rgba(255, 255, 255, 0.37);
+  color: #7d899b;
 
   font-size: 10px;
+  line-height: 1.65;
 }
 
 
 /* ========================================
-   MODAL
+   TIMELINE
 ======================================== */
 
-.vivia-reconstruction-modal-overlay {
-  position: fixed;
+.recon-timeline {
+  padding:
+    38px
+    44px;
 
-  inset: 0;
+  border:
+    1px solid #e7e8e5;
 
-  z-index: 999;
-
-  padding: 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 28px;
 
   background:
-    rgba(7, 20, 39, 0.55);
-
-  backdrop-filter: blur(8px);
-}
-
-.vivia-reconstruction-modal {
-  position: relative;
-
-  width: min(470px, 100%);
-
-  padding: 43px;
-
-  border-radius: 29px;
-
-  background:
-    linear-gradient(
-      150deg,
-      #ffffff,
-      #fff9f5
-    );
-
-  text-align: center;
+    rgba(255,255,255,.95);
 
   box-shadow:
-    0 30px 80px rgba(8, 25, 48, 0.24);
+    0 19px 50px
+    rgba(27,48,75,.05);
 }
 
-.vivia-reconstruction-modal-close {
-  position: absolute;
+.recon-timeline-item {
+  display: grid;
 
-  top: 17px;
-  right: 17px;
+  grid-template-columns:
+    90px
+    34px
+    minmax(0, 1fr);
 
-  width: 35px;
-  height: 35px;
+  min-height: 112px;
+}
 
-  border: none;
+.recon-timeline-item time {
+  padding-top: 1px;
+
+  color: #637188;
+
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.recon-timeline-axis {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+}
+
+.recon-timeline-axis > span {
+  position: relative;
+  z-index: 2;
+
+  width: 12px;
+  height: 12px;
+
+  margin-top: 2px;
+
+  border:
+    3px solid white;
+
   border-radius: 50%;
 
-  background: #f3f6fa;
-
-  color: #64748b;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
+  box-shadow:
+    0 0 0 1px
+    #d9dfe4;
 }
 
-.vivia-reconstruction-modal-icon {
-  width: 62px;
-  height: 62px;
+.recon-timeline-axis
+> span.blue {
+  background: #559dd0;
+}
 
-  margin: 0 auto 18px;
+.recon-timeline-axis
+> span.aqua {
+  background: #48c1c1;
+}
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.recon-timeline-axis
+> span.orange {
+  background: #f4874d;
+}
 
-  border-radius: 20px;
+.recon-timeline-axis
+> span.lavender {
+  background: #9388ee;
+}
+
+.recon-timeline-axis i {
+  position: absolute;
+
+  top: 16px;
+  bottom: 0;
+
+  width: 1px;
+
+  background: #e2e6e9;
+}
+
+.recon-timeline-copy {
+  padding:
+    0
+    0
+    31px
+    12px;
+}
+
+.recon-timeline-copy small {
+  color: var(--rc-orange);
+
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.recon-timeline-copy h3 {
+  margin:
+    5px
+    0
+    6px;
+
+  color: var(--rc-navy);
+
+  font-size: 17px;
+}
+
+.recon-timeline-copy p {
+  margin: 0;
+
+  color: #8791a1;
+
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+
+/* ========================================
+   STORY
+======================================== */
+
+.recon-story {
+  overflow: hidden;
+
+  border:
+    1px solid #e7e8e5;
+
+  border-radius: 28px;
 
   background:
     linear-gradient(
       145deg,
-      #eaf3ff,
-      #fff0e5
+      #ffffff,
+      #fffdfa
     );
 
-  color: #ff7a2a;
+  box-shadow:
+    0 20px 55px
+    rgba(27,48,75,.055);
 }
 
-.vivia-reconstruction-modal > span {
-  color: #0f6fff;
+.recon-story-top {
+  min-height: 70px;
 
-  font-size: 11px;
-  font-weight: 850;
+  padding:
+    20px
+    27px;
 
-  letter-spacing: 0.09em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom:
+    1px solid #ecece8;
 }
 
-.vivia-reconstruction-modal h2 {
-  margin: 12px 0 0;
+.recon-story-top > div {
+  display: flex;
+  align-items: center;
 
-  color: #0f172a;
+  gap: 9px;
 
-  font-size: 28px;
-  line-height: 1.35;
+  color: var(--rc-lav);
 }
 
-.vivia-reconstruction-modal p {
-  margin: 17px 0 27px;
+.recon-story-top span {
+  color: #6d7890;
 
-  color: #64748b;
+  font-size: 9px;
+  font-weight: 900;
 
-  font-size: 14px;
-  line-height: 1.8;
+  letter-spacing: .12em;
 }
 
-.vivia-reconstruction-modal > button:last-child {
-  width: 100%;
-  height: 53px;
+.recon-story-top small {
+  color: #8c96a5;
 
-  border: none;
-  border-radius: 16px;
+  font-size: 10px;
+}
 
-  background: #0f6fff;
+.recon-story-layout {
+  display: grid;
 
-  color: white;
+  grid-template-columns:
+    125px
+    minmax(0, 1fr);
+}
 
-  font-size: 14px;
+
+/* margin */
+
+.recon-story-layout aside {
+  padding:
+    42px
+    25px;
+
+  border-right:
+    1px solid #eeeeea;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fafbf9,
+      #fff
+    );
+}
+
+.recon-story-layout aside > strong {
+  display: block;
+
+  color: var(--rc-navy);
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 35px;
+
+  font-weight: 500;
+}
+
+.recon-story-layout aside > i {
+  display: block;
+
+  width: 1px;
+  height: 95px;
+
+  margin:
+    20px
+    0;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--rc-aqua),
+      var(--rc-lav),
+      rgba(244,135,77,.3)
+    );
+}
+
+.recon-story-layout aside > span {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #8a96a7;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: .1em;
+}
+
+
+/* paper */
+
+.recon-story-paper {
+  max-width: 890px;
+
+  padding:
+    48px
+    58px
+    50px;
+}
+
+.recon-story-meta {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #98a2b0;
+
+  font-size: 8px;
   font-weight: 800;
 
-  cursor: pointer;
+  letter-spacing: .09em;
+
+  text-transform: uppercase;
+}
+
+.recon-story-meta i {
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: #c3c8cf;
+}
+
+.recon-story-paper h3 {
+  max-width: 700px;
+
+  margin:
+    21px
+    0
+    0;
+
+  color: var(--rc-navy);
+
+  font-family:
+    Georgia,
+    "Noto Serif KR",
+    serif;
+
+  font-size:
+    clamp(
+      30px,
+      3vw,
+      43px
+    );
+
+  line-height: 1.25;
+
+  font-weight: 500;
+
+  letter-spacing: -.035em;
+
+  word-break: keep-all;
+}
+
+.recon-story-lead {
+  max-width: 720px;
+
+  margin:
+    25px
+    0
+    0;
+
+  color: #374860;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  line-height: 1.8;
+
+  word-break: keep-all;
+}
+
+.recon-story-divider {
+  width: 70%;
+
+  height: 1px;
+
+  margin:
+    27px
+    0;
+
+  background: #ebece9;
+}
+
+.recon-story-paragraph {
+  max-width: 730px;
+
+  margin:
+    0
+    0
+    17px;
+
+  color: #66758a;
+
+  font-size: 13px;
+  line-height: 1.95;
+
+  word-break: keep-all;
+}
+
+.recon-story-closing {
+  max-width: 720px;
+
+  margin-top: 27px;
+
+  padding:
+    16px
+    18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #eef9f8,
+      #fff5f0
+    );
+}
+
+.recon-story-closing span {
+  width: 3px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      var(--rc-aqua),
+      var(--rc-orange)
+    );
+}
+
+.recon-story-closing strong {
+  color: #3f4c61;
+
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.recon-story-disclaimer {
+  max-width: 720px;
+
+  margin:
+    20px
+    0
+    0;
+
+  color: #9ba3af;
+
+  font-size: 9px;
+  line-height: 1.65;
+}
+
+
+/* ========================================
+   FOOTER — SAME AS HOME
+======================================== */
+
+.vh3-footer {
+  padding:
+    52px
+    0
+    58px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #07152f,
+      #0b224a
+    );
+
+  color: white;
+}
+
+.vh3-footer > .shell {
+  width:
+    min(
+      1320px,
+      calc(100% - 64px)
+    );
+
+  margin: 0 auto;
+
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 48px;
+}
+
+.vh3-footer-brand img {
+  width: 124px;
+
+  filter:
+    brightness(0)
+    invert(1);
+
+  opacity: .95;
+}
+
+.vh3-footer-brand p {
+  margin-top: 14px;
+
+  color: #aebdd0;
+
+  font-size: 11px;
+}
+
+.vh3-footer-team {
+  display: grid;
+
+  justify-items: end;
+
+  gap: 7px;
+
+  text-align: right;
+}
+
+.vh3-footer-team strong {
+  margin-bottom: 4px;
+
+  color: #d9e4ef;
+
+  font-size: 9px;
+
+  letter-spacing: .14em;
+}
+
+.vh3-footer-team span {
+  color: #9fadc0;
+
+  font-size: 11px;
 }
 
 
@@ -1198,35 +1484,48 @@
    TABLET
 ======================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
 
-  .vivia-reconstruction-section-head {
-    flex-direction: column;
-    align-items: flex-start;
-
-    gap: 10px;
+  .recon-shell {
+    width:
+      min(
+        100% - 40px,
+        1320px
+      );
   }
 
-  .vivia-reconstruction-section-head > p {
-    text-align: left;
+  .recon-hero {
+    grid-template-columns: 1fr;
+
+    padding:
+      50px
+      42px;
   }
 
-  .vivia-reconstruction-sensor-grid {
+  .recon-hero-visual {
+    min-height: 300px;
+  }
+
+  .body-trace-stage {
     grid-template-columns:
-      repeat(2, 1fr);
+      1fr
+      220px
+      1fr;
+
+    gap: 20px;
   }
 
-  .vivia-reconstruction-evidence-grid {
+  .body-figure {
+    width: 200px;
+  }
+
+  .signature-layout {
     grid-template-columns: 1fr;
   }
 
-  .vivia-reconstruction-reasoning {
+  .signature-tags {
     grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .vivia-reconstruction-reasoning-arrow {
-    display: none;
+      repeat(5, 1fr);
   }
 
 }
@@ -1236,305 +1535,150 @@
    MOBILE
 ======================================== */
 
-@media (max-width: 650px) {
+@media (max-width: 720px) {
 
-  .vivia-reconstruction-page {
-    padding: 28px 17px 70px;
+  .recon-shell {
+    width:
+      min(
+        100% - 28px,
+        1320px
+      );
+
+    padding-top: 30px;
   }
 
-  .vivia-reconstruction-header {
-    margin-top: 42px;
+  .recon-hero {
+    min-height: 0;
+
+    padding:
+      38px
+      24px;
+
+    border-radius: 26px;
   }
 
-  .vivia-reconstruction-header h1 {
-    font-size: 38px;
+  .recon-hero-copy h2 {
+    font-size: 37px;
   }
 
-  .vivia-reconstruction-header p {
-    font-size: 15px;
+  .recon-hero-visual {
+    min-height: 260px;
   }
 
-  .vivia-reconstruction-hero {
-    padding: 27px;
-
-    border-radius: 25px;
+  .recon-section {
+    margin-top: 70px;
   }
 
-  .vivia-reconstruction-hero-content h2 {
-    font-size: 31px;
+  .recon-section-head {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
   }
 
-  .vivia-reconstruction-sensor-grid {
-    grid-template-columns: 1fr;
+  .recon-section-head > p {
+    max-width: 560px;
+
+    text-align: left;
   }
 
-  .vivia-reconstruction-reasoning {
-    grid-template-columns: 1fr;
+  .body-trace-heading {
+    flex-direction: column;
+
+    gap: 8px;
   }
 
-  .vivia-reconstruction-timeline-item {
+  .body-trace-heading > p {
+    text-align: left;
+  }
+
+  /* body cards never overlap the figure */
+  .body-trace-stage {
+    display: flex;
+    flex-direction: column;
+
+    min-height: auto;
+
+    padding:
+      24px
+      18px;
+  }
+
+  .body-trace-column {
+    width: 100%;
+
     grid-template-columns:
-      55px
-      27px
       1fr;
   }
 
-  .vivia-reconstruction-result {
-    padding: 27px;
+  .body-figure-wrap {
+    order: -1;
+
+    width: 100%;
+
+    min-height: 430px;
+  }
+
+  .body-figure {
+    width: 210px;
+    height: 410px;
+  }
+
+  .signature-tags {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .recon-timeline {
+    padding:
+      30px
+      22px;
+  }
+
+  .recon-timeline-item {
+    grid-template-columns:
+      62px
+      28px
+      minmax(0, 1fr);
+  }
+
+  .recon-story-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .recon-story-layout aside {
+    display: none;
+  }
+
+  .recon-story-paper {
+    padding:
+      38px
+      25px;
+  }
+
+  .recon-story-top {
+    align-items: flex-start;
 
     flex-direction: column;
   }
 
-  .vivia-reconstruction-vr-content {
-    padding: 52px 22px;
+  .vh3-footer > .shell {
+    width:
+      min(
+        100% - 28px,
+        1320px
+      );
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 30px;
   }
 
-  .vivia-reconstruction-vr h2 {
-    font-size: 31px;
+  .vh3-footer-team {
+    justify-items: end;
   }
 
-  .vivia-reconstruction-vr-button {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .vivia-reconstruction-modal {
-    padding: 37px 24px 27px;
-  }
-}
-/* ========================================
-   VIVIA · AI NARRATIVE
-======================================== */
-
-.vivia-narrative-shell {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(16, 32, 74, 0.10);
-  border-radius: 34px;
-  background:
-    linear-gradient(145deg, rgba(255,255,255,.98), rgba(248,249,253,.96));
-  box-shadow: 0 30px 80px rgba(16, 32, 74, 0.08);
-  isolation: isolate;
-}
-
-.vivia-narrative-ambient {
-  position: absolute;
-  z-index: -1;
-  width: 360px;
-  height: 360px;
-  border-radius: 50%;
-  filter: blur(95px);
-  opacity: .13;
-  pointer-events: none;
-}
-.vivia-narrative-ambient-a { left: -120px; top: -170px; background: #35c8c5; }
-.vivia-narrative-ambient-b { right: -140px; bottom: -190px; background: linear-gradient(135deg, #9b91e8, #ff7e73); }
-
-.vivia-narrative-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 24px 28px;
-  border-bottom: 1px solid rgba(16, 32, 74, .075);
-  background: rgba(255,255,255,.64);
-  backdrop-filter: blur(20px);
-}
-
-.vivia-narrative-mark {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #10204a;
-}
-.vivia-narrative-mark > svg { color: #6b6ed7; }
-.vivia-narrative-mark span {
-  display: block;
-  color: #6f7d96;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: .15em;
-}
-.vivia-narrative-mark strong {
-  display: block;
-  margin-top: 3px;
-  color: #1d2b50;
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.vivia-narrative-regenerate {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border: 1px solid rgba(16, 32, 74, .10);
-  border-radius: 999px;
-  background: rgba(255,255,255,.86);
-  color: #42516e;
-  font-size: 10px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-}
-.vivia-narrative-regenerate:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(53,200,197,.35);
-  box-shadow: 0 8px 24px rgba(16,32,74,.06);
-}
-.vivia-narrative-regenerate:disabled { opacity: .58; cursor: wait; }
-.is-spinning { animation: viviaNarrativeSpin .9s linear infinite; }
-@keyframes viviaNarrativeSpin { to { transform: rotate(360deg); } }
-
-.vivia-narrative-layout {
-  display: grid;
-  grid-template-columns: 128px minmax(0, 1fr);
-  min-height: 570px;
-}
-
-.vivia-narrative-margin {
-  padding: 44px 22px 36px 30px;
-  border-right: 1px solid rgba(16, 32, 74, .07);
-  background: linear-gradient(180deg, rgba(247,249,253,.8), rgba(255,255,255,.25));
-}
-.vivia-narrative-index {
-  color: #10204a;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 39px;
-  line-height: 1;
-  letter-spacing: -.04em;
-}
-.vivia-narrative-line {
-  width: 1px;
-  height: 112px;
-  margin: 22px 0 22px 12px;
-  background: linear-gradient(180deg, #35c8c5, #9b91e8, rgba(255,126,115,.25));
-}
-.vivia-narrative-source {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin: 11px 0;
-  color: #8b96aa;
-}
-.vivia-narrative-source span { font-size: 8px; font-weight: 850; letter-spacing: .09em; }
-
-.vivia-narrative-paper {
-  max-width: 790px;
-  width: 100%;
-  padding: 58px 68px 48px;
-}
-.vivia-narrative-meta {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #9aa4b5;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-}
-.vivia-narrative-meta i { width: 3px; height: 3px; border-radius: 50%; background: #c5ccd7; }
-
-.vivia-narrative-paper h3 {
-  max-width: 650px;
-  margin: 24px 0 0;
-  color: #10204a;
-  font-family: Georgia, "Times New Roman", "Noto Serif KR", serif;
-  font-size: clamp(31px, 3.2vw, 45px);
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: -.035em;
-}
-.vivia-narrative-lead {
-  max-width: 650px;
-  margin: 22px 0 0;
-  color: #4f5d78;
-  font-size: 16px;
-  line-height: 1.88;
-  font-weight: 650;
-  word-break: keep-all;
-}
-.vivia-narrative-prose {
-  max-width: 660px;
-  margin-top: 31px;
-  padding-top: 27px;
-  border-top: 1px solid #eceff4;
-}
-.vivia-narrative-prose p {
-  margin: 0 0 18px;
-  color: #5e6b84;
-  font-family: Georgia, "Times New Roman", "Noto Serif KR", serif;
-  font-size: 14px;
-  line-height: 2.05;
-  letter-spacing: -.005em;
-  word-break: keep-all;
-}
-.vivia-narrative-prose p:first-child::first-letter {
-  float: left;
-  margin: 7px 8px 0 0;
-  color: #35a8a7;
-  font-size: 38px;
-  line-height: .75;
-}
-
-.vivia-narrative-closing {
-  display: flex;
-  gap: 15px;
-  max-width: 650px;
-  margin-top: 30px;
-  padding: 18px 20px;
-  border-radius: 18px;
-  background: linear-gradient(90deg, rgba(53,200,197,.07), rgba(155,145,232,.06), rgba(255,126,115,.06));
-}
-.vivia-narrative-closing > span {
-  width: 3px;
-  flex: 0 0 auto;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #35c8c5, #9b91e8, #ff7e73);
-}
-.vivia-narrative-closing p {
-  margin: 0;
-  color: #354563;
-  font-size: 12px;
-  font-weight: 750;
-  line-height: 1.75;
-}
-
-.vivia-narrative-footnote {
-  max-width: 650px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-top: 28px;
-}
-.vivia-narrative-mode {
-  flex: 0 0 auto;
-  padding: 6px 8px;
-  border-radius: 999px;
-  font-size: 7px;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-.vivia-narrative-mode.openai { color: #167e80; background: rgba(53,200,197,.12); }
-.vivia-narrative-mode.preview { color: #756ba9; background: rgba(155,145,232,.12); }
-.vivia-narrative-footnote p {
-  margin: 0;
-  color: #9aa3b3;
-  font-size: 9px;
-  line-height: 1.65;
-}
-.vivia-narrative-error {
-  max-width: 650px;
-  margin-top: 12px;
-  color: #b26b65;
-  font-size: 9px;
-}
-
-@media (max-width: 760px) {
-  .vivia-narrative-topbar { align-items: flex-start; flex-direction: column; }
-  .vivia-narrative-layout { grid-template-columns: 1fr; }
-  .vivia-narrative-margin { display: none; }
-  .vivia-narrative-paper { padding: 42px 24px 36px; }
-  .vivia-narrative-footnote { flex-direction: column; }
 }
