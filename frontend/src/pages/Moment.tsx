@@ -1,5 +1,7 @@
 import "../styles/moment.css";
+import "../styles/momentPersona.css";
 import SiteNav from "../components/SiteNav";
+import teamAvatar from "../assets/avatars/team-yology-duo.png";
 
 import { useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
@@ -350,15 +352,18 @@ const Moment = () => {
             <div className="life-demo-intro-orbit orbit-a" />
             <div className="life-demo-intro-orbit orbit-b" />
             <div className="life-demo-persona">
-              <span className="life-demo-badge">DEMO PERSONA · 20s</span>
-              <div className="life-demo-avatar">YO</div>
+              <span className="life-demo-badge">TEAM Yology · YONSEI UNIVERSITY</span>
+              <div className="life-demo-avatar">
+                <span className="life-avatar-halo" />
+                <img src={teamAvatar} alt="팀 Yology 미모지" />
+                <small>TEAM Y</small>
+              </div>
               <div className="life-demo-copy">
-                <p className="life-demo-hello">안녕하세요, 저는 <strong>욜로지</strong>입니다.</p>
-                <h1>라놀랩 대학교에 다니며,<br />평범한 하루 속 특별한 순간들을 모으고 있어요.</h1>
-                <p>이번 데모에서는 제 일상에서 몸의 신호가 크게 달라졌던 순간을 따라가며, VIVIA가 그 장면을 어떻게 발견하고 이야기로 다시 연결하는지 보여드릴게요.</p>
+                <p className="life-demo-hello">안녕하세요, 저희는 <strong>팀 Yology</strong>입니다.</p>
+                <h1>연세대학교에서,<br />평범한 하루 속 특별한 순간들을 모으고 있어요.</h1>
+                <p>이번 데모에서는 저희 일상에서 몸의 신호가 크게 달라졌던 순간을 따라가며, VIVIA가 그 장면을 어떻게 발견하고 이야기로 다시 연결하는지 보여드릴게요.</p>
                 <div className="life-demo-actions">
-                  <button className="life-demo-enter" onClick={() => setShowIntro(false)}>욜로지의 순간 따라가기 <ArrowRight size={17} /></button>
-                  <button className="life-demo-skip" onClick={() => setShowIntro(false)}>바로 아카이브 보기</button>
+                  <button className="life-demo-enter" onClick={() => setShowIntro(false)}>팀 Yology의 순간 따라가기 <ArrowRight size={17} /></button>
                 </div>
               </div>
             </div>

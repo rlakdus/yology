@@ -1,0 +1,18 @@
+/* The public VIVIA journey has four canonical stages. */
+.hiw-process-nav,
+.hiw-summary > div {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 960px) {
+  .hiw-process-nav,
+  .hiw-summary > div {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .hiw-summary > div {
+    grid-template-columns: 1fr;
+  }
+}

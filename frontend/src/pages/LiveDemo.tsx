@@ -5,7 +5,6 @@ import {
   ArrowUpRight,
   Camera,
   Check,
-  ChevronRight,
   CircleDot,
   Clock3,
   HeartPulse,
@@ -13,7 +12,6 @@ import {
   Radio,
   Save,
   Sparkles,
-  Trash2,
   WifiOff,
   X,
 } from "lucide-react";
@@ -21,7 +19,6 @@ import SiteNav from "../components/SiteNav";
 import { useLiveHeartRate } from "../hooks/useLiveHeartRate";
 import type { LiveHeartRateSample } from "../hooks/useLiveHeartRate";
 import "../styles/liveDemo.css";
-import "../styles/liveDemoTimeline.css";
 
 type TraceSample = LiveHeartRateSample & { receivedAt: number };
 
@@ -40,6 +37,10 @@ type Moment = {
     z_score?: number | null;
     is_anomaly?: boolean;
     timestamp?: number | null;
+    motion?: number | null;
+    movement_state?: "still" | "light" | "active" | "unknown";
+    active_energy_kcal?: number | null;
+    distance_m?: number | null;
   };
   previewPhotoUrl?: string | null;
 };
@@ -57,7 +58,7 @@ const previewSeed: Moment[] = [
     source: "preview",
     status: "enriched",
     note: "발표를 마치고 자리로 돌아온 순간. 긴장이 풀리면서 웃음이 났다.",
-    signal: { bpm: 96, baseline: 72, z_score: 2.1, is_anomaly: true },
+    signal: { bpm: 96, baseline: 72, z_score: 2.1, is_anomaly: true, motion: 0.022, movement_state: "still", active_energy_kcal: 2.4, distance_m: 18 },
   },
   {
     id: "preview_02",
@@ -65,7 +66,7 @@ const previewSeed: Moment[] = [
     source: "preview",
     status: "enriched",
     note: "오랜만에 듣던 노래가 우연히 카페에서 흘러나왔다.",
-    signal: { bpm: 88, baseline: 71, z_score: 1.7, is_anomaly: true },
+    signal: { bpm: 88, baseline: 71, z_score: 1.7, is_anomaly: true, motion: 0.061, movement_state: "light", active_energy_kcal: 1.1, distance_m: 42 },
   },
 ];
 
@@ -78,12 +79,21 @@ function makePreviewSample(index: number): LiveHeartRateSample {
   if (cycle >= 34 && cycle < 40) bpm += 21 - (cycle - 34) * 2.8;
   const baseline = 72.2;
   const z = Math.abs(bpm - baseline) / 7.2;
+  const motionBase = 0.018 + Math.abs(Math.sin(index / 5)) * 0.012;
+  const motion = cycle >= 12 && cycle < 20 ? 0.11 + Math.abs(Math.sin(index)) * 0.04 : motionBase;
+  const movementState = motion < 0.035 ? "still" : motion < 0.12 ? "light" : "active";
+  const activeEnergy = Math.max(0, index * 0.018 + (cycle >= 12 && cycle < 20 ? 0.18 : 0));
+  const distance = Math.max(0, index * 0.55 + (cycle >= 12 && cycle < 20 ? (cycle - 12) * 1.8 : 0));
   return {
     type: "heart_rate",
     bpm: Math.round(bpm * 10) / 10,
     baseline,
     z_score: Math.round(z * 100) / 100,
     is_anomaly: z >= 1.5,
+    motion: Math.round(motion * 1000) / 1000,
+    movement_state: movementState,
+    active_energy_kcal: Math.round(activeEnergy * 100) / 100,
+    distance_m: Math.round(distance * 10) / 10,
     timestamp: Date.now() / 1000,
   };
 }
@@ -111,14 +121,11 @@ const LiveDemo = () => {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [removeExistingPhoto, setRemoveExistingPhoto] = useState(false);
   const [savedMessage, setSavedMessage] = useState<string | null>(null);
   const [anomalyStartedAt, setAnomalyStartedAt] = useState<number | null>(null);
   const [anomalySeconds, setAnomalySeconds] = useState(0);
   const anomalyTimer = useRef<number | null>(null);
   const previewCounter = useRef(0);
-  const previewSeedLoaded = useRef(false);
 
   useEffect(() => {
     if (live.sample) setLastLiveAt(Date.now());
@@ -179,10 +186,7 @@ const LiveDemo = () => {
       setMoments(Array.isArray(data.moments) ? data.moments : []);
     } catch {
       setBackendAvailable(false);
-      if (!previewSeedLoaded.current) {
-        previewSeedLoaded.current = true;
-        setMoments(previewSeed);
-      }
+      setMoments((prev) => (prev.some((m) => m.source === "preview") ? prev : previewSeed));
     }
   };
 
@@ -201,6 +205,11 @@ const LiveDemo = () => {
   const currentBpm = activeSample ? Math.round(activeSample.bpm) : "--";
   const baseline = activeSample?.baseline ?? null;
   const zScore = activeSample?.z_score ?? 0;
+  const motion = activeSample?.motion ?? null;
+  const movementState = activeSample?.movement_state ?? "unknown";
+  const activeEnergy = activeSample?.active_energy_kcal ?? null;
+  const distanceM = activeSample?.distance_m ?? null;
+  const movementLabel = movementState === "still" ? "STILL" : movementState === "light" ? "LIGHT" : movementState === "active" ? "ACTIVE" : "--";
   const isDetected = Boolean(activeSample?.is_anomaly && anomalySeconds >= 10);
 
   const chart = useMemo(() => {
@@ -224,6 +233,21 @@ const LiveDemo = () => {
     const anomalySegments = trace.map((d, i) => ({ d, cx: x(i), cy: y(d.bpm) })).filter(({ d }) => d.is_anomaly);
     const yTicks = [min, min + range / 2, max];
     return { width, height, path, baselinePath, anomalySegments, yTicks, y };
+  }, [trace]);
+
+  const motionChart = useMemo(() => {
+    const width = 1080;
+    const height = 96;
+    const padX = 48;
+    const padY = 14;
+    const maxMotion = Math.max(0.18, ...trace.map((d) => d.motion ?? 0));
+    const x = (i: number) => padX + (i / Math.max(trace.length - 1, 1)) * (width - padX * 2);
+    const y = (value: number) => height - padY - (Math.min(value, maxMotion) / maxMotion) * (height - padY * 2);
+    const path = trace.map((d, i) => {
+      const value = d.motion ?? 0;
+      return `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(value).toFixed(1)}`;
+    }).join(" ");
+    return { width, height, path };
   }, [trace]);
 
   const clearPhoto = () => {
@@ -255,7 +279,6 @@ const LiveDemo = () => {
     setEditingMoment(moment ?? null);
     setNote(moment?.note ?? "");
     clearPhoto();
-    setRemoveExistingPhoto(false);
     setRecordOpen(true);
   };
 
@@ -263,31 +286,10 @@ const LiveDemo = () => {
     setRecordOpen(false);
     setEditingMoment(null);
     setNote("");
-    setRemoveExistingPhoto(false);
     clearPhoto();
   };
 
-  const savePreviewMoment = () => {
-    if (editingMoment) {
-      setMoments((prev) => prev.map((moment) => moment.id === editingMoment.id ? {
-        ...moment,
-        note: note.trim(),
-        updated_at: new Date().toISOString(),
-        status: note.trim() || photoPreview || (!removeExistingPhoto && (moment.previewPhotoUrl || moment.photo)) ? "enriched" : "captured",
-        previewPhotoUrl: photoPreview || (removeExistingPhoto ? null : moment.previewPhotoUrl),
-        photo: removeExistingPhoto ? null : moment.photo,
-        photo_url: removeExistingPhoto ? null : moment.photo_url,
-      } : moment));
-      if (photoPreview) setPhotoPreview(null);
-      setSavedMessage("순간의 내용을 수정했어요.");
-      setRecordOpen(false);
-      setEditingMoment(null);
-      setNote("");
-      setPhoto(null);
-      setRemoveExistingPhoto(false);
-      window.setTimeout(() => setSavedMessage(null), 3500);
-      return;
-    }
+  const addPreviewMoment = () => {
     const id = `preview_${Date.now()}`;
     const previewMoment: Moment = {
       id,
@@ -303,6 +305,10 @@ const LiveDemo = () => {
         z_score: activeSample?.z_score,
         is_anomaly: activeSample?.is_anomaly,
         timestamp: activeSample?.timestamp,
+        motion: activeSample?.motion,
+        movement_state: activeSample?.movement_state,
+        active_energy_kcal: activeSample?.active_energy_kcal,
+        distance_m: activeSample?.distance_m,
       },
     };
     // Preserve object URL because the card needs it after the modal closes.
@@ -312,7 +318,6 @@ const LiveDemo = () => {
     setRecordOpen(false);
     setNote("");
     setPhoto(null);
-    setRemoveExistingPhoto(false);
     window.setTimeout(() => setSavedMessage(null), 3500);
   };
 
@@ -320,8 +325,8 @@ const LiveDemo = () => {
     event.preventDefault();
     if (photoError) return;
 
-    if (!backendAvailable || editingMoment?.source === "preview" || (!editingMoment && previewMode)) {
-      savePreviewMoment();
+    if (!backendAvailable || previewMode) {
+      addPreviewMoment();
       return;
     }
 
@@ -334,16 +339,19 @@ const LiveDemo = () => {
 
       let url = `${API_BASE}/moments`;
       let method = "POST";
-      if (editingMoment) {
+      if (editingMoment && editingMoment.source !== "preview") {
         url = `${API_BASE}/moments/${editingMoment.id}`;
         method = "PATCH";
-        if (removeExistingPhoto) form.append("remove_photo", "true");
       } else {
         if (typeof activeSample?.bpm === "number") form.append("bpm", String(activeSample.bpm));
         if (typeof activeSample?.baseline === "number") form.append("baseline", String(activeSample.baseline));
         if (typeof activeSample?.z_score === "number") form.append("z_score", String(activeSample.z_score));
         form.append("is_anomaly", String(Boolean(activeSample?.is_anomaly)));
         if (typeof activeSample?.timestamp === "number") form.append("signal_timestamp", String(activeSample.timestamp));
+        if (typeof activeSample?.motion === "number") form.append("motion", String(activeSample.motion));
+        if (activeSample?.movement_state) form.append("movement_state", activeSample.movement_state);
+        if (typeof activeSample?.active_energy_kcal === "number") form.append("active_energy_kcal", String(activeSample.active_energy_kcal));
+        if (typeof activeSample?.distance_m === "number") form.append("distance_m", String(activeSample.distance_m));
       }
 
       const response = await fetch(url, { method, body: form });
@@ -361,28 +369,6 @@ const LiveDemo = () => {
     }
   };
 
-  const deleteMoment = async (moment: Moment) => {
-    if (!window.confirm("이 Moment를 삭제할까요? 삭제한 기록은 복구할 수 없어요.")) return;
-    setDeletingId(moment.id);
-    setSavedMessage(null);
-    try {
-      if (!backendAvailable || moment.source === "preview") {
-        setMoments((prev) => prev.filter((item) => item.id !== moment.id));
-      } else {
-        const response = await fetch(`${API_BASE}/moments/${moment.id}`, { method: "DELETE" });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(data?.detail || `HTTP ${response.status}`);
-        setMoments((prev) => prev.filter((item) => item.id !== moment.id));
-      }
-      setSavedMessage("순간을 타임라인에서 삭제했어요.");
-      window.setTimeout(() => setSavedMessage(null), 3500);
-    } catch (e) {
-      setSavedMessage(`삭제 실패 · ${e instanceof Error ? e.message : "서버를 확인해주세요."}`);
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
   return (
     <main className="live-demo-page">
       <SiteNav />
@@ -391,7 +377,7 @@ const LiveDemo = () => {
         <div className="shell live-intro-grid">
           <div>
             <span className="live-eyebrow"><Radio size={13} /> LIVE SIGNAL LAB</span>
-            <h1>실시간으로<br />나의 상태를 기록합니다.</h1>
+            <h1>Signal, observed<br />in the moment.</h1>
             <p>Apple Watch의 실시간 심박을 개인 baseline과 비교해 평소와 다른 변화 구간을 관찰합니다. 신호는 감정의 정답이 아니라, 기록을 시작하는 단서입니다.</p>
           </div>
           <div className={`source-panel ${previewMode ? "preview" : "live"}`}>
@@ -413,15 +399,16 @@ const LiveDemo = () => {
       )}
 
       <section className="shell live-workspace">
-        <div className="signal-summary-row">
+        <div className="signal-summary-row multisignal">
           <div className="current-signal">
             <span>HEART RATE</span>
             <strong>{currentBpm}<small>BPM</small></strong>
             <div className="signal-live-label"><span className={previewMode ? "preview-pulse" : "live-pulse"} />{previewMode ? "sample stream" : "live stream"}</div>
           </div>
+          <div className="signal-stat"><span>MOVEMENT</span><strong>{movementLabel}</strong><small>{motion == null ? "sensor pending" : `${motion.toFixed(3)} g · dynamic accel.`}</small></div>
+          <div className="signal-stat"><span>ACTIVE ENERGY</span><strong>{activeEnergy == null ? "--" : activeEnergy.toFixed(2)}</strong><small>kcal · session total</small></div>
           <div className="signal-stat"><span>PERSONAL BASELINE</span><strong>{baseline == null ? "--" : baseline.toFixed(1)}</strong><small>BPM · recent window</small></div>
-          <div className="signal-stat"><span>DEVIATION</span><strong>{zScore.toFixed(2)}</strong><small>z-score</small></div>
-          <div className={`signal-stat status ${activeSample?.is_anomaly ? "elevated" : ""}`}><span>SIGNAL STATE</span><strong>{isDetected ? "DETECTED" : activeSample?.is_anomaly ? "ELEVATED" : "STABLE"}</strong><small>{activeSample?.is_anomaly ? `${anomalySeconds.toFixed(1)} sec sustained` : "within recent pattern"}</small></div>
+          <div className={`signal-stat status ${activeSample?.is_anomaly ? "elevated" : ""}`}><span>SIGNAL STATE</span><strong>{isDetected ? "DETECTED" : activeSample?.is_anomaly ? "ELEVATED" : "STABLE"}</strong><small>{activeSample?.is_anomaly ? `${anomalySeconds.toFixed(1)} sec sustained` : `motion ${movementLabel.toLowerCase()}`}</small></div>
         </div>
 
         <div className={`signal-plot-section ${isDetected ? "detected" : ""}`}>
@@ -448,6 +435,26 @@ const LiveDemo = () => {
             <div className="plot-time-label"><span>−60 sec</span><span>now</span></div>
           </div>
 
+          <div className="motion-trace-panel">
+            <div className="motion-trace-copy">
+              <span>MOVEMENT TRACE</span>
+              <strong>{movementLabel}</strong>
+              <small>가속도 기반 움직임 강도 · 심박 상승이 활동으로 설명되는지 함께 봅니다.</small>
+            </div>
+            <svg viewBox={`0 0 ${motionChart.width} ${motionChart.height}`} className="motion-chart" role="img" aria-label="실시간 움직임 강도 그래프">
+              <defs>
+                <linearGradient id="motionLine" x1="0" x2="1"><stop offset="0%" stopColor="#35C8C5" /><stop offset="100%" stopColor="#9B91E8" /></linearGradient>
+              </defs>
+              <line x1="48" x2="1032" y1="82" y2="82" className="motion-grid-line" />
+              <path d={motionChart.path} className="motion-path" />
+            </svg>
+            <div className="session-context">
+              <div><span>SESSION DISTANCE</span><strong>{distanceM == null ? "--" : distanceM < 1000 ? `${Math.round(distanceM)} m` : `${(distanceM / 1000).toFixed(2)} km`}</strong></div>
+              <div><span>ACTIVE ENERGY</span><strong>{activeEnergy == null ? "--" : `${activeEnergy.toFixed(2)} kcal`}</strong></div>
+              <div><span>INTERPRETATION</span><strong>{activeSample?.is_anomaly && movementState === "still" ? "HR rise · low motion" : activeSample?.is_anomaly && movementState === "active" ? "HR rise · active motion" : "multisignal context"}</strong></div>
+            </div>
+          </div>
+
           {isDetected && (
             <div className="detected-strip">
               <div className="detected-mark"><CircleDot size={18} /></div>
@@ -468,7 +475,7 @@ const LiveDemo = () => {
             <strong>{moments.length.toString().padStart(2, "0")}<small> moments</small></strong>
           </div>
 
-          <div className="moment-stack" aria-label="기록된 순간 타임라인">
+          <div className="moment-stack">
             {moments.length === 0 ? (
               <div className="moment-empty"><Sparkles size={21} /><strong>아직 기록된 순간이 없습니다.</strong><span>Watch 또는 웹에서 첫 순간을 기록해보세요.</span></div>
             ) : moments.slice(0, 8).map((moment, index) => {
@@ -476,8 +483,7 @@ const LiveDemo = () => {
               const needsContext = moment.status === "captured" && !moment.note && !moment.photo;
               return (
                 <article className="moment-row" key={moment.id}>
-                  <div className="moment-rail"><span className="moment-dot" /><span className="moment-line" /></div>
-                  <div className="moment-index">M.{String(moments.length - index).padStart(2, "0")}</div>
+                  <div className="moment-index">{String(moments.length - index).padStart(2, "0")}</div>
                   <div className="moment-time"><Clock3 size={14} /><span>{formatTime(moment.created_at)}</span></div>
                   <div className="moment-signal"><HeartPulse size={15} /><strong>{moment.signal?.bpm ? Math.round(moment.signal.bpm) : "--"}</strong><span>bpm</span></div>
                   <div className="moment-story">
@@ -485,10 +491,7 @@ const LiveDemo = () => {
                     <strong>{moment.note || "이 순간의 맥락을 더해보세요."}</strong>
                   </div>
                   {photoUrl ? <img className="moment-thumb" src={photoUrl} alt="기록된 순간" /> : <div className="moment-thumb empty"><ImagePlus size={17} /></div>}
-                  <div className="moment-actions">
-                    <button className={needsContext ? "context-button attention" : "context-button"} onClick={() => openRecorder(moment)}>{needsContext ? "맥락 추가" : "편집"}<ChevronRight size={12} /></button>
-                    <button className="delete-button" onClick={() => deleteMoment(moment)} disabled={deletingId === moment.id} aria-label={`${formatTime(moment.created_at)} Moment 삭제`}><Trash2 size={14} /></button>
-                  </div>
+                  <button className={needsContext ? "context-button attention" : "context-button"} onClick={() => openRecorder(moment)}>{needsContext ? "맥락 추가" : "편집"}</button>
                 </article>
               );
             })}
@@ -504,8 +507,10 @@ const LiveDemo = () => {
               <button type="button" onClick={resetRecorder} aria-label="닫기"><X /></button>
             </div>
 
-            <div className="record-snapshot">
+            <div className="record-snapshot multisignal-snapshot">
               <div><span>HEART RATE</span><strong>{editingMoment?.signal?.bpm ? Math.round(editingMoment.signal.bpm) : currentBpm}<small> bpm</small></strong></div>
+              <div><span>MOVEMENT</span><strong>{editingMoment?.signal?.movement_state?.toUpperCase?.() ?? movementLabel}</strong></div>
+              <div><span>ACTIVE ENERGY</span><strong>{editingMoment?.signal?.active_energy_kcal?.toFixed?.(2) ?? (activeEnergy == null ? "--" : activeEnergy.toFixed(2))}<small> kcal</small></strong></div>
               <div><span>BASELINE</span><strong>{editingMoment?.signal?.baseline?.toFixed?.(1) ?? (baseline == null ? "--" : baseline.toFixed(1))}<small> bpm</small></strong></div>
               <div><span>STATE</span><strong>{editingMoment?.signal?.is_anomaly || activeSample?.is_anomaly ? "DEVIATION" : "CAPTURE"}</strong></div>
             </div>
@@ -518,13 +523,6 @@ const LiveDemo = () => {
                 <input type="file" accept="image/jpeg,image/png,image/webp" onChange={onPhoto} />
                 {photoPreview ? <img src={photoPreview} alt="업로드 미리보기" /> : <><ImagePlus size={25} /><strong>사진 선택</strong><span>클릭해서 이 순간과 함께 남길 이미지를 추가하세요.</span></>}
               </label>
-              {editingMoment && (editingMoment.previewPhotoUrl || editingMoment.photo_url) && !photoPreview && !removeExistingPhoto && (
-                <div className="existing-photo">
-                  <img src={editingMoment.previewPhotoUrl || `${API_BASE}${editingMoment.photo_url}`} alt="현재 저장된 사진" />
-                  <button type="button" onClick={() => setRemoveExistingPhoto(true)}><Trash2 size={13} /> 사진 삭제</button>
-                </div>
-              )}
-              {removeExistingPhoto && <p className="photo-remove-notice">저장하면 기존 사진이 삭제됩니다.</p>}
               {photoError && <p className="photo-error">{photoError}</p>}
             </div>
 
@@ -533,7 +531,7 @@ const LiveDemo = () => {
         </div>
       )}
 
-      {savedMessage && <div className={`save-toast ${savedMessage.includes("실패") ? "error" : ""}`}><Check size={16} />{savedMessage}</div>}
+      {savedMessage && <div className={`save-toast ${savedMessage.startsWith("저장 실패") ? "error" : ""}`}><Check size={16} />{savedMessage}</div>}
     </main>
   );
 };

@@ -108,7 +108,7 @@ const Persona = () => {
 
   return (
     <div className="persona">
-      <button className="back-btn" onClick={() => navigate("/scenario")}>
+      <button className="back-btn" onClick={() => navigate("/moment")}>
         <ArrowLeft size={20} />
       </button>
 

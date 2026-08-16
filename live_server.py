@@ -6,7 +6,7 @@ Data flow
 Apple Watch -> HTTP POST http://<MAC_IP>:8000/heart-rate
 Apple Watch -> HTTP POST http://<MAC_IP>:8000/moments/watch   ("기록하기")
 React       <- WebSocket ws://localhost:8000/ws/web
-React       -> GET/POST/PATCH/DELETE http://localhost:8000/moments
+React       -> GET/POST/PATCH http://localhost:8000/moments
 
 Run:
     pip install -r requirements-live.txt
@@ -21,7 +21,7 @@ from pathlib import Path
 from statistics import mean, pstdev
 from typing import Any
 import json
-import shutil
+import os
 import time
 import uuid
 
@@ -60,6 +60,28 @@ ALLOWED_PHOTO_TYPES = {
 class HeartRatePayload(BaseModel):
     bpm: float
     timestamp: float | None = None
+    motion: float | None = None
+    active_energy_kcal: float | None = None
+    distance_m: float | None = None
+
+
+class NarrativeRequest(BaseModel):
+    momentId: str
+    title: str
+    date: str
+    time: str
+    location: str
+    description: str
+    note: str | None = None
+    heartRate: float
+    baseline: float
+    zScore: float
+    movement: str
+    motion: float
+    activeEnergy: float
+    oxygen: float | None = None
+    respiration: float | None = None
+    evidence: list[str] = []
 
 
 def analyze_bpm(bpm: float) -> dict[str, Any]:
@@ -187,17 +209,35 @@ async def receive_heart_rate(data: HeartRatePayload) -> dict[str, Any]:
     analysis = analyze_bpm(bpm)
     history.append(bpm)
 
+    motion = None if data.motion is None else max(0.0, float(data.motion))
+    active_energy = None if data.active_energy_kcal is None else max(0.0, float(data.active_energy_kcal))
+    distance_m = None if data.distance_m is None else max(0.0, float(data.distance_m))
+
+    if motion is None:
+        movement_state = "unknown"
+    elif motion < 0.035:
+        movement_state = "still"
+    elif motion < 0.12:
+        movement_state = "light"
+    else:
+        movement_state = "active"
+
     payload = {
         "type": "heart_rate",
         "bpm": round(bpm, 2),
         "timestamp": data.timestamp or time.time(),
+        "motion": None if motion is None else round(motion, 4),
+        "movement_state": movement_state,
+        "active_energy_kcal": None if active_energy is None else round(active_energy, 3),
+        "distance_m": None if distance_m is None else round(distance_m, 2),
         **analysis,
     }
     latest_signal = payload
 
     print(
         f"❤️ WATCH BPM: {bpm:.0f} | baseline={analysis['baseline']} | "
-        f"z={analysis['z_score']} | anomaly={analysis['is_anomaly']}"
+        f"z={analysis['z_score']} | anomaly={analysis['is_anomaly']} | "
+        f"motion={payload['motion']} ({payload['movement_state']}) | kcal={payload['active_energy_kcal']}"
     )
 
     await broadcast(payload)
@@ -222,6 +262,10 @@ async def save_moment(
     z_score: float | None = Form(None),
     is_anomaly: bool = Form(False),
     signal_timestamp: float | None = Form(None),
+    motion: float | None = Form(None),
+    movement_state: str | None = Form(None),
+    active_energy_kcal: float | None = Form(None),
+    distance_m: float | None = Form(None),
     photo: UploadFile | None = File(None),
 ) -> dict[str, Any]:
     """Create a moment from the web and optionally enrich it with a photo."""
@@ -232,6 +276,10 @@ async def save_moment(
         "z_score": z_score,
         "is_anomaly": is_anomaly,
         "timestamp": signal_timestamp,
+        "motion": motion,
+        "movement_state": movement_state,
+        "active_energy_kcal": active_energy_kcal,
+        "distance_m": distance_m,
     }
     moment_dir, metadata = _new_moment_metadata(source="web", note=note, signal=signal)
     try:
@@ -257,41 +305,26 @@ async def enrich_moment(
     moment_id: str,
     note: str = Form(""),
     photo: UploadFile | None = File(None),
-    remove_photo: bool = Form(False),
 ) -> dict[str, Any]:
-    """Edit the memo/photo attached to an existing moment."""
+    """Add memo/photo to a Watch-captured moment."""
     moment_dir = _moment_dir(moment_id)
     metadata = _read_moment(moment_dir)
 
-    metadata["note"] = note.strip()
-
-    if remove_photo:
-        for old in moment_dir.glob("photo.*"):
-            old.unlink(missing_ok=True)
-        metadata["photo"] = None
+    if note.strip():
+        metadata["note"] = note.strip()
 
     photo_name = await _save_photo(moment_dir, photo)
     if photo_name:
         metadata["photo"] = photo_name
 
     metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
-    metadata["status"] = "enriched" if metadata.get("note") or metadata.get("photo") else "captured"
+    if metadata.get("note") or metadata.get("photo"):
+        metadata["status"] = "enriched"
 
     _write_moment(moment_dir, metadata)
     await broadcast({"type": "moment_updated", "moment": metadata})
     print(f"✍️ MOMENT ENRICHED: {moment_id}")
     return {"ok": True, "moment": metadata}
-
-
-@app.delete("/moments/{moment_id}")
-async def delete_moment(moment_id: str) -> dict[str, Any]:
-    """Permanently remove one moment and its uploaded photo."""
-    moment_dir = _moment_dir(moment_id)
-    _read_moment(moment_dir)
-    shutil.rmtree(moment_dir)
-    await broadcast({"type": "moment_deleted", "moment_id": moment_id})
-    print(f"🗑️ MOMENT DELETED: {moment_id}")
-    return {"ok": True, "moment_id": moment_id}
 
 
 @app.get("/moments")
@@ -319,6 +352,115 @@ def get_moment_photo(moment_id: str) -> FileResponse:
     if not photo_path.exists():
         raise HTTPException(status_code=404, detail="Photo not found")
     return FileResponse(photo_path)
+
+
+
+def _preview_narrative(data: NarrativeRequest) -> dict[str, Any]:
+    """Always-available fallback for submitted/demo sites without an API key."""
+    hr_delta = round(data.heartRate - data.baseline)
+    movement_copy = {
+        "STILL": "큰 움직임은 거의 없었고",
+        "still": "큰 움직임은 거의 없었고",
+        "LIGHT": "가벼운 움직임이 이어졌고",
+        "light": "가벼운 움직임이 이어졌고",
+        "ACTIVE": "활발한 움직임이 함께 있었고",
+        "active": "활발한 움직임이 함께 있었고",
+    }.get(data.movement, "움직임의 맥락이 함께 기록되었고")
+
+    context = data.note.strip() if data.note else data.description
+    return {
+        "title": f"{data.title}, 몸이 남긴 작은 흔적",
+        "lead": (
+            f"{data.time}, {data.location}. {movement_copy} 심박은 {data.heartRate:.0f} bpm으로 "
+            f"개인 기준선보다 {abs(hr_delta):.0f} bpm {'높았습니다' if hr_delta >= 0 else '낮았습니다'}."
+        ),
+        "paragraphs": [
+            (
+                f"이 순간의 신호 편차는 {data.zScore:.1f}σ였습니다. VIVIA는 이 수치를 감정의 이름으로 바꾸지 않고, "
+                "평소의 몸과 달랐던 정도를 나타내는 하나의 흔적으로 남깁니다."
+            ),
+            (
+                f"함께 남은 맥락은 ‘{context}’입니다. 시간·장소·주변 기록과 Body Trace를 포개면, "
+                "숫자 하나만으로는 보이지 않던 순간의 윤곽이 조금 더 선명해집니다."
+            ),
+        ],
+        "closing": "기억은 무엇을 느꼈는지 단정하는 대신, 그 순간 무엇이 달라졌는지를 따라 다시 시작됩니다.",
+        "mode": "preview",
+    }
+
+
+@app.post("/reconstruct/narrative")
+def reconstruct_narrative(data: NarrativeRequest) -> dict[str, Any]:
+    """Generate a Korean memory narrative from signals + context.
+
+    If OPENAI_API_KEY is missing or the API call fails, return a deterministic
+    preview narrative so the submitted website still works offline.
+    """
+    fallback = _preview_narrative(data)
+    if not os.getenv("OPENAI_API_KEY"):
+        return {"ok": True, "narrative": fallback, "provider": "preview"}
+
+    try:
+        from openai import OpenAI
+
+        client = OpenAI()
+        prompt = {
+            "moment": {
+                "title": data.title,
+                "date": data.date,
+                "time": data.time,
+                "location": data.location,
+                "user_context": data.note or data.description,
+            },
+            "body_trace": {
+                "heart_rate_bpm": data.heartRate,
+                "personal_baseline_bpm": data.baseline,
+                "deviation_z": data.zScore,
+                "movement_state": data.movement,
+                "motion_g": data.motion,
+                "active_energy_kcal": data.activeEnergy,
+                "oxygen_saturation_percent": data.oxygen,
+                "respiratory_rate_per_min": data.respiration,
+            },
+            "evidence": data.evidence,
+        }
+
+        instructions = """
+You are the narrative engine for VIVIA, a memory reconstruction experience.
+Write in Korean. Build a restrained, literary but professional first-person-adjacent memory narrative from the supplied observations.
+Never claim a biosignal directly proves a specific emotion, diagnosis, or mental state. Distinguish observation from interpretation.
+Do not invent people, dialogue, weather, objects, sounds, or events that are not in the input.
+Use body data as texture: trajectory, contrast with personal baseline, movement context, and what stayed stable.
+Return ONLY valid JSON with this exact shape:
+{
+  "title": "short poetic title",
+  "lead": "1-2 sentence opening",
+  "paragraphs": ["paragraph 1", "paragraph 2"],
+  "closing": "one memorable closing sentence"
+}
+Each paragraph should be 2-3 Korean sentences. Avoid clinical tone and avoid overclaiming emotion.
+""".strip()
+
+        response = client.responses.create(
+            model=os.getenv("OPENAI_NARRATIVE_MODEL", "gpt-5.6"),
+            reasoning={"effort": "low"},
+            instructions=instructions,
+            input=json.dumps(prompt, ensure_ascii=False),
+        )
+        parsed = json.loads(response.output_text)
+        narrative = {
+            "title": str(parsed["title"]),
+            "lead": str(parsed["lead"]),
+            "paragraphs": [str(x) for x in parsed["paragraphs"]][:3],
+            "closing": str(parsed["closing"]),
+            "mode": "openai",
+        }
+        if len(narrative["paragraphs"]) < 2:
+            raise ValueError("Narrative needs at least two paragraphs")
+        return {"ok": True, "narrative": narrative, "provider": "openai"}
+    except Exception as exc:
+        print(f"⚠️ AI narrative fallback: {exc}")
+        return {"ok": True, "narrative": fallback, "provider": "preview"}
 
 
 # Compatibility with the earlier Watch WebSocket prototype.
