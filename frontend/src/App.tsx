@@ -10,6 +10,7 @@ import HeEvents from "./pages/HeEvents";
 import HeReconstruction from "./pages/HeReconstruction";
 import VrScene from "./pages/VrScene";
 import LiveDemo from "./pages/LiveDemo";
+import SignalInsight from "./pages/SignalInsight";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
         <Route path="/moment" element={<Moment />} />
         <Route path="/live-demo" element={<LiveDemo />} />
+        <Route path="/signal-insight" element={<SignalInsight />} />
 
         {/* Journey aliases keep shared/demo links readable and stable. */}
         <Route path="/sense" element={<Navigate to="/live-demo" replace />} />

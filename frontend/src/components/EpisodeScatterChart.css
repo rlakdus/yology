@@ -1,0 +1,112 @@
+.scatter-chart {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 18px 20px 16px;
+  box-shadow: var(--shadow);
+}
+
+.scatter-chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.scatter-chart-head h4 {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.scatter-chart-subtitle {
+  font-size: 12px;
+  color: var(--subtext);
+  white-space: nowrap;
+}
+
+.scatter-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 10px 0 6px;
+}
+
+.scatter-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--subtext);
+}
+
+.scatter-chart-legend-item i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.scatter-chart-legend-bubble {
+  width: 12px !important;
+  height: 12px !important;
+  background: var(--border);
+  border: 1.5px solid var(--subtext);
+}
+
+.scatter-chart-body {
+  position: relative;
+}
+
+.scatter-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.scatter-chart-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.scatter-chart-zero {
+  stroke: var(--subtext);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.scatter-chart-tick {
+  fill: var(--subtext);
+  font-size: 11px;
+}
+
+.scatter-chart-axis-label {
+  fill: var(--subtext);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.scatter-chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -110%);
+  background: var(--text);
+  color: white;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.22);
+}
+
+.scatter-chart-tooltip strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.scatter-chart-tooltip span {
+  display: block;
+  color: rgba(255, 255, 255, 0.72);
+}
