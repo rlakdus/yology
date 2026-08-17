@@ -1,0 +1,63 @@
+diff --git a/video_to_video/video_to_video_model.py b/video_to_video/video_to_video_model.py
+--- a/video_to_video/video_to_video_model.py
++++ b/video_to_video/video_to_video_model.py
+@@ -1,3 +1,4 @@
++import os
+ from typing import Any, Dict
+@@ -178,6 +179,10 @@ class VideoToVideo:
+     def vae_encode(self, t, chunk_size=1):
++        tiled_threshold = int(os.environ.get("VENHANCER_TILED_ENCODE_PIXELS", 1152 * 2048))
++        if t.shape[-2] * t.shape[-1] > tiled_threshold:
++            return self.tiled_vae_encode(t)
++
+         bs = t.shape[0]
+@@ -187,6 +192,52 @@ class VideoToVideo:
+         return z * self.vae.config.scaling_factor
+ 
++    def tiled_vae_encode(self, t):
++        """Encode high-resolution frames in overlapping spatial tiles."""
++        batch_size, num_frames, _, height, width = t.shape
++        tile_height = 576
++        tile_width = 1024
++        overlap_height = tile_height // 6
++        overlap_width = 200  # Keep every tile origin aligned to the VAE's 8-pixel grid.
++        latent_height = height // 8
++        latent_width = width // 8
++
++        latents = t.new_zeros((batch_size, 4, num_frames, latent_height, latent_width))
++        count = latents.clone()
++        height_inds = sliding_windows_1d(height, tile_height, overlap_height)
++        for start_height, end_height in height_inds:
++            width_inds = sliding_windows_1d(width, tile_width, overlap_width)
++            for start_width, end_width in width_inds:
++                tile = t[:, :, :, start_height:end_height, start_width:end_width]
++                tile = rearrange(tile, "b f c h w -> (b f) c h w")
++                encoded = []
++                for index in range(tile.shape[0]):
++                    encoded.append(self.vae.encode(tile[index:index + 1]).latent_dist.sample())
++                tile_latents = torch.cat(encoded, dim=0)
++                tile_latents = rearrange(
++                    tile_latents,
++                    "(b f) c h w -> b c f h w",
++                    b=batch_size,
++                )
++
++                tile_latent_height = tile_latents.shape[-2]
++                tile_latent_width = tile_latents.shape[-1]
++                weights = gaussian_weights(tile_latent_width, tile_latent_height)[None, None, None]
++                weights = torch.tensor(weights, dtype=latents.dtype, device=latents.device)
++                start_latent_height = start_height // 8
++                start_latent_width = start_width // 8
++                end_latent_height = start_latent_height + tile_latent_height
++                end_latent_width = start_latent_width + tile_latent_width
++                latents[
++                    :, :, :, start_latent_height:end_latent_height, start_latent_width:end_latent_width
++                ] += tile_latents * weights
++                count[
++                    :, :, :, start_latent_height:end_latent_height, start_latent_width:end_latent_width
++                ] += weights
++
++        latents.div_(count.clamp_min(1e-6))
++        return latents * self.vae.config.scaling_factor
++
+     def tiled_chunked_decode(self, z):

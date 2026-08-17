@@ -1,0 +1,11 @@
+{
+  "status": "awaiting_source_data",
+  "source_person": "he",
+  "source_file": "data/output/export_he_vitals.csv",
+  "source_window_start": "2026-08-12T16:00:00+09:00",
+  "source_window_end": "2026-08-12T18:00:00+09:00",
+  "source_peak_at": "2026-08-12T16:16:00+09:00",
+  "display_peak_at": "2026-08-12T20:31:00+09:00",
+  "timeline_offset_seconds": 15300,
+  "exported_to_frontend": false
+}

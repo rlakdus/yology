@@ -1,0 +1,18 @@
+{
+  "status": "ready",
+  "event_id": "event_003",
+  "source_person": "student",
+  "anomaly_file": "persona/data/20s_trip.json",
+  "anomaly_sha256": "ffeeaa2ee5f41b87cabe50be94ba9f136d25791490c04809b45fe1f644350639",
+  "sensor_file": "persona/data/20s_trip.csv",
+  "sensor_sha256": "efb1084af8d8b13edef4de83d31ae44a10a9c7cc46c22b644a65e231e141fdcc",
+  "source_window_start": "2026-07-25T20:53:54+09:00",
+  "source_window_end": "2026-07-25T20:56:15+09:00",
+  "source_peak_at": "2026-07-25T20:56:15+09:00",
+  "display_window_start": "2026-07-25T16:15:39+09:00",
+  "display_window_end": "2026-07-25T16:18:00+09:00",
+  "display_peak_at": "2026-07-25T16:18:00+09:00",
+  "timeline_offset_seconds": -16695,
+  "values_modified": false,
+  "exported_to_frontend": false
+}

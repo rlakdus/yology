@@ -92,7 +92,7 @@ const SurroundBackdrop = ({ event, playback, blurred, videos }: SurroundBackdrop
       {fallbackPanorama ? (
         <SceneErrorBoundary fallback={<FallbackShell />}>
           <Suspense fallback={<FallbackShell />}>
-            <PanoramaEnvironment panorama={fallbackPanorama} playback={playback} />
+            <PanoramaEnvironment panorama={fallbackPanorama} playback={playback} view={event.view} />
           </Suspense>
         </SceneErrorBoundary>
       ) : (
@@ -107,6 +107,7 @@ const SurroundBackdrop = ({ event, playback, blurred, videos }: SurroundBackdrop
           panorama={event.panorama_video}
           playback={playback}
           video={videos.get(event.panorama_video.src)!}
+          view={event.view}
         />
       )}
 

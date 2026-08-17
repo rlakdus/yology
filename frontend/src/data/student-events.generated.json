@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "timezone": "Asia/Seoul",
+  "events": [
+    {
+      "id": "interview-result",
+      "eventId": "event_001",
+      "persona": "student",
+      "title": "면접 결과 확인",
+      "subtitle": "결과를 열어보던 순간의 긴장과 안도",
+      "description": "면접 결과를 확인하며 긴장과 안도가 교차하고 심박이 크게 상승했던 순간",
+      "location": "Campus",
+      "icon": "graduation-cap",
+      "month": "2026.04",
+      "peakAt": "2026-04-12T14:25:00+09:00",
+      "time": "14:25",
+      "availability": {
+        "anomaly_ready": false,
+        "source_video_ready": true,
+        "panorama_ready": false,
+        "vr_ready": false
+      },
+      "available": true
+    },
+    {
+      "id": "first-concert",
+      "eventId": "event_002",
+      "persona": "student",
+      "title": "대학 입학 후 첫 콘서트",
+      "subtitle": "처음 마주한 공연장의 열기",
+      "description": "좋아하는 음악과 사람들 사이에서 설렘과 몰입이 높아졌던 순간",
+      "location": "Seoul",
+      "icon": "music",
+      "month": "2026.05",
+      "peakAt": "2026-05-15T19:42:00+09:00",
+      "time": "19:42",
+      "availability": {
+        "anomaly_ready": false,
+        "source_video_ready": true,
+        "panorama_ready": false,
+        "vr_ready": false
+      },
+      "available": true
+    },
+    {
+      "id": "mongolia-trip",
+      "eventId": "event_003",
+      "persona": "student",
+      "title": "몽골 여행",
+      "subtitle": "초원을 달리던 여름",
+      "description": "1인칭 승마 영상을 중심으로 몽골 초원의 주변 시야를 확장한 VR 재현",
+      "location": "Mongolia",
+      "icon": "plane",
+      "month": "2026.07",
+      "peakAt": "2026-07-25T16:18:00+09:00",
+      "time": "16:18",
+      "availability": {
+        "anomaly_ready": true,
+        "source_video_ready": true,
+        "panorama_ready": true,
+        "vr_ready": true
+      },
+      "available": true
+    },
+    {
+      "id": "favorite-movie",
+      "eventId": "event_004",
+      "persona": "student",
+      "title": "좋아하는 영화 관람",
+      "subtitle": "오래 기억하고 싶은 한 장면",
+      "description": "영화를 관람하며 안정적인 박동 속에서 장면에 따라 감정적 각성이 나타났던 순간",
+      "location": "Cinema",
+      "icon": "film",
+      "month": "2026.08",
+      "peakAt": "2026-08-12T20:31:00+09:00",
+      "time": "20:31",
+      "availability": {
+        "anomaly_ready": false,
+        "source_video_ready": true,
+        "panorama_ready": false,
+        "vr_ready": false
+      },
+      "available": true
+    }
+  ]
+}

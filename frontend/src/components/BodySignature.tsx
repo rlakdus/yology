@@ -4,7 +4,6 @@ import {
   Gauge,
   HeartPulse,
   Move3D,
-  TimerReset,
   Wind,
   Zap,
 } from "lucide-react";

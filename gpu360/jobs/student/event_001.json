@@ -1,0 +1,45 @@
+{
+  "event": "student/event_001",
+  "label": "면접 결과 확인",
+  "source": "events/student/event_001/source/interview-result.original.mov",
+  "expected_source_sha256": "838c69ec82b4f1b1e37f028e5b653d0658b62ece13d680a1e90fcd7caebbb65f",
+  "output": "events/student/event_001/panorama/interview-result-360.mp4",
+  "generation_record": "events/student/event_001/panorama/generation.json",
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "reset_batch_conditioning": true,
+    "guidance_scale": 3.0,
+    "inference_steps": 25
+  },
+  "input": {
+    "aspect_policy": "preserve",
+    "stabilize_zoom": true,
+    "stabilize_rotation": true,
+    "fixed_fov_deg": 90,
+    "minimum_valid_area_ratio": 0.7,
+    "maximum_tracking_failure_ratio": 0.1
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": false
+  }
+}

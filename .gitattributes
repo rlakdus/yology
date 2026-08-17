@@ -1,2 +1,5 @@
 scripts/gpu360/*.sh text eol=lf
 gpu360/patches/*.patch text eol=lf
+events/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+events/**/*.mov filter=lfs diff=lfs merge=lfs -text
+events/**/*.mkv filter=lfs diff=lfs merge=lfs -text

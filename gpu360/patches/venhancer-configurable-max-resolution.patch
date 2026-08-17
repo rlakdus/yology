@@ -1,0 +1,13 @@
+diff --git a/inference_utils.py b/inference_utils.py
+--- a/inference_utils.py
++++ b/inference_utils.py
+@@ -44,2 +44,5 @@ def adjust_resolution(h, w, up_scale):
++    max_pixels = int(os.environ.get("VENHANCER_MAX_PIXELS", 1152 * 2048))
++    if max_pixels <= 0:
++        raise ValueError("VENHANCER_MAX_PIXELS must be greater than zero")
+     if h * w * up_scale * up_scale < 720 * 1280 * 1.5:
+@@ -48,3 +51,3 @@ def adjust_resolution(h, w, up_scale):
+-    elif h * w * up_scale * up_scale > 1152 * 2048:
+-        up_s = np.sqrt(1152 * 2048 / (h * w))
++    elif h * w * up_scale * up_scale > max_pixels:
++        up_s = np.sqrt(max_pixels / (h * w))

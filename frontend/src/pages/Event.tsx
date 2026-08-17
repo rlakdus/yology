@@ -24,13 +24,13 @@ type EventDetail = {
 };
 
 const eventDetails: Record<string, EventDetail> = {
-  "exam-interview": {
+  "interview-result": {
     time: "14:25",
     signal: "Stress Spike",
     heartRate: "112 bpm",
     stress: "High",
     aiSummary:
-      "시험과 면접을 앞두고 긴장도가 높아지며 심박과 스트레스 신호가 동시에 상승한 순간으로 탐지되었습니다.",
+      "면접 결과를 확인하는 동안 긴장과 안도가 교차하며 심박이 크게 상승한 순간으로 탐지되었습니다.",
     evidenceCount: 3,
   },
 
@@ -72,15 +72,15 @@ const Event = () => {
   const {
     ageLabel = "20대",
 
-    momentId = "exam-interview",
+    momentId = "interview-result",
 
-    momentTitle = "시험·면접 직전후",
+    momentTitle = "면접 결과 확인",
 
     momentSubtitle =
       "긴장과 몰입이 가장 높았던 순간",
 
     momentDescription =
-      "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
+      "면접 결과를 확인하며 긴장과 안도가 교차했던 순간을 다시 살펴봅니다.",
 
     /* Moment 카드용 월 단위 */
     momentDate = "2026.04",
@@ -97,7 +97,7 @@ const Event = () => {
 
   const detail =
     eventDetails[momentId] ??
-    eventDetails["exam-interview"];
+    eventDetails["interview-result"];
 
   /*
     정확한 날짜가 있으면 exactDate 사용

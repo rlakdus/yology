@@ -1,0 +1,48 @@
+{
+  "event": "student/event_003",
+  "label": "몽골 승마 체험",
+  "source": "events/student/event_003/source/mongolia-horse-riding.original.mp4",
+  "expected_source_sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70",
+  "output": "events/student/event_003/panorama/mongolia-horse-riding-360.mp4",
+  "generation_record": "events/student/event_003/panorama/generation.json",
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "reset_batch_conditioning": true,
+    "guidance_scale": 3.0,
+    "inference_steps": 25
+  },
+  "input": {
+    "aspect_policy": "preserve",
+    "stabilize_zoom": true,
+    "stabilize_rotation": true,
+    "fixed_fov_deg": 90,
+    "minimum_valid_area_ratio": 0.7,
+    "maximum_tracking_failure_ratio": 0.1
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": -25,
+    "initial_pitch_deg": -5
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "output_width": 2048,
+    "output_height": 1024,
+    "edge_feather": 0.05,
+    "source_mask_inset": 0.015,
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": false
+  }
+}

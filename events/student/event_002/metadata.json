@@ -1,0 +1,38 @@
+{
+  "event_id": "event_002",
+  "slug": "first-concert",
+  "title": "대학 입학 후 첫 콘서트",
+  "subtitle": "처음 마주한 공연장의 열기",
+  "persona": "student",
+  "emotion": "excitement",
+  "description": "좋아하는 음악과 사람들 사이에서 설렘과 몰입이 높아졌던 순간",
+  "location": "Seoul",
+  "icon": "music",
+  "start_time": null,
+  "end_time": null,
+  "vr_scene": "first_concert",
+  "display": {
+    "month": "2026.05",
+    "peak_at": "2026-05-15T19:42:00+09:00",
+    "timezone": "Asia/Seoul",
+    "date_basis": "ui_configured"
+  },
+  "availability": {
+    "anomaly_ready": false,
+    "source_video_ready": true,
+    "panorama_ready": false,
+    "vr_ready": false
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "assets": [
+    {
+      "file": "source/first-concert.original.mov",
+      "taken_at": "2026-05-15T19:42:00+09:00",
+      "source_time_basis": "ui_configured_peak"
+    }
+  ]
+}

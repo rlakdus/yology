@@ -285,8 +285,22 @@ def main():
     duration_min = round((end - start).total_seconds() / 60, 2) if start and end else 0
 
     sensor_path = event_dir / "sensor.json"
+    anomaly_path = event_dir / "anomaly.json"
+    availability = metadata.get("availability") or {}
+    sensor_ready = bool(availability.get("anomaly_ready"))
+    sensor = (
+        json.loads(sensor_path.read_text(encoding="utf-8"))
+        if sensor_ready and sensor_path.exists()
+        else {"heart_rate_source": "unavailable", "heart_rate": []}
+    )
+    anomaly = (
+        json.loads(anomaly_path.read_text(encoding="utf-8"))
+        if sensor_ready and anomaly_path.exists()
+        else None
+    )
     payload = {
         "event_id": metadata.get("event_id", args.event),
+        "slug": metadata.get("slug", args.event),
         "persona": metadata.get("persona", args.persona),
         "title": metadata.get("title", args.event),
         "description": metadata.get("description", ""),
@@ -295,16 +309,18 @@ def main():
         "start_time": metadata.get("start_time"),
         "end_time": metadata.get("end_time"),
         "duration_min": duration_min,
+        "display": metadata.get("display"),
+        "availability": availability,
+        "view": metadata.get("view"),
+        "anomaly": anomaly,
         "panorama": panorama,
         "panorama_video": panorama_video,
         "media": media,
         "chats": read_chats(event_dir),
-        "sensor": json.loads(sensor_path.read_text(encoding="utf-8")) if sensor_path.exists() else {},
+        "sensor": sensor,
     }
     if metadata.get("experience"):
         payload["experience"] = metadata["experience"]
-    if metadata.get("data_provenance"):
-        payload["data_provenance"] = metadata["data_provenance"]
 
     output = target_dir / "vr-event.json"
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

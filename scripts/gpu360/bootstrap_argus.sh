@@ -4,7 +4,17 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 LOCK_FILE="${PROJECT_ROOT}/gpu360/argus.lock.json"
-PATCH_FILE="${PROJECT_ROOT}/gpu360/patches/argus-save-camera-metadata.patch"
+ARGUS_PATCH_FILES=(
+  "${PROJECT_ROOT}/gpu360/patches/argus-save-camera-metadata.patch"
+  "${PROJECT_ROOT}/gpu360/patches/argus-fixed-fov-aspect.patch"
+  "${PROJECT_ROOT}/gpu360/patches/argus-fp16-runtime.patch"
+  "${PROJECT_ROOT}/gpu360/patches/argus-reset-batch-conditioning.patch"
+)
+VENHANCER_PATCH_FILES=(
+  "${PROJECT_ROOT}/gpu360/patches/venhancer-portable-ffmpeg.patch"
+  "${PROJECT_ROOT}/gpu360/patches/venhancer-configurable-max-resolution.patch"
+  "${PROJECT_ROOT}/gpu360/patches/venhancer-tiled-vae-encode.patch"
+)
 ARGUS_DIR="${ARGUS_DIR:-${PROJECT_ROOT}/.gpu360/argus-code}"
 
 read_lock() {
@@ -12,7 +22,8 @@ read_lock() {
 import json
 import sys
 
-data = json.load(open(sys.argv[1], encoding="utf-8"))
+with open(sys.argv[1], encoding="utf-8") as stream:
+    data = json.load(stream)
 print(data[sys.argv[2]])
 PY
 }
@@ -28,7 +39,6 @@ for command in git python3; do
 done
 
 mkdir -p "$(dirname "${ARGUS_DIR}")"
-
 if [[ ! -d "${ARGUS_DIR}/.git" ]]; then
   if [[ -e "${ARGUS_DIR}" ]]; then
     echo "Argus 경로가 비어 있지 않고 Git 저장소도 아닙니다: ${ARGUS_DIR}" >&2
@@ -37,43 +47,103 @@ if [[ ! -d "${ARGUS_DIR}/.git" ]]; then
   git clone --recurse-submodules "${ARGUS_REPOSITORY}" "${ARGUS_DIR}"
 fi
 
-if git -C "${ARGUS_DIR}" apply --unidiff-zero --reverse --check "${PATCH_FILE}" >/dev/null 2>&1; then
-  CURRENT_COMMIT="$(git -C "${ARGUS_DIR}" rev-parse HEAD)"
-  if [[ "${CURRENT_COMMIT}" != "${ARGUS_COMMIT}" ]]; then
-    echo "패치된 Argus가 lock과 다른 커밋에 있습니다: ${CURRENT_COMMIT}" >&2
+CURRENT_COMMIT="$(git -C "${ARGUS_DIR}" rev-parse HEAD)"
+if [[ "${CURRENT_COMMIT}" != "${ARGUS_COMMIT}" ]]; then
+  if [[ -n "$(git -C "${ARGUS_DIR}" status --porcelain)" ]]; then
+    echo "Argus가 lock과 다른 커밋이며 작업 트리 변경도 있어 중단합니다: ${CURRENT_COMMIT}" >&2
     exit 1
   fi
-  UNKNOWN_CHANGES="$(git -C "${ARGUS_DIR}" status --porcelain | grep -v '^ M inference.py$' || true)"
-  if [[ -n "${UNKNOWN_CHANGES}" ]]; then
-    echo "카메라 패치 외의 Argus 변경이 있어 중단합니다:" >&2
-    echo "${UNKNOWN_CHANGES}" >&2
-    exit 1
-  fi
-  git -C "${ARGUS_DIR}" submodule sync --recursive
-  git -C "${ARGUS_DIR}" submodule update --init --recursive
-  echo "카메라 메타데이터 패치가 이미 적용되어 있습니다."
-  echo "Argus 준비 완료"
-  echo "  경로: ${ARGUS_DIR}"
-  echo "  커밋: ${ARGUS_COMMIT}"
-  exit 0
+  git -C "${ARGUS_DIR}" fetch origin "${ARGUS_COMMIT}"
+  git -C "${ARGUS_DIR}" checkout --detach "${ARGUS_COMMIT}"
 fi
 
-if [[ -n "$(git -C "${ARGUS_DIR}" status --porcelain)" ]]; then
-  echo "알 수 없는 Argus 작업 트리 변경이 있어 중단합니다: ${ARGUS_DIR}" >&2
+ARGUS_UNKNOWN_CHANGES="$(
+  git -C "${ARGUS_DIR}" status --porcelain |
+    grep -v '^ M inference.py$' |
+    grep -v '^ M src/sampling_svd.py$' |
+    grep -Ev '^ [mM] venhancer$' || true
+)"
+if [[ -n "${ARGUS_UNKNOWN_CHANGES}" ]]; then
+  echo "관리되는 패치 외의 Argus 변경이 있어 중단합니다:" >&2
+  echo "${ARGUS_UNKNOWN_CHANGES}" >&2
   exit 1
 fi
 
-git -C "${ARGUS_DIR}" fetch origin "${ARGUS_COMMIT}"
-git -C "${ARGUS_DIR}" checkout --detach "${ARGUS_COMMIT}"
+argus_patch_is_applied() {
+  case "$(basename "$1")" in
+    argus-save-camera-metadata.patch)
+      [[ "$(grep -c 'camera_metadata_path = out_file_path' "${ARGUS_DIR}/inference.py")" -eq 1 ]] &&
+        [[ "$(grep -c '^import json$' "${ARGUS_DIR}/inference.py")" -eq 1 ]]
+      ;;
+    argus-fixed-fov-aspect.patch)
+      grep -Fq 'hw_ratio = video.shape[-2] / video.shape[-1]' "${ARGUS_DIR}/inference.py"
+      ;;
+    argus-fp16-runtime.patch)
+      grep -Fq "Accelerator(mixed_precision='fp16')" "${ARGUS_DIR}/inference.py" &&
+        grep -Fq 'weight_dtype = torch.float16' "${ARGUS_DIR}/inference.py" &&
+        grep -Fq 'torch_dtype=weight_dtype,' "${ARGUS_DIR}/inference.py"
+      ;;
+    argus-reset-batch-conditioning.patch)
+      grep -Fq "parser.add_argument('--reset_batch_conditioning'" "${ARGUS_DIR}/inference.py" &&
+        grep -Fq "getattr(args, 'reset_batch_conditioning', False)" "${ARGUS_DIR}/src/sampling_svd.py"
+      ;;
+    *) return 1 ;;
+  esac
+}
+
+for patch_file in "${ARGUS_PATCH_FILES[@]}"; do
+  if argus_patch_is_applied "${patch_file}"; then
+    echo "패치 적용 확인: $(basename "${patch_file}")"
+  elif git -C "${ARGUS_DIR}" apply --unidiff-zero --check "${patch_file}" >/dev/null 2>&1; then
+    git -C "${ARGUS_DIR}" apply --unidiff-zero "${patch_file}"
+    echo "패치 적용 완료: $(basename "${patch_file}")"
+  else
+    echo "고정된 Argus 커밋에 패치를 적용하거나 확인할 수 없습니다: ${patch_file}" >&2
+    exit 1
+  fi
+done
+
 git -C "${ARGUS_DIR}" submodule sync --recursive
 git -C "${ARGUS_DIR}" submodule update --init --recursive
 
-if git -C "${ARGUS_DIR}" apply --unidiff-zero --check "${PATCH_FILE}"; then
-  git -C "${ARGUS_DIR}" apply --unidiff-zero "${PATCH_FILE}"
-else
-  echo "고정된 Argus 커밋에 패치를 적용할 수 없습니다." >&2
+VENHANCER_DIR="${ARGUS_DIR}/venhancer"
+VENHANCER_UNKNOWN_CHANGES="$(
+  git -C "${VENHANCER_DIR}" status --porcelain |
+    grep -v '^ M inference_utils.py$' |
+    grep -v '^ M video_to_video/video_to_video_model.py$' || true
+)"
+if [[ -n "${VENHANCER_UNKNOWN_CHANGES}" ]]; then
+  echo "관리되는 FFmpeg 패치 외의 VEnhancer 변경이 있어 중단합니다:" >&2
+  echo "${VENHANCER_UNKNOWN_CHANGES}" >&2
   exit 1
 fi
+
+venhancer_patch_is_applied() {
+  case "$(basename "$1")" in
+    venhancer-portable-ffmpeg.patch)
+      grep -Fq 'os.environ.get("FFMPEG_PATH", "ffmpeg")' "${VENHANCER_DIR}/inference_utils.py"
+      ;;
+    venhancer-configurable-max-resolution.patch)
+      grep -Fq 'os.environ.get("VENHANCER_MAX_PIXELS", 1152 * 2048)' "${VENHANCER_DIR}/inference_utils.py"
+      ;;
+    venhancer-tiled-vae-encode.patch)
+      grep -Fq 'def tiled_vae_encode(self, t):' "${VENHANCER_DIR}/video_to_video/video_to_video_model.py"
+      ;;
+    *) return 1 ;;
+  esac
+}
+
+for patch_file in "${VENHANCER_PATCH_FILES[@]}"; do
+  if venhancer_patch_is_applied "${patch_file}"; then
+    echo "패치 적용 확인: $(basename "${patch_file}")"
+  elif git -C "${VENHANCER_DIR}" apply --unidiff-zero --check "${patch_file}" >/dev/null 2>&1; then
+    git -C "${VENHANCER_DIR}" apply --unidiff-zero "${patch_file}"
+    echo "패치 적용 완료: $(basename "${patch_file}")"
+  else
+    echo "고정된 VEnhancer 커밋에 패치를 적용하거나 확인할 수 없습니다: ${patch_file}" >&2
+    exit 1
+  fi
+done
 
 echo "Argus 준비 완료"
 echo "  경로: ${ARGUS_DIR}"

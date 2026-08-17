@@ -1,0 +1,28 @@
+diff --git a/inference.py b/inference.py
+--- a/inference.py
++++ b/inference.py
+@@ -69,2 +69,3 @@ if __name__ == "__main__":
+ 	parser.add_argument('--blend_frames', type=int, default=0, help='Number of frames to blend.')
+ 	parser.add_argument("--num_frames_batch", type=int, default=25, help="Number of frames to generate.")
++	parser.add_argument('--reset_batch_conditioning', action='store_true', help='Condition every temporal batch on recorded frames instead of prior generated panoramas.')
+diff --git a/src/sampling_svd.py b/src/sampling_svd.py
+--- a/src/sampling_svd.py
++++ b/src/sampling_svd.py
+@@ -841,7 +841,14 @@ def sample_svd(args, accelerator, pipeline, weight_dtype,
+ 		while num_frames_remaining > 0:
+ 			num_frames_to_process = min(num_frames_batch, num_frames_remaining)
+-			conditional_video_input = conditional_video_equi[:, :num_frames_to_process] if round == 0 else \
+-				torch.cat([generated_frames_this[:, :, -blend_frames:].permute(0, 2, 1, 3, 4),
+-						conditional_video_equi[:, num_frames_processed+blend_frames: num_frames_processed+num_frames_to_process]], 
+-						dim=1)
++			if round == 0 or getattr(args, 'reset_batch_conditioning', False):
++				conditional_video_input = conditional_video_equi[
++					:, num_frames_processed:num_frames_processed+num_frames_to_process
++				]
++			else:
++				conditional_video_input = torch.cat([
++					generated_frames_this[:, :, -blend_frames:].permute(0, 2, 1, 3, 4),
++					conditional_video_equi[
++						:, num_frames_processed+blend_frames:num_frames_processed+num_frames_to_process
++					],
++				], dim=1)

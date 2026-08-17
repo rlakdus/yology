@@ -7,6 +7,10 @@ export type LiveHeartRateSample = {
   baseline?: number | null;
   z_score?: number;
   is_anomaly?: boolean;
+  motion?: number | null;
+  movement_state?: "still" | "light" | "active" | "unknown";
+  active_energy_kcal?: number | null;
+  distance_m?: number | null;
 };
 
 type LiveHeartRateState = {
@@ -59,6 +63,13 @@ export const useLiveHeartRate = (): LiveHeartRateState => {
               z_score:
                 typeof data.z_score === "number" ? data.z_score : 0,
               is_anomaly: Boolean(data.is_anomaly),
+              motion: typeof data.motion === "number" ? data.motion : null,
+              movement_state: ["still", "light", "active", "unknown"].includes(data.movement_state)
+                ? data.movement_state
+                : "unknown",
+              active_energy_kcal:
+                typeof data.active_energy_kcal === "number" ? data.active_energy_kcal : null,
+              distance_m: typeof data.distance_m === "number" ? data.distance_m : null,
             });
           }
         } catch {

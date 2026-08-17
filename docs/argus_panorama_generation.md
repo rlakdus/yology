@@ -1,47 +1,29 @@
 # event_003 Argus panorama-video handoff
 
-> 재현 가능한 GPU 실행기와 환경 구성은
-> [`gpu_360_video_generation.md`](gpu_360_video_generation.md)를 따른다. 이 문서는
-> event_003의 결과 계약과 검수 기준을 설명한다.
+재현 가능한 환경과 실행법은 [`gpu_360_video_generation.md`](gpu_360_video_generation.md), 이벤트·시간 규칙은 [`event_data_pipeline.md`](event_data_pipeline.md)를 따른다.
 
-The web application consumes a completed mono equirectangular video at:
+웹 애플리케이션의 최종 영상 경로는 다음과 같다.
 
-`events/student/event_003/panorama/mongolia-horse-360.mp4`
+`events/student/event_003/panorama/mongolia-horse-riding-360.mp4`
 
-The generated file is intentionally not replaced by a fake local conversion. Until the
-external GPU job produces it, `generation.json` remains `pending_external_gpu` and the
-VR page displays the static panorama with a retryable video error.
+## 생성 계약
 
-## External GPU job
+1. `source/mongolia-horse-riding.original.mp4`의 SHA-256을 작업 설정과 대조한다.
+2. 원본 종횡비를 유지하고 첫 프레임을 메인 시점으로 삼아 줌·롤을 상쇄한다. 장면의 실제 이동은 유지한다.
+3. Argus를 1024×512, 고정 FOV 90°, 고정 roll/pitch/yaw 0으로 실행한다. 236프레임 전체를 25프레임 내부 배치와 4프레임 겹침으로 처리하되, 각 배치는 기록 프레임에서 다시 조건화해 이전 생성 결과의 오류가 누적되지 않게 한다.
+4. VEnhancer 타일 인코딩으로 3072×1536까지 향상하고 원본 정면을 직접 재투영해 4096×2048로 합성한다.
+5. 전처리한 정면을 동일한 고정 카메라 규격으로 재투영하되, 오디오는 변경하지 않은 원본에서 가져온다.
+6. H.264 High Profile, `yuv420p`, AAC, MP4 `faststart`로 인코딩한다.
+7. `generation.json`에 체크포인트, 옵션, 입력·출력 해시와 전처리 보고서를 기록한다.
 
-1. Use a Linux CUDA worker and install the three environments and checkpoints described
-   by the official [Argus repository](https://github.com/Red-Fairy/argus-code): camera
-   trajectory prediction, 360 video generation, and VEnhancer.
-2. Use `source/mongolia-horse-riding.original.mp4` as the source. Run the full-video sampling path at
-   1024x512 with 25-frame internal batches. Do not generate independent clips.
-3. Enhance the generated panorama to 2048x1024.
-4. Using Argus camera calibration and trajectory output, project the original source
-   frames back into their recorded forward field of view. Keep the center at full source
-   weight and blend only the outer 5% of the projection mask.
-5. Make the equirectangular left/right boundary wrap continuously, retain the exact source
-   frame rate and duration, and mux the original audio.
-6. Encode H.264 High Profile, `yuv420p`, AAC audio, with MP4 `faststart` enabled.
+AI가 만든 주변 시야는 가설적 복원이며, 재투영된 정면만 기록된 영상 증거로 취급한다.
 
-Store the checkpoint identifier and final parameters in `generation.json`, then change
-its status to `complete`. Generated surroundings must remain identified as an AI
-hypothesis; only the reprojected forward field is recorded evidence.
-
-## Acceptance checks
-
-Run this on the GPU worker, where `ffprobe` is installed:
+## 검수
 
 ```bash
-python scripts/validate_panorama_video.py \
-  events/student/event_003/panorama/mongolia-horse-360.mp4 \
+conda run -n 360VG python scripts/validate_panorama_video.py \
+  events/student/event_003/panorama/mongolia-horse-riding-360.mp4 \
   --source events/student/event_003/source/mongolia-horse-riding.original.mp4
 ```
 
-Then visually inspect the 0°/360° seam, temporal batch boundaries, and the feather around
-the recorded forward view. The validator covers projection dimensions, browser codecs,
-duration, frame rate, and audio presence; those visual consistency checks still require
-review of the generated frames.
+자동 검사는 해상도·2:1 비율·코덱·픽셀 포맷·길이·FPS·오디오를 확인한다. 추가로 첫 시점이 주 장면인지, 0°/360° seam과 내부 배치 경계가 자연스러운지, 정면 페더에 이중상이 없는지 시각 검토한다.

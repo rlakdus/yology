@@ -68,17 +68,17 @@ const reconstructionData: Record<
   ReconstructionDetail
 > = {
   /* =========================
-     시험 / 면접
+     면접 결과 확인
   ========================= */
 
-  "exam-interview": {
+  "interview-result": {
     category: "STUDY · HIGH FOCUS",
     icon: GraduationCap,
 
     confidence: 91,
 
     interpretation:
-      "시험과 면접을 앞둔 상황에서 심박과 스트레스 지표가 동시에 증가했습니다. 일정 정보와 시간대, 생체 신호를 함께 분석했을 때 높은 긴장감과 집중이 공존했던 순간으로 추정됩니다.",
+      "면접 결과를 확인하는 상황에서 심박과 스트레스 지표가 동시에 증가했습니다. 일정 정보와 시간대, 생체 신호를 함께 분석했을 때 높은 긴장감과 집중이 공존했던 순간으로 추정됩니다.",
 
     sensorItems: [
       {
@@ -110,9 +110,9 @@ const reconstructionData: Record<
     evidence: [
       {
         type: "Schedule",
-        title: "시험 일정",
+        title: "결과 발표 일정",
         description:
-          "해당 시간대에 예정된 시험 및 일정 기록",
+          "해당 시간대에 예정된 면접 결과 발표 일정과 확인 기록",
         icon: CalendarDays,
       },
       {
@@ -126,7 +126,7 @@ const reconstructionData: Record<
         type: "Message",
         title: "대화 기록",
         description:
-          "시험 직전 상황을 확인할 수 있는 메시지 맥락",
+          "결과 발표를 기다리고 확인한 메시지 맥락",
         icon: MessageCircle,
       },
     ],
@@ -136,7 +136,7 @@ const reconstructionData: Record<
         time: "14:03",
         title: "집중 상태 시작",
         description:
-          "시험 직전 학습 활동이 지속적으로 감지되었습니다.",
+          "결과 발표 전 대기 상태가 지속적으로 감지되었습니다.",
         accent: "blue",
       },
       {
@@ -182,7 +182,7 @@ const reconstructionData: Record<
     ],
 
     result:
-      "높은 긴장감과 집중이 동시에 나타난 시험 직전의 순간",
+      "높은 긴장감과 집중이 동시에 나타난 면접 결과를 확인하던 순간",
   },
 
   /* =========================
@@ -557,7 +557,7 @@ type BodyProfilePreset = {
 };
 
 const bodyProfilePresets: Record<string, BodyProfilePreset> = {
-  "exam-interview": {
+  "interview-result": {
     intensity: 84, movement: 18, persistence: 76, recovery: 42, stability: 71,
     baseline: 74, zScore: 2.4, motion: 0.024, energy: 1.8, oxygen: 97, respiration: 22,
   },
@@ -589,15 +589,15 @@ const Reconstruction = () => {
   const location = useLocation();
 
   const {
-    momentId = "exam-interview",
+    momentId = "interview-result",
 
-    momentTitle = "시험·면접 직전후",
+    momentTitle = "면접 결과 확인",
 
     momentSubtitle =
       "긴장과 몰입이 가장 높았던 순간",
 
     momentDescription =
-      "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
+      "면접 결과를 확인하며 긴장과 안도가 교차했던 순간을 다시 살펴봅니다.",
 
     momentDate = "2026.04",
 
@@ -630,7 +630,7 @@ const Reconstruction = () => {
 
   const detail =
     reconstructionData[momentId] ??
-    reconstructionData["exam-interview"];
+    reconstructionData["interview-result"];
 
   const displayDate =
     momentExactDate ||
@@ -640,7 +640,7 @@ const Reconstruction = () => {
 
   const preset =
     bodyProfilePresets[momentId] ??
-    bodyProfilePresets["exam-interview"];
+    bodyProfilePresets["interview-result"];
 
   const currentHeartRate = parseBpm(
     eventHeartRate ?? detail.sensorItems.find((item) => item.label === "Heart Rate")?.value,
@@ -666,14 +666,14 @@ const Reconstruction = () => {
   ];
 
   const narrativeFallbacks: Record<string, { title: string; lead: string; paragraphs: string[]; closing: string; mode: "preview" }> = {
-    "exam-interview": {
-      title: "문 앞에서, 몸이 먼저 알고 있던 것",
+    "interview-result": {
+      title: "결과를 열기 전, 몸이 먼저 알고 있던 것",
       lead: "14시 25분, 움직임은 크지 않았지만 심박은 평소 기준선보다 뚜렷하게 올라가 있었습니다. 몸은 조용히 앉아 있었고, 신호만 조금 더 빠르게 움직이고 있었습니다.",
       paragraphs: [
-        "시험과 면접이 예정된 오후. 일정 기록과 시간대가 겹치는 동안 심박은 112 bpm까지 올라갔고, 개인 기준선과의 차이는 +2.4σ로 커졌습니다. 큰 움직임이 함께 나타나지 않았다는 점은 이 변화가 단순한 신체 활동만으로 설명되지는 않는다는 단서를 남깁니다.",
-        "VIVIA는 이 숫자에 감정의 이름을 붙이지 않습니다. 대신 그때의 몸이 평소와 달랐다는 사실, 그리고 그 변화가 시험 직전의 맥락과 같은 시간 위에 놓여 있었다는 것을 기억의 재료로 남깁니다."
+        "면접 결과가 발표된 오후. 일정 기록과 시간대가 겹치는 동안 심박은 112 bpm까지 올라갔고, 개인 기준선과의 차이는 +2.4σ로 커졌습니다. 큰 움직임이 함께 나타나지 않았다는 점은 이 변화가 단순한 신체 활동만으로 설명되지는 않는다는 단서를 남깁니다.",
+        "VIVIA는 이 숫자에 감정의 이름을 붙이지 않습니다. 대신 그때의 몸이 평소와 달랐다는 사실, 그리고 그 변화가 결과 확인의 맥락과 같은 시간 위에 놓여 있었다는 것을 기억의 재료로 남깁니다."
       ],
-      closing: "기억은 장면으로만 남지 않습니다. 때로는 문을 열기 직전, 몸이 먼저 남긴 작은 속도 차이로 남습니다.",
+      closing: "기억은 장면으로만 남지 않습니다. 때로는 결과를 열기 직전, 몸이 먼저 남긴 작은 속도 차이로 남습니다.",
       mode: "preview",
     },
     "first-concert": {
@@ -727,7 +727,7 @@ const Reconstruction = () => {
     evidence: detail.evidence.map((item) => `${item.type}: ${item.title} — ${item.description}`),
   };
 
-  const narrativeFallback = narrativeFallbacks[momentId] ?? narrativeFallbacks["exam-interview"];
+  const narrativeFallback = narrativeFallbacks[momentId] ?? narrativeFallbacks["interview-result"];
 
   const snapshotItems: SnapshotItem[] = [
     {

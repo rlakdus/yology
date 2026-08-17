@@ -43,6 +43,8 @@ def main() -> int:
     parser.add_argument("--source", required=True, type=Path, help="Original perspective MP4")
     parser.add_argument("--duration-tolerance", type=float, default=0.08)
     parser.add_argument("--fps-tolerance", type=float, default=0.01)
+    parser.add_argument("--expected-width", type=int, default=2048)
+    parser.add_argument("--expected-height", type=int, default=1024)
     args = parser.parse_args()
 
     for path in (args.source, args.output):
@@ -63,8 +65,10 @@ def main() -> int:
     else:
         width = int(output_video.get("width", 0))
         height = int(output_video.get("height", 0))
-        if (width, height) != (2048, 1024):
-            failures.append(f"expected 2048x1024, got {width}x{height}")
+        if (width, height) != (args.expected_width, args.expected_height):
+            failures.append(
+                f"expected {args.expected_width}x{args.expected_height}, got {width}x{height}"
+            )
         if width != height * 2:
             failures.append("output is not exactly 2:1 equirectangular")
         if output_video.get("codec_name") != "h264":
@@ -97,7 +101,7 @@ def main() -> int:
         return 1
 
     print(
-        f"OK: 2048x1024 H.264/AAC, {output_duration:.3f}s, "
+        f"OK: {args.expected_width}x{args.expected_height} H.264/AAC, {output_duration:.3f}s, "
         f"{frame_rate(output_video.get('avg_frame_rate')):.3f} fps"
     )
     return 0

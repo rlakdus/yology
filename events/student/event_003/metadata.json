@@ -1,24 +1,48 @@
 {
   "event_id": "event_003",
-  "title": "Mongolia Horse Riding",
+  "slug": "mongolia-trip",
+  "title": "몽골 여행",
+  "subtitle": "초원을 달리던 여름",
   "persona": "student",
   "emotion": "exhilaration",
   "description": "1인칭 승마 영상을 중심으로 몽골 초원의 주변 시야를 확장한 VR 재현",
-  "start_time": null,
-  "end_time": null,
+  "location": "Mongolia",
+  "icon": "plane",
+  "start_time": "2026-07-25T16:15:39+09:00",
+  "end_time": "2026-07-25T16:18:00+09:00",
   "vr_scene": "mongolia_horse_riding",
+  "display": {
+    "month": "2026.07",
+    "peak_at": "2026-07-25T16:18:00+09:00",
+    "timezone": "Asia/Seoul",
+    "date_basis": "ui_configured"
+  },
+  "availability": {
+    "anomaly_ready": true,
+    "source_video_ready": true,
+    "panorama_ready": true,
+    "vr_ready": true
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": -25,
+    "initial_pitch_deg": -5
+  },
+  "source_mapping": {
+    "status": "ready",
+    "person": "student",
+    "anomaly_file": "persona/data/20s_trip.json",
+    "sensor_file": "persona/data/20s_trip.csv",
+    "source_peak_at": "2026-07-25T20:56:15+09:00",
+    "display_peak_at": "2026-07-25T16:18:00+09:00",
+    "media_time_basis": "source_peak_assumed"
+  },
   "panorama": {
     "file": "panorama/mongolia-horse-360.generated.png",
     "generated": true,
     "mode": "recorded_anchor",
     "anchor_yaw_deg": 0,
-    "source_note": "AI-generated 360 environment anchored to a representative frame from source/mongolia-horse-riding.original.mp4; the front video is recorded and the surrounding view is a generated hypothesis"
-  },
-  "panorama_video": {
-    "file": "panorama/mongolia-horse-360.mp4",
-    "projection": "equirectangular",
-    "fallback_image_file": "panorama/mongolia-horse-360.generated.png",
-    "yaw_offset_deg": 0
+    "source_note": "AI-generated 360 environment anchored to a representative source frame"
   },
   "experience": {
     "intro": {
@@ -37,7 +61,15 @@
   },
   "assets": [
     {
-      "file": "source/mongolia-horse-riding.original.mp4"
+      "file": "source/mongolia-horse-riding.original.mp4",
+      "taken_at": "2026-07-25T16:18:00+09:00",
+      "source_time_basis": "ui_configured_peak"
     }
-  ]
+  ],
+  "panorama_video": {
+    "file": "panorama/mongolia-horse-riding-360.mp4",
+    "projection": "equirectangular",
+    "fallback_image_file": "panorama/mongolia-horse-360.generated.png",
+    "yaw_offset_deg": -25.0
+  }
 }

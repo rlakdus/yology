@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- stream samples intentionally drive local trace and timers */
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import {
@@ -204,7 +205,6 @@ const LiveDemo = () => {
 
   const currentBpm = activeSample ? Math.round(activeSample.bpm) : "--";
   const baseline = activeSample?.baseline ?? null;
-  const zScore = activeSample?.z_score ?? 0;
   const motion = activeSample?.motion ?? null;
   const movementState = activeSample?.movement_state ?? "unknown";
   const activeEnergy = activeSample?.active_energy_kcal ?? null;

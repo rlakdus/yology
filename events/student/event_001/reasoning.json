@@ -1,9 +1,7 @@
 {
-  "basis": "he의 2026-08-12 15:00~15:10 Apple Watch 생체 데이터와 면접 결과 확인 영상",
-  "evidence": "15:01:05 110bpm, 15:03:36 98bpm, 15:07:39 154bpm으로 결과 확인 구간에서 급격한 심박 상승이 기록됨",
-  "scene_status": "recorded_anchor",
-  "selected_videos": [
-    "source/exam-interview.original.mov"
-  ],
-  "warning": "영상은 해당 순간의 원본 기록이며, 향후 확장되는 주변 360° 시야는 AI 재현 영역으로 구분해야 한다."
+  "basis": "2026-08-12 15:00~15:10의 면접 결과 확인 구간과 원본 영상. 생체 원본 CSV가 복구되기 전까지 검증 대기 상태다.",
+  "evidence": "기록된 최고 심박 시각 15:07:39을 UI의 2026-04-12 14:25에 맞추도록 전체 타임라인을 이동한다.",
+  "scene_status": "recorded_anchor_pending_data",
+  "selected_videos": ["source/interview-result.original.mov"],
+  "warning": "정면 영상은 원본 기록이지만 주변 360° 시야는 AI 재현 영역이다. 출처 CSV가 없으므로 현재 센서 값은 웹에 검증 데이터로 내보내지 않는다."
 }

@@ -2,9 +2,11 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
   BackSide,
+  ClampToEdgeWrapping,
   LinearFilter,
   Mesh,
   MeshBasicMaterial,
+  RepeatWrapping,
   SRGBColorSpace,
   VideoTexture,
 } from "three";
@@ -18,6 +20,7 @@ type PanoramaVideoEnvironmentProps = {
   panorama: NonNullable<VrEvent["panorama_video"]>;
   playback: PlaybackRefs;
   video: HTMLVideoElement;
+  view?: VrEvent["view"];
 };
 
 /**
@@ -31,6 +34,7 @@ const PanoramaVideoEnvironment = ({
   panorama,
   playback,
   video,
+  view,
 }: PanoramaVideoEnvironmentProps) => {
   const meshRef = useRef<Mesh>(null);
   const gl = useThree((state) => state.gl);
@@ -41,8 +45,11 @@ const PanoramaVideoEnvironment = ({
     next.minFilter = LinearFilter;
     next.magFilter = LinearFilter;
     next.generateMipmaps = false;
+    next.wrapS = RepeatWrapping;
+    next.wrapT = ClampToEdgeWrapping;
+    next.anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy());
     return next;
-  }, [video]);
+  }, [gl, video]);
 
   const material = useMemo(() => new MeshBasicMaterial({
     map: texture,
@@ -75,7 +82,11 @@ const PanoramaVideoEnvironment = ({
     <mesh
       ref={meshRef}
       material={material}
-      rotation={[0, Math.PI / 2 + panorama.yaw_offset_deg * Math.PI / 180, 0]}
+      rotation={[
+        -(view?.initial_pitch_deg ?? 0) * Math.PI / 180,
+        Math.PI / 2 + (view ? -view.initial_yaw_deg : panorama.yaw_offset_deg) * Math.PI / 180,
+        0,
+      ]}
       renderOrder={-10}
       frustumCulled={false}
     >

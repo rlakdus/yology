@@ -1,0 +1,11 @@
+diff --git a/inference.py b/inference.py
+--- a/inference.py
++++ b/inference.py
+@@ -196,6 +196,7 @@
+ 
+ 				else:
+ 					fov_x = args.fixed_fov
++					hw_ratio = video.shape[-2] / video.shape[-1]
+ 					assert args.predict_camera_motion is False, "Predict camera motion is not supported with fixed fov."
+ 
+ 				if args.predict_camera_motion:

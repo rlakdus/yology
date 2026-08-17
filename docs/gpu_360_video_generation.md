@@ -27,7 +27,7 @@ Argus는 MIT 라이선스의 외부 프로젝트이며 이 저장소에 소스�
 - Git, Conda, FFmpeg/ffprobe
 - 체크포인트 및 중간 영상에 충분한 로컬 저장 공간
 
-다음 명령으로 고정된 Argus와 서브모듈을 내려받고, 카메라 자세 기록용 작은 패치를
+다음 명령으로 고정된 Argus와 서브모듈을 내려받고, 고정 FOV 종횡비, 카메라 메타데이터 기록, 현재 Diffusers용 FP16 호환 패치를
 적용한다.
 
 ```bash
@@ -43,11 +43,11 @@ ARGUS_DIR=/mnt/fast/argus-code bash scripts/gpu360/bootstrap_argus.sh
 
 ## 2. Conda 환경
 
-공식 Argus 구조처럼 생성·카메라 추정과 영상 향상을 분리한다. PyTorch 설치 명령은
+공식 Argus 구조처럼 고정 시점 전처리·생성과 영상 향상을 분리한다. PyTorch 설치 명령은
 GPU 드라이버와 CUDA 버전에 따라 달라지므로 작업자가 PyTorch 공식 선택기를 이용해
 각 환경에 맞는 빌드를 먼저 설치해야 한다.
 
-### `360VG`: Argus 생성과 MASt3R 카메라 추정
+### `360VG`: 고정 시점 전처리와 Argus 생성
 
 ```bash
 conda create -n 360VG python=3.10 -y
@@ -65,7 +65,7 @@ pip install . --no-build-isolation
 cd ../..
 ```
 
-### `venhancer`: 1024×512 → 2048×1024 향상
+### `venhancer`: 1024×512 → 3072×1536 생성 향상
 
 ```bash
 conda create -n venhancer python=3.10 -y
@@ -85,7 +85,7 @@ GPU 없이도 원본 경로와 SHA-256, 출력 규칙을 확인할 수 있다.
 
 ```bash
 python scripts/gpu360/run_pipeline.py \
-  --job gpu360/jobs/student-event_003.json \
+  --job gpu360/jobs/student/event_003.json \
   --check-config
 ```
 
@@ -93,9 +93,10 @@ python scripts/gpu360/run_pipeline.py \
 
 | 설정 | 원본 | 예정 출력 |
 | --- | --- | --- |
-| `student-event_001.json` | 면접 결과 확인 | `exam-interview-360.mp4` |
-| `student-event_003.json` | 몽골 승마 | `mongolia-horse-360.mp4` |
-| `student-event_004.json` | 영화 관람 | `favorite-movie-360.mp4` |
+| `student/event_001.json` | 면접 결과 확인 | `interview-result-360.mp4` |
+| `student/event_002.json` | 대학 입학 후 첫 콘서트 | `first-concert-360.mp4` |
+| `student/event_003.json` | 몽골 승마 | `mongolia-horse-riding-360.mp4` |
+| `student/event_004.json` | 영화 관람 | `favorite-movie-360.mp4` |
 
 ## 4. 전체 파이프라인 실행
 
@@ -106,37 +107,65 @@ export ARGUS_UNET_PATH=/mnt/models/argus/checkpoint
 export ARGUS_CHECKPOINT_ID=official-unet-checkpoint
 
 python scripts/gpu360/run_pipeline.py \
-  --job gpu360/jobs/student-event_003.json
+  --job gpu360/jobs/student/event_003.json
 ```
 
 실행기는 다음 순서를 보장한다.
 
 1. 원본 SHA-256, CUDA, Conda 환경, ffmpeg를 검사한다.
-2. ffprobe의 전체 프레임 수를 Argus `--num_frames`로 전달한다.
-3. `--full_sampling` 한 작업 안에서 25프레임 배치와 4프레임 겹침을 사용한다.
-4. VEnhancer로 2048×1024까지 2배 향상한다.
-5. Argus가 사용한 FOV와 프레임별 roll/pitch/yaw로 원본 정면을 다시 투영한다.
-6. 투영 가장자리 5%를 페더링하고 좌우 seam을 좁게 연결한다.
-7. 원본 FPS와 오디오로 H.264 High Profile, yuv420p, AAC, faststart MP4를 만든다.
-8. `validate_panorama_video.py` 통과 후 이벤트 출력과 생성 기록을 갱신한다.
+2. 원본 종횡비를 보존하고 줌·롤을 상쇄한 고정 시점 영상을 준비한다.
+3. ffprobe의 전체 프레임 수를 Argus `--num_frames`로 전달한다.
+4. `--full_sampling` 한 작업 안에서 25프레임 배치와 4프레임 겹침을 사용한다. 각 배치는 이전 생성 파노라마가 아니라 해당 시점의 기록 프레임으로 다시 조건화해 누적 왜곡을 막는다.
+5. VEnhancer의 타일 VAE 인코딩으로 3072×1536까지 3배 향상한다.
+6. 생성 배경을 Lanczos로 4096×2048에 배치하고, 고정 FOV와 0° roll/pitch/yaw로 전처리한 정면은 원본 1280×720에서 곧바로 4K 좌표에 재투영한다.
+7. 투영 가장자리 5%를 페더링하고 좌우 seam을 좁게 연결한다.
+8. 원본 FPS와 오디오로 H.264 High Profile, yuv420p, AAC, faststart MP4를 만든다.
+9. `validate_panorama_video.py` 통과 후 이벤트 출력과 생성 기록을 갱신한다.
 
 긴 작업이 중단되면 완료된 단계 다음부터 재개할 수 있다.
 
 ```bash
 # Argus 결과부터 향상 재개
 python scripts/gpu360/run_pipeline.py \
-  --job gpu360/jobs/student-event_003.json \
+  --job gpu360/jobs/student/event_003.json \
   --from-stage enhance
 
 # 합성 결과만 다시 검증·배치
 python scripts/gpu360/run_pipeline.py \
-  --job gpu360/jobs/student-event_003.json \
+  --job gpu360/jobs/student/event_003.json \
   --from-stage validate
 ```
 
 기존 최종 출력 또는 중간 합성 결과를 의도적으로 교체할 때만 `--force`를 사용한다.
 
-## 5. 완료 후 검수
+`event_003`은 모든 시점에서 생성 주변부 움직임을 100% 유지한다. 4초 이후에 발생했던
+채도 상승과 삼각형 경계는 프레임을 고정하는 후처리가 아니라 Argus 배치 조건 초기화로
+해결한다. 정면 마스크는 바깥쪽 1.5%를 제외하고 10% 폭의 smoothstep 페더를 사용한다.
+
+## 5. 다중 GPU로 남은 학생 이벤트 동시 생성
+
+GPU가 3개 이상 보이는 한 워크스페이스에서는 다음 실행기로 남은 세 이벤트를 동시에
+생성한다. 각 하위 프로세스에는 하나의 물리 GPU만 노출되며, 프로세스 내부에서는 항상
+`cuda:0`을 사용한다.
+
+| 이벤트 | 물리 GPU |
+| --- | --- |
+| `event_002` | GPU 0 |
+| `event_001` | GPU 1 |
+| `event_004` | GPU 2 |
+
+```bash
+python scripts/gpu360/run_parallel_events.py --check-config
+nvidia-smi -L
+python scripts/gpu360/run_parallel_events.py
+```
+
+이벤트별 로그는 `.gpu360/logs/parallel-<UTC 시각>/`에 분리한다. 한 작업이 실패해도
+다른 GPU 작업은 중단하지 않으며, 세 작업이 모두 성공한 경우에만 학생 이벤트 에셋을
+프런트엔드로 한 번 내보낸다. 중간 단계부터 다시 시작할 때는 모든 대상에 동일한
+`--from-stage`를 전달한다.
+
+## 6. 완료 후 검수
 
 자동 검증은 해상도, 2:1 비율, H.264/yuv420p, AAC, FPS와 길이를 확인한다. 다음은
 사람이 직접 확인해야 한다.
@@ -150,6 +179,6 @@ python scripts/gpu360/run_pipeline.py \
 완성 MP4는 크기를 확인한 뒤 Git LFS 또는 팀의 대용량 에셋 저장소를 사용한다.
 체크포인트와 `gpu360/work`은 커밋하지 않는다.
 
-`event_003` 메타데이터는 이미 생성될 `mongolia-horse-360.mp4`를 참조한다.
-`event_001`과 `event_004`는 검수가 끝날 때까지 현재 원본 평면 영상을 유지하며,
+`event_003` 생성과 검증이 끝나면 실행기가 메타데이터를 `mongolia-horse-riding-360.mp4`로 자동 전환한다.
+`event_001`, `event_002`, `event_004`는 검수가 끝날 때까지 현재 원본 평면 영상을 유지하며,
 검수 후 각 `metadata.json`에 `panorama_video`를 추가해 명시적으로 전환한다.

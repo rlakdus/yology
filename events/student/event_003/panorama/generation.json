@@ -1,34 +1,110 @@
 {
-  "status": "pending_external_gpu",
+  "status": "complete",
+  "completed_at": "2026-08-17T00:25:35+00:00",
   "model": {
     "name": "Beyond the Frame (Argus)",
-    "repository": "https://github.com/Red-Fairy/argus-code",
-    "checkpoint": null
+    "repository": "https://github.com/Red-Fairy/argus-code.git",
+    "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
+    "checkpoint": "official-argus-unet"
   },
   "source": {
-    "file": "../source/mongolia-horse-riding.original.mp4",
-    "sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70"
+    "file": "events/student/event_003/source/mongolia-horse-riding.original.mp4",
+    "sha256": "1f85b24140590757172cd4a01ddf49d747f3e799c17e5cbb5ebf355f9a3bbe70",
+    "duration_seconds": 9.833333,
+    "fps": "24",
+    "fps_float": 24.0,
+    "frames": 236,
+    "width": 1280,
+    "height": 720,
+    "video_codec": "h264"
+  },
+  "preparation": {
+    "source": "events/student/event_003/source/mongolia-horse-riding.original.mp4",
+    "output": "gpu360/work/student/event_003/prepared/fixed-view.mp4",
+    "frames": 236,
+    "fps": 24.0,
+    "source_width": 1280,
+    "source_height": 720,
+    "display_aspect_ratio": 1.7777777777777777,
+    "anchor_frame_seconds": 0.0,
+    "anchor_frame_index": 0,
+    "tracking_failures": 0,
+    "tracking_failure_ratio": 0.0,
+    "common_crop": {
+      "x": 90,
+      "y": 51,
+      "width": 1100,
+      "height": 618,
+      "valid_area_ratio": 0.73763
+    },
+    "inverse_scale_range": [
+      0.977579,
+      1.000588
+    ],
+    "inverse_rotation_deg_range": [
+      -4.630929,
+      0.0
+    ],
+    "zoom_removed": true,
+    "roll_removed": true,
+    "translation_preserved": true,
+    "source_orientation_metadata_applied": true,
+    "aspect_policy": "preserve",
+    "probe": {
+      "duration_seconds": 9.833333,
+      "fps": "24",
+      "fps_float": 24.0,
+      "frames": 236,
+      "width": 1280,
+      "height": 720,
+      "video_codec": "mpeg4"
+    }
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": -25,
+    "initial_pitch_deg": -5
   },
   "generation": {
     "width": 1024,
     "height": 512,
-    "full_sampling": true,
     "batch_frames": 25,
+    "blend_frames": 4,
+    "guidance_scale": 3.0,
+    "inference_steps": 25,
+    "fixed_fov_deg": 90,
+    "camera_motion_prediction": false,
+    "rotation_during_inference": false,
+    "roll_pitch_yaw": "fixed_zero",
+    "full_sampling": true,
     "preserve_source_timeline": true,
     "generated_region": "outside_recorded_front_view"
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
   },
   "composite": {
     "recorded_front_preserved": true,
     "edge_feather": 0.05,
-    "seam_wrap": true
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": false
   },
   "output": {
-    "file": "mongolia-horse-360.mp4",
+    "file": "events/student/event_003/panorama/mongolia-horse-riding-360.mp4",
+    "sha256": "c4a920e7d44d8ce23052201d471917f7b65ff067f25d8b9cca092d2d2dcb8d0f",
     "width": 2048,
     "height": 1024,
     "video_codec": "h264",
     "pixel_format": "yuv420p",
     "audio": "original_aac",
-    "faststart": true
+    "faststart": true,
+    "stable_backup_file": "events/student/event_003/panorama/mongolia-horse-riding-360-stable-backup.mp4",
+    "stable_backup_sha256": "c30dcb2f9e6353aced43c33feafea3f227c7b874e404ae33db2d9837d8fb54a5"
   }
 }

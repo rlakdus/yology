@@ -21,6 +21,25 @@ export type VrEvent = {
   start_time: string | null;
   end_time: string | null;
   duration_min: number;
+  slug?: string;
+  display?: {
+    month: string;
+    peak_at: string;
+    timezone: string;
+    date_basis?: string;
+  };
+  availability?: {
+    anomaly_ready: boolean;
+    source_video_ready: boolean;
+    panorama_ready: boolean;
+    vr_ready: boolean;
+  };
+  view?: {
+    anchor_frame_seconds: number;
+    initial_yaw_deg: number;
+    initial_pitch_deg: number;
+  };
+  anomaly?: Record<string, unknown> | null;
   data_provenance?: {
     person: string;
     vitals_file: string;
@@ -46,7 +65,7 @@ export type VrEvent = {
   chats: string[];
   sensor: {
     heart_rate?: number[];
-    heart_rate_source?: "recorded" | "placeholder";
+    heart_rate_source?: "recorded" | "placeholder" | "unavailable";
     heart_rate_timestamps?: string[];
     hrv_sdnn?: number[];
     hrv_sdnn_timestamps?: string[];

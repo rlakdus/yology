@@ -1,18 +1,41 @@
 {
   "event_id": "event_004",
+  "slug": "favorite-movie",
   "title": "좋아하는 영화 관람",
+  "subtitle": "오래 기억하고 싶은 한 장면",
   "persona": "student",
   "emotion": "emotional_immersion",
   "description": "영화를 관람하며 안정적인 박동 속에서 장면에 따라 감정적 각성이 나타났던 순간",
-  "start_time": "2026-08-12T16:00:00+09:00",
-  "end_time": "2026-08-12T18:00:00+09:00",
+  "location": "Cinema",
+  "icon": "film",
+  "start_time": "2026-08-12T20:15:00+09:00",
+  "end_time": "2026-08-12T22:15:00+09:00",
   "vr_scene": "favorite_movie",
-  "data_provenance": {
+  "display": {
+    "month": "2026.08",
+    "peak_at": "2026-08-12T20:31:00+09:00",
+    "timezone": "Asia/Seoul",
+    "date_basis": "ui_configured"
+  },
+  "availability": {
+    "anomaly_ready": false,
+    "source_video_ready": true,
+    "panorama_ready": false,
+    "vr_ready": false
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "source_mapping": {
+    "status": "awaiting_source_data",
     "person": "he",
     "vitals_file": "data/output/export_he_vitals.csv",
-    "timezone": "Asia/Seoul",
-    "window_start": "2026-08-12T16:00:00+09:00",
-    "window_end": "2026-08-12T18:00:00+09:00"
+    "source_window_start": "2026-08-12T16:00:00+09:00",
+    "source_window_end": "2026-08-12T18:00:00+09:00",
+    "source_peak_at": "2026-08-12T16:16:00+09:00",
+    "display_peak_at": "2026-08-12T20:31:00+09:00"
   },
   "experience": {
     "intro": {
@@ -33,7 +56,8 @@
   "assets": [
     {
       "file": "source/favorite-movie.original.mov",
-      "taken_at": "2026-08-12T16:00:00+09:00"
+      "taken_at": "2026-08-12T20:15:00+09:00",
+      "source_taken_at": "2026-08-12T16:00:00+09:00"
     }
   ]
 }

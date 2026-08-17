@@ -79,9 +79,10 @@ const fragmentShader = /* glsl */ `
 type PanoramaEnvironmentProps = {
   panorama: NonNullable<VrEvent["panorama"]>;
   playback: PlaybackRefs;
+  view?: VrEvent["view"];
 };
 
-const PanoramaEnvironment = ({ panorama, playback }: PanoramaEnvironmentProps) => {
+const PanoramaEnvironment = ({ panorama, playback, view }: PanoramaEnvironmentProps) => {
   const meshRef = useRef<Mesh>(null);
   const gl = useThree((state) => state.gl);
   const colorTexture = useTexture(panorama.src);
@@ -125,7 +126,11 @@ const PanoramaEnvironment = ({ panorama, playback }: PanoramaEnvironmentProps) =
   });
 
   return (
-    <group rotation={[0, Math.PI / 2 + panorama.anchor_yaw_deg * Math.PI / 180, 0]}>
+    <group rotation={[
+      -(view?.initial_pitch_deg ?? 0) * Math.PI / 180,
+      Math.PI / 2 + (view ? -view.initial_yaw_deg : panorama.anchor_yaw_deg) * Math.PI / 180,
+      0,
+    ]}>
       <mesh renderOrder={-21}>
         <sphereGeometry args={[FAR_RADIUS + 0.2, 128, 64]} />
         <meshBasicMaterial map={colorTexture} side={BackSide} />

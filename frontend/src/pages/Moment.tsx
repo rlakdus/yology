@@ -1,6 +1,7 @@
 import "../styles/moment.css";
 
 import SiteNav from "../components/SiteNav";
+import studentCatalog from "../data/student-events.generated.json";
 
 import {
   useRef,
@@ -78,6 +79,14 @@ const ageLabels: Record<
   "40s": "40대",
 };
 
+const studentIconMap: Record<string, LucideIcon> = {
+  "graduation-cap": GraduationCap,
+  music: Music,
+  plane: Plane,
+  film: Film,
+  sparkles: Sparkles,
+};
+
 
 /* ========================================
    MOMENT DATA
@@ -93,109 +102,19 @@ const momentData: Record<
      2026 실제 수집 기록
   ========================= */
 
-  "20s": [
-    {
-      id: "exam-interview",
-
-      date: "2026.04",
-      exactDate: "",
-
-      title: "시험·면접 직전후",
-
-      subtitle:
-        "긴장과 몰입이 가장 높았던 순간",
-
-      description:
-        "시험과 면접을 앞두고 심박과 스트레스가 크게 변화했던 순간을 다시 살펴봅니다.",
-
-      location: "Campus",
-
-      icon: GraduationCap,
-
-      available: true,
-
-      demoSource: "student",
-
-      eventId: "event_001",
-    },
-
-    {
-      id: "first-concert",
-
-      date: "2026.05",
-      exactDate: "",
-
-      title:
-        "대학 입학 후 첫 콘서트",
-
-      subtitle:
-        "처음 마주한 공연장의 열기",
-
-      description:
-        "좋아하는 음악과 사람들 사이에서 설렘과 몰입이 높아졌던 순간을 다시 떠올립니다.",
-
-      location: "Seoul",
-
-      icon: Music,
-
-      available: true,
-
-      demoSource: "student",
-
-      eventId: "event_002",
-    },
-
-    {
-      id: "mongolia-trip",
-
-      date: "2026.07",
-      exactDate: "",
-
-      title: "몽골 여행",
-
-      subtitle:
-        "초원을 달리던 여름",
-
-      description:
-        "끝없이 펼쳐진 초원에서 말을 타며 느꼈던 자유와 설렘을 몸의 신호와 함께 다시 경험합니다.",
-
-      location: "Mongolia",
-
-      icon: Plane,
-
-      available: true,
-
-      demoSource: "student",
-
-      eventId: "event_003",
-    },
-
-    {
-      id: "favorite-movie",
-
-      date: "2026.08",
-      exactDate: "",
-
-      title:
-        "좋아하는 영화 관람",
-
-      subtitle:
-        "오래 기억하고 싶은 한 장면",
-
-      description:
-        "영화를 보며 느꼈던 몰입과 감정의 변화를 몸의 신호와 함께 다시 꺼내봅니다.",
-
-      location: "Cinema",
-
-      icon: Film,
-
-      available: true,
-
-      demoSource: "student",
-
-      eventId: "event_004",
-    },
-  ],
+  "20s": studentCatalog.events.map((event) => ({
+    id: event.id,
+    date: event.month,
+    exactDate: "",
+    title: event.title,
+    subtitle: event.subtitle,
+    description: event.description,
+    location: event.location,
+    icon: studentIconMap[event.icon] ?? Sparkles,
+    available: event.available,
+    demoSource: event.persona,
+    eventId: event.eventId,
+  })),
 
 
   /* =========================
