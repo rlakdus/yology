@@ -64,6 +64,8 @@
     radial-gradient(circle at 50% 44%, rgba(48, 65, 87, .055), transparent 28%),
     linear-gradient(180deg, #fbfcfd 0%, #f3f5f7 100%);
   isolation: isolate;
+
+  --bs-card-offset: 22px;
 }
 
 .bs-body-grid {
@@ -114,15 +116,25 @@
   position: absolute;
   z-index: 4;
   top: var(--anchor-y);
-  width: 260px;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
 }
-.bs-signal-left { left: 22px; }
-.bs-signal-right { right: 22px; }
+.bs-signal-left {
+  left: var(--bs-card-offset);
+  width: calc(var(--anchor-x) - var(--bs-card-offset));
+  flex-direction: row;
+}
+.bs-signal-right {
+  right: var(--bs-card-offset);
+  width: calc(100% - var(--anchor-x) - var(--bs-card-offset));
+  flex-direction: row-reverse;
+}
 
 .bs-signal-card {
   position: relative;
   z-index: 2;
+  flex: 0 1 260px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -172,21 +184,18 @@
 }
 
 .bs-signal-connector {
-  position: absolute;
   z-index: 0;
-  top: 50%;
+  flex: 1 1 auto;
+  min-width: 12px;
   height: 1px;
-  width: clamp(95px, 13vw, 170px);
   background: linear-gradient(90deg, rgba(16,32,74,.07), rgba(53,200,197,.46));
 }
-.bs-signal-left .bs-signal-connector { left: calc(100% - 2px); }
 .bs-signal-right .bs-signal-connector {
-  right: calc(100% - 2px);
   background: linear-gradient(90deg, rgba(155,145,232,.46), rgba(16,32,74,.07));
 }
 .bs-signal-dot {
-  position: absolute;
-  top: calc(50% - 4px);
+  z-index: 1;
+  flex: 0 0 auto;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -194,8 +203,10 @@
   border: 2px solid #35c8c5;
   box-shadow: 0 0 0 5px rgba(53,200,197,.10);
 }
-.bs-signal-left .bs-signal-dot { left: calc(100% + clamp(91px, 13vw, 166px)); }
-.bs-signal-right .bs-signal-dot { right: calc(100% + clamp(91px, 13vw, 166px)); border-color: #9b91e8; box-shadow: 0 0 0 5px rgba(155,145,232,.10); }
+.bs-signal-right .bs-signal-dot {
+  border-color: #9b91e8;
+  box-shadow: 0 0 0 5px rgba(155,145,232,.10);
+}
 
 .bs-body-caption {
   position: absolute;
@@ -270,10 +281,8 @@
 .bs-signature-summary strong { color: #3e4c69; }
 
 @media (max-width: 1100px) {
-  .bs-body-stage { min-height: 700px; }
-  .bs-signal { width: 220px; }
-  .bs-signal-left { left: 10px; }
-  .bs-signal-right { right: 10px; }
+  .bs-body-stage { min-height: 700px; --bs-card-offset: 10px; }
+  .bs-signal-card { flex-basis: 220px; }
 }
 
 @media (max-width: 850px) {
@@ -281,10 +290,11 @@
   .bs-section-title { flex-direction: column; gap: 8px; }
   .bs-body-stage { min-height: 860px; }
   .bs-human-wrap { top: 42%; width: 220px; }
-  .bs-signal { width: calc(50% - 28px); }
+  .bs-signal-left,
+  .bs-signal-right { width: calc(50% - 28px); left: auto; right: auto; }
   .bs-signal-left { left: 8px; }
   .bs-signal-right { right: 8px; }
-  .bs-signal-card { min-height: 66px; padding: 10px; }
+  .bs-signal-card { flex: 1 1 auto; min-height: 66px; padding: 10px; }
   .bs-signal-connector, .bs-signal-dot { display: none; }
   .bs-signal-heart { top: 66% !important; }
   .bs-signal-deviation { top: 75% !important; }

@@ -125,8 +125,6 @@ const BodySignature = ({
                 key={item.label}
                 style={{ "--anchor-x": `${anchor.x}%`, "--anchor-y": `${anchor.y}%` } as React.CSSProperties}
               >
-                <span className="bs-signal-connector" aria-hidden="true" />
-                <span className="bs-signal-dot" aria-hidden="true" />
                 <div className="bs-signal-card">
                   <div className="bs-signal-icon"><Icon size={16} /></div>
                   <div className="bs-signal-copy">
@@ -135,6 +133,8 @@ const BodySignature = ({
                     {item.note && <small>{item.note}</small>}
                   </div>
                 </div>
+                <span className="bs-signal-connector" aria-hidden="true" />
+                <span className="bs-signal-dot" aria-hidden="true" />
               </div>
             );
           })}

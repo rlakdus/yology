@@ -702,7 +702,63 @@ svg:last-child {
 ======================================== */
 
 .vivia-event-section {
-  margin-top: 74px;
+  margin-top: 46px;
+}
+
+
+/* ========================================
+   FLOW CONNECTOR (between numbered sections)
+======================================== */
+
+.vivia-event-flow {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 24px;
+}
+
+.vivia-event-flow-line {
+  width: 1px;
+  height: 18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      var(--event-orange) 65%,
+      transparent
+    );
+}
+
+.vivia-event-flow-node {
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: white;
+  border: 1px solid var(--event-orange-soft);
+  color: var(--event-orange);
+
+  box-shadow:
+    0 8px 18px
+    rgba(28, 48, 74, .07);
+}
+
+.vivia-event-flow-label {
+  color: #9aa3b2;
+
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .01em;
 }
 
 .vivia-event-section-heading {
@@ -1451,7 +1507,7 @@ svg:last-child {
   }
 
   .vivia-event-section {
-    margin-top: 58px;
+    margin-top: 38px;
   }
 
   .vivia-event-section-heading h2 {

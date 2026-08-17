@@ -1392,6 +1392,84 @@ body {
 
 
 /* ========================================
+   CTA · VR
+======================================== */
+
+.recon-actions {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 40px;
+}
+
+.recon-vr-button {
+  min-height: 54px;
+
+  padding: 0 24px;
+
+  border: none;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      105deg,
+      #0b1c3f,
+      #14548a 64%,
+      #e07f42
+    );
+
+  box-shadow:
+    0 16px 36px
+    rgba(14, 54, 94, 0.22);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.recon-vr-button:hover {
+  transform: translateY(-3px);
+
+  background:
+    linear-gradient(
+      105deg,
+      #12305f,
+      #19719a 64%,
+      #dc7543
+    );
+
+  box-shadow:
+    0 21px 42px
+    rgba(14, 54, 94, 0.26);
+}
+
+.recon-vr-button svg:first-child {
+  color: #76ded8;
+}
+
+.recon-vr-button svg:last-child {
+  transition: transform 0.2s ease;
+}
+
+.recon-vr-button:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+
+/* ========================================
    FOOTER — SAME AS HOME
 ======================================== */
 

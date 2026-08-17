@@ -155,7 +155,7 @@ body {
 
   margin-bottom: 18px;
 
-  color: #518eb9;
+  color: #438cc6;
 
   font-size: 11px;
   font-weight: 850;
@@ -175,6 +175,8 @@ body {
   );
 
   line-height: 1.2;
+
+  font-weight: 820;
 
   letter-spacing: -0.05em;
 

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   Activity,
+  ArrowDown,
   ArrowLeft,
   ArrowRight,
   BrainCircuit,
@@ -19,6 +20,7 @@ import {
   MessageCircle,
   Music,
   Plane,
+  Plus,
   Sparkles,
   Ticket,
   Video,
@@ -753,6 +755,18 @@ const Event = () => {
         </section>
 
 
+        {/* FLOW: SIGNAL → CONTEXT */}
+
+        <div className="vivia-event-flow" aria-hidden="true">
+          <span className="vivia-event-flow-line" />
+          <span className="vivia-event-flow-node">
+            <Plus size={14} />
+          </span>
+          <span className="vivia-event-flow-label">
+          </span>
+        </div>
+
+
         {/* ========================================
             02 · CONTEXT
         ======================================== */}
@@ -848,6 +862,18 @@ const Event = () => {
           </div>
 
         </section>
+
+
+        {/* FLOW: CONTEXT → INSIGHT */}
+
+        <div className="vivia-event-flow" aria-hidden="true">
+          <span className="vivia-event-flow-line" />
+          <span className="vivia-event-flow-node">
+            <ArrowDown size={14} />
+          </span>
+          <span className="vivia-event-flow-label">
+          </span>
+        </div>
 
 
         {/* ========================================
