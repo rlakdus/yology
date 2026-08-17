@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
   Activity,
+  ArrowLeft,
   ArrowRight,
   BookOpenText,
   HeartPulse,
@@ -18,6 +19,8 @@ import "../styles/home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  const [isFilmOpen, setIsFilmOpen] = useState(false);
 
   const {
     sample: liveHeartRate,
@@ -82,6 +85,42 @@ const Home = () => {
     return () =>
       observer.disconnect();
   }, []);
+
+  /* =========================
+     FILM OVERLAY
+  ========================= */
+
+  useEffect(() => {
+    if (!isFilmOpen) return;
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (
+      event: KeyboardEvent
+    ) => {
+      if (event.key === "Escape") {
+        setIsFilmOpen(false);
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [isFilmOpen]);
 
   /* =========================
      INTERACTIVE GLOW
@@ -278,7 +317,9 @@ const Home = () => {
               </div>
 
               <div
-                className={`vh3-signal-card card-b ${momentDetected ? "is-detected" : ""
+                className={`vh3-signal-card card-b ${momentDetected
+                    ? "is-detected"
+                    : ""
                   }`}
               >
                 <span>
@@ -360,7 +401,6 @@ const Home = () => {
               <p>
                 <span>
                   몸이 남긴 신호를 단서로,
-
                 </span>
 
                 <span>
@@ -476,7 +516,7 @@ const Home = () => {
         </section>
 
         {/* =========================
-            PROJECT FILM
+            VIVIA FILM
         ========================= */}
 
         <section
@@ -488,16 +528,13 @@ const Home = () => {
 
             <div className="vh3-film-heading">
 
-              <span className="vh3-section-label">
-
+              <div className="vh3-section-label">
                 <b>02</b>
-
                 VIVIA FILM
-
-              </span>
+              </div>
 
               <h2>
-                VIVIA가 그리고 있는
+                VIVIA가 그리는
                 <br />
                 새로운 기억의 경험
               </h2>
@@ -509,36 +546,54 @@ const Home = () => {
                 다시 이야기로 이어지는 과정을
                 영상으로 소개합니다.
               </p>
+
             </div>
 
-            {/* 추후 실제 영상으로 교체 */}
+            {/* FILM PREVIEW */}
 
-            <div className="vh3-film-frame">
+            <button
+              type="button"
+              className="vh3-film-frame"
+              onClick={() =>
+                setIsFilmOpen(true)
+              }
+              aria-label="VIVIA 소개 영상 재생"
+            >
 
-              <div className="vh3-film-placeholder">
+              <div className="vh3-film-preview-image">
 
-                <div className="vh3-film-play">
-
-                  <Play size={28} />
-
-                </div>
-
-                <span>
-                  PROJECT FILM
-                </span>
-
-                <strong>
-                  VIVIA 프로젝트 소개 영상
-                </strong>
-
-                <p>
-                  프로젝트 소개 영상이
-                  이곳에 추가될 예정입니다.
-                </p>
+                <video
+                  src="/videos/vivia-intro.mp4"
+                  preload="metadata"
+                  muted
+                  playsInline
+                  tabIndex={-1}
+                />
 
               </div>
 
-            </div>
+              <div className="vh3-film-shade" />
+
+              <div className="vh3-film-placeholder">
+
+                <span className="vh3-film-play">
+                  <Play
+                    size={26}
+                    fill="currentColor"
+                  />
+                </span>
+
+                <strong>
+                  VIVIA FILM
+                </strong>
+
+                <small>
+                  PLAY FILM · 00:59
+                </small>
+
+              </div>
+
+            </button>
 
           </div>
 
@@ -586,6 +641,45 @@ const Home = () => {
         </div>
 
       </footer>
+
+      {/* =========================
+          FULLSCREEN FILM
+      ========================= */}
+
+      {isFilmOpen && (
+
+        <div
+          className="vh3-film-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="VIVIA 소개 영상"
+        >
+
+          <button
+            type="button"
+            className="vh3-film-back"
+            onClick={() =>
+              setIsFilmOpen(false)
+            }
+            aria-label="영상 닫기"
+          >
+            <ArrowLeft size={20} />
+          </button>
+
+          <div className="vh3-film-overlay-video">
+
+            <video
+              src="/videos/vivia-intro.mp4"
+              controls
+              autoPlay
+              playsInline
+            />
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   );
