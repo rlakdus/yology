@@ -114,19 +114,26 @@ def stabilize_color_statistics(
 
 
 def blend_seam(frame: np.ndarray, fraction: float) -> np.ndarray:
-    """Soften a narrow periodic strip and make the first/last pixels equal."""
+    """Close the wrap discontinuity by ramping the edge mismatch to zero.
+
+    Only the first and last columns look at the same direction. Averaging column
+    ``i`` with column ``W-1-i`` for the whole band would make those two equal as
+    well, even though they point several degrees apart — that forces the band into
+    a mirror image of itself, which reads as a hard vertical line with reflected
+    content when the viewer looks straight back. Instead take half the edge
+    mismatch and fade that same offset out across the band, so the two edges meet
+    while everything inside keeps its own content.
+    """
     band = min(frame.shape[1] // 4, max(0, round(frame.shape[1] * fraction)))
     if band == 0:
         return frame
 
     result = frame.astype(np.float32)
+    half_mismatch = (result[:, -1] - result[:, 0]) * 0.5
     for offset in range(band):
-        left = offset
-        right = frame.shape[1] - 1 - offset
         strength = 0.5 * (1 + math.cos(math.pi * offset / band))
-        average = (result[:, left] + result[:, right]) * 0.5
-        result[:, left] = result[:, left] * (1 - strength) + average * strength
-        result[:, right] = result[:, right] * (1 - strength) + average * strength
+        result[:, offset] += half_mismatch * strength
+        result[:, frame.shape[1] - 1 - offset] -= half_mismatch * strength
     return np.clip(result, 0, 255).astype(np.uint8)
 
 

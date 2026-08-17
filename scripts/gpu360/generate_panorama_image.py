@@ -20,6 +20,48 @@ from PIL import Image
 from composite_recorded_front import blend_seam, feather_alpha
 
 
+def merge_reference(
+    canvas_bgr: np.ndarray,
+    known_mask: np.ndarray,
+    ref_bgr: np.ndarray,
+    ref_mask: np.ndarray,
+    feather: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Blend a posed reference projection into the canvas without touching the interior
+    of already-known regions.
+
+    The reference owns any pixels nobody has claimed yet; where it overlaps existing
+    coverage it fades out toward the interior of that coverage, so the recorded front
+    (merged first) always wins deep inside its own footprint and the hand-off happens
+    in a feathered band at the boundary.
+    """
+    overlap = ref_mask & known_mask
+    # Handheld frames taken seconds apart drift in exposure/white balance. Match the
+    # reference to the canvas over their overlap so the sky does not band at each seam.
+    if overlap.sum() >= 2000:
+        ref_lab = cv2.cvtColor(ref_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        canvas_lab = cv2.cvtColor(canvas_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        for channel in range(3):
+            ref_values = ref_lab[..., channel][overlap]
+            canvas_values = canvas_lab[..., channel][overlap]
+            ref_std = float(ref_values.std())
+            if ref_std < 1e-3:
+                continue
+            scale = min(1.6, max(0.6, float(canvas_values.std()) / ref_std))
+            ref_lab[..., channel] = (
+                (ref_lab[..., channel] - float(ref_values.mean())) * scale
+                + float(canvas_values.mean())
+            )
+        ref_bgr = cv2.cvtColor(np.clip(ref_lab, 0, 255).astype(np.uint8), cv2.COLOR_LAB2BGR)
+
+    known_interior = feather_alpha(known_mask.astype(np.float32), feather, 0.0)
+    alpha = (ref_mask.astype(np.float32) * (1.0 - known_interior))[..., None]
+    merged = (
+        canvas_bgr.astype(np.float32) * (1 - alpha) + ref_bgr.astype(np.float32) * alpha
+    ).astype(np.uint8)
+    return merged, known_mask | ref_mask
+
+
 def build_seed_fill(
     front_bgr: np.ndarray,
     known_bgr: np.ndarray,
@@ -61,7 +103,7 @@ def fill_faces(
     conditioned on already-filled neighbours.
     """
     size = args.face_size
-    for yaw_deg, pitch_deg in args.faces:
+    for index, (yaw_deg, pitch_deg) in enumerate(args.faces):
         equi_rgb = cv2.cvtColor(canvas_bgr, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
         equi_t = torch.from_numpy(equi_rgb).permute(2, 0, 1).unsqueeze(0).to(device)
         cov_t = (
@@ -78,6 +120,19 @@ def fill_faces(
 
         face_rgb = (face[0].permute(1, 2, 0).clamp(0, 1) * 255).byte().cpu().numpy()
         face_known = face_cov[0, 0].cpu().numpy() > 0.5
+
+        # 수평 면들은 45도 간격의 90도 면이라 대부분 서로 겹치지만, 마지막 두 면(135와
+        # 225)은 정확히 180도에서 겹침 없이 맞닿는다. 뒤에 채워지는 쪽이 빈 화소를
+        # alpha 1로 곧장 덮어써서 그 경도에 세로 단절이 남고, 이미 덮인 뒤에 오는 180도
+        # 면은 인페인팅할 미지 영역이 없어 그것을 메우지 못한다. 이 면에서만 가운데 띠를
+        # 강제로 미지로 되돌려 양쪽을 보고 다시 그리게 한다.
+        heal_band = 0
+        if args.seam_heal_deg > 0 and index == args.seam_heal_face_index:
+            heal_band = int(round(size * args.seam_heal_deg / args.face_fov_deg))
+        if heal_band > 0:
+            start = max(0, size // 2 - heal_band // 2)
+            face_known[:, start:start + heal_band] = False
+
         if face_known.all():
             continue
 
@@ -135,7 +190,23 @@ def fill_faces(
         # Ramp the face in across its own border so neighbouring faces cross-fade instead of
         # meeting at a hard cut; anywhere still empty takes the new content outright.
         alpha = feather_alpha(face_area.astype(np.float32), args.face_feather, 0.0)
-        alpha = np.where(coverage, alpha, face_area.astype(np.float32))[..., None]
+        alpha = np.where(coverage, alpha, face_area.astype(np.float32))
+        # 이음새 치유 면은 이미 덮인 자리를 다시 그린 것이라, 자기 경계에서만 페더되는
+        # 위 규칙으로는 띠 가장자리가 다시 단절된다. 다시 그린 띠 주변만 좁게 교차 페이드한다.
+        if heal_band > 0:
+            redrawn = np.zeros_like(face_known, dtype=np.float32)
+            redrawn[:, start:start + heal_band] = 1.0
+            redrawn_equi, _ = pers2equi_batch(
+                torch.from_numpy(redrawn).to(device)[None, None].repeat(1, 3, 1, 1) * 2 - 1,
+                fov_x=args.face_fov_deg,
+                roll=np.zeros(1, dtype=np.float32),
+                pitch=np.asarray([np.deg2rad(pitch_deg)], dtype=np.float32),
+                yaw=np.asarray([np.deg2rad(yaw_deg)], dtype=np.float32),
+                height=args.height, width=args.width, device=device, return_mask=True,
+            )
+            band = (redrawn_equi[0, 0].cpu().numpy() + 1) / 2
+            alpha = cv2.GaussianBlur(band * face_area, (0, 0), 9)
+        alpha = alpha[..., None]
         canvas_bgr = (
             canvas_bgr.astype(np.float32) * (1 - alpha) + back_bgr.astype(np.float32) * alpha
         ).astype(np.uint8)
@@ -196,6 +267,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--up-negative-prompt")
     parser.add_argument("--down-prompt", help="바닥(아래) 면 전용 프롬프트. 없으면 --prompt를 쓴다.")
     parser.add_argument("--down-negative-prompt")
+    parser.add_argument(
+        "--seam-heal-deg",
+        type=float,
+        default=12.0,
+        help=(
+            "마지막 수평 면(경도 180도)에서 강제로 다시 그릴 가운데 띠의 폭(도). "
+            "135도 면과 225도 면이 겹침 없이 맞닿아 생기는 세로 단절을 메운다. 0이면 끈다."
+        ),
+    )
     parser.add_argument("--face-size", type=int, default=1024)
     parser.add_argument("--face-fov-deg", type=float, default=90.0)
     parser.add_argument(
@@ -211,6 +291,24 @@ def parse_args() -> argparse.Namespace:
         type=float,
         help="기본값은 인페인팅 0.99, --seed-fill 0.7 (미리 채운 배경을 남겨야 하므로 더 낮다).",
     )
+    parser.add_argument(
+        "--ref-image",
+        action="append",
+        default=[],
+        metavar="PATH,YAW,PITCH[,FOV | ,ROLL,FOV]",
+        help=(
+            "정면과 같은 자리에서 다른 방향을 찍은 참조 이미지. 지정한 각도(도)로 구면에 "
+            "투영해 실측 영역으로 깔고, SDXL은 나머지 빈틈만 채운다. 여러 번 지정할 수 "
+            "있고 나열 순서대로 우선권을 가진다. 각도는 estimate_reference_pose.py로 "
+            "구한다. 필드가 4개면 네 번째는 FOV(roll 0), 5개면 ROLL,FOV 순이다."
+        ),
+    )
+    parser.add_argument(
+        "--ref-feather",
+        type=float,
+        default=0.03,
+        help="참조 이미지가 기존 커버리지 경계에서 교차 페이드되는 폭 비율.",
+    )
     parser.add_argument("--mask-dilate-px", type=int, default=8)
     parser.add_argument("--edge-feather", type=float, default=0.02)
     parser.add_argument("--seam-blend", type=float, default=0.02)
@@ -225,6 +323,8 @@ def parse_args() -> argparse.Namespace:
         (135, 0), (225, 0), (180, 0),
         (0, -90), (0, 90),
     ]
+    # 135도 면과 225도 면이 맞닿는 경도 180도를 다시 그리는 면.
+    args.seam_heal_face_index = args.faces.index((180, 0))
     return args
 
 
@@ -275,13 +375,56 @@ def main() -> int:
         ((projected[0].permute(1, 2, 0).clamp(-1, 1) + 1) * 127.5).byte().cpu().numpy()
     )
     known_mask = (mask[0, 0].cpu().numpy() > 0.5)
+    known_bgr = cv2.cvtColor(projected_rgb, cv2.COLOR_RGB2BGR)
+
+    for spec in args.ref_image:
+        parts = spec.split(",")
+        if len(parts) not in (3, 4, 5):
+            raise SystemExit(
+                f"--ref-image 형식은 PATH,YAW,PITCH[,FOV | ,ROLL,FOV] 입니다: {spec}"
+            )
+        ref_path = Path(parts[0])
+        ref_yaw, ref_pitch = float(parts[1]), float(parts[2])
+        ref_roll = float(parts[3]) if len(parts) == 5 else 0.0
+        ref_fov = float(parts[-1]) if len(parts) > 3 else args.fov_x_deg
+        ref_src = cv2.imread(str(ref_path))
+        if ref_src is None:
+            raise SystemExit(f"참조 이미지를 읽을 수 없습니다: {ref_path}")
+        ref_tensor = (
+            torch.from_numpy(cv2.cvtColor(ref_src, cv2.COLOR_BGR2RGB))
+            .to(device=device, dtype=torch.float32)
+            .permute(2, 0, 1)
+            .unsqueeze(0)
+            / 127.5 - 1
+        )
+        with torch.inference_mode():
+            ref_projected, ref_mask_t = pers2equi_batch(
+                ref_tensor,
+                fov_x=ref_fov,
+                roll=np.asarray([np.deg2rad(ref_roll)], dtype=np.float32),
+                pitch=np.asarray([np.deg2rad(ref_pitch)], dtype=np.float32),
+                yaw=np.asarray([np.deg2rad(ref_yaw)], dtype=np.float32),
+                height=args.height,
+                width=args.width,
+                device=device,
+                return_mask=True,
+            )
+        ref_projected_bgr = cv2.cvtColor(
+            ((ref_projected[0].permute(1, 2, 0).clamp(-1, 1) + 1) * 127.5)
+            .byte().cpu().numpy(),
+            cv2.COLOR_RGB2BGR,
+        )
+        ref_area = ref_mask_t[0, 0].cpu().numpy() > 0.5
+        known_bgr, known_mask = merge_reference(
+            known_bgr, known_mask, ref_projected_bgr, ref_area, args.ref_feather,
+        )
+        print(f"참조 병합 {ref_path.name} yaw={ref_yaw} pitch={ref_pitch} roll={ref_roll} "
+              f"fov={ref_fov}: 커버리지 {known_mask.mean() * 100:.1f}%")
 
     inpaint_mask = (~known_mask).astype(np.uint8) * 255
     if args.mask_dilate_px > 0:
         kernel = np.ones((args.mask_dilate_px, args.mask_dilate_px), np.uint8)
         inpaint_mask = cv2.dilate(inpaint_mask, kernel)
-
-    known_bgr = cv2.cvtColor(projected_rgb, cv2.COLOR_RGB2BGR)
     generator = torch.Generator(device=device).manual_seed(args.seed)
     shared = {
         "prompt": args.prompt,
@@ -300,7 +443,25 @@ def main() -> int:
         ).to(device)
         pipe.vae.enable_tiling()
         pipe.set_progress_bar_config(disable=True)
-        canvas = build_seed_fill(front_bgr, known_bgr, known_mask, args.seed_fill_blur)
+        if args.ref_image:
+            # 참조들이 하늘·능선 색을 이미 알고 있으니, 정면 한 장을 늘리는 대신
+            # 전체 실측 영역을 저해상에서 TELEA로 이어붙여 주변광을 만든다. 정면
+            # 스트레치는 무대 조명색을 하늘까지 끌고 가 스며든다(event_002의 초록 하늘).
+            small = cv2.resize(known_bgr, (512, 256), interpolation=cv2.INTER_AREA)
+            small_hole = cv2.resize(
+                (~known_mask).astype(np.uint8) * 255, (512, 256),
+                interpolation=cv2.INTER_NEAREST,
+            )
+            ambient_small = cv2.inpaint(small, small_hole, 5, cv2.INPAINT_TELEA)
+            ambient = cv2.resize(
+                ambient_small, (args.width, args.height), interpolation=cv2.INTER_LINEAR,
+            )
+            kernel = args.seed_fill_blur if args.seed_fill_blur % 2 == 1 else args.seed_fill_blur + 1
+            ambient = cv2.GaussianBlur(ambient, (kernel, kernel), 0)
+            canvas = known_bgr.copy()
+            canvas[~known_mask] = ambient[~known_mask]
+        else:
+            canvas = build_seed_fill(front_bgr, known_bgr, known_mask, args.seed_fill_blur)
         canvas, coverage = fill_faces(
             canvas,
             known_mask.copy(),

@@ -280,6 +280,14 @@ def update_event_metadata(job: dict[str, Any]) -> None:
     metadata = load_json(metadata_path)
     output = resolve_project_path(job["output"])
     fallback = metadata.get("panorama", {}).get("file")
+    if not fallback:
+        # 정지 파노라마가 없는 이벤트도 고정 배경 이미지가 있으면 그것이 폴백이다.
+        # 폴백이 null이면 프런트가 영상 준비 전에 어두운 셸만 보여준다.
+        frozen = (job.get("composite") or {}).get("frozen_panorama_image")
+        if frozen:
+            frozen_path = resolve_project_path(frozen)
+            if frozen_path.is_file() and frozen_path.is_relative_to(event_dir):
+                fallback = frozen_path.relative_to(event_dir).as_posix()
     metadata["panorama_video"] = {
         "file": output.relative_to(event_dir).as_posix(),
         "projection": "equirectangular",

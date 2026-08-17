@@ -1,6 +1,6 @@
 {
   "status": "complete",
-  "completed_at": "2026-08-17T08:38:54.177547+00:00",
+  "completed_at": "2026-08-17T12:59:07.787523+00:00",
   "model": {
     "name": "Beyond the Frame (Argus)",
     "repository": "https://github.com/Red-Fairy/argus-code.git",
@@ -99,11 +99,77 @@
     "seam_blend": 0.01,
     "freeze_generated_surroundings": true,
     "frozen_panorama_image": "events/student/event_002/panorama/first-concert-360.background.png",
-    "frozen_reason": "Argus 전체 생성본을 검수한 결과 주변부가 실제 야외 공연장과 맞지 않아 채택하지 않았다. event_001과 같이 한 장의 파노라마 이미지를 주변부로 고정하고 정면만 실제 녹화 영상으로 재생한다."
+    "frozen_reason": "Argus 전체 생성본은 실제 야외 공연장과 맞지 않아 고정 배경 방식을 유지한다. 배경은 정면 프레임에 사용자가 제공한 현장 사진 1장과 원본 영상 후반부(트림에서 빠진 t=23~31s 팬 구간) 프레임 5장을 더해 estimate_reference_pose.py로 yaw/pitch/roll과 화각을 추정해 구면에 투영하고, 실측 커버리지를 8.2%→20.4%로 넓힌 뒤 SDXL이 빈틈만 채우고 refine_frozen_background.py로 천정/바닥을 정리해 만들었다. 정면과 오른쪽 언덕 관중석·능선·해질녘 하늘은 실측이며, 왼쪽과 뒤쪽은 생성이다.",
+    "background_generation": {
+      "method": "posed_reference_outpainting",
+      "scripts": [
+        "scripts/gpu360/estimate_reference_pose.py",
+        "scripts/gpu360/generate_panorama_image.py",
+        "scripts/gpu360/refine_frozen_background.py"
+      ],
+      "front_image": "prepared 첫 프레임 (fov_x 60도, yaw/pitch/roll 0)",
+      "angle_convention": "Argus pers2equi_batch: M = Rz(yaw)·Ry(-pitch)·Rx(-roll)",
+      "references": [
+        {
+          "source": "user photo (연세대 노천극장 현장 사진)",
+          "yaw_deg": 11.1,
+          "pitch_deg": 28.01,
+          "roll_deg": -0.45,
+          "fov_x_deg": 67.0,
+          "residual_deg": 0.06
+        },
+        {
+          "source": "original t=23s",
+          "yaw_deg": 12.01,
+          "pitch_deg": 28.3,
+          "roll_deg": 3.12,
+          "fov_x_deg": 67.2
+        },
+        {
+          "source": "original t=25s",
+          "yaw_deg": 25.6,
+          "pitch_deg": 21.69,
+          "roll_deg": 9.79,
+          "fov_x_deg": 67.2
+        },
+        {
+          "source": "original t=26s",
+          "yaw_deg": 33.28,
+          "pitch_deg": 16.81,
+          "roll_deg": 13.29,
+          "fov_x_deg": 67.2
+        },
+        {
+          "source": "original t=28s",
+          "yaw_deg": 46.57,
+          "pitch_deg": 15.02,
+          "roll_deg": 16.12,
+          "fov_x_deg": 67.2
+        },
+        {
+          "source": "original t=31s",
+          "yaw_deg": 38.92,
+          "pitch_deg": 20.12,
+          "roll_deg": 13.47,
+          "fov_x_deg": 67.2
+        }
+      ],
+      "rejected_references": [
+        {
+          "source": "user photo (무대 캐노피를 올려다본 사진)",
+          "residual_deg": 23.45,
+          "reason": "촬영 위치가 달라 순수 회전으로 설명되지 않는다(시차). 투영하지 않고 프롬프트를 고치는 데만 참고했다 — 왼쪽에는 LED 스크린과 파란 배너, 나무가 있고 산이나 도시 불빛은 없다."
+        }
+      ],
+      "video_fov_note": "원본 1080px 가로 화각 67.2도는 stabilization crop(938/1080)과 prepared fov 60도에서 유도했다. 화각은 회전과 축퇴되어 추정값이 흔들리므로 고정하고 각도만 풀었다.",
+      "real_coverage_ratio": 0.204,
+      "sdxl_seed": 5,
+      "seam_heal_deg": 12.0
+    }
   },
   "output": {
     "file": "events/student/event_002/panorama/first-concert-360.mp4",
-    "sha256": "3bd1deba74b1d9755af2af9349a4503560cfd758c7fc70690e842733ee39ea80",
+    "sha256": "a5f83b7e44d13256f70b9124b7a5f6baa2b7a784afaf30cfa75f1e573855421f",
     "width": 2048,
     "height": 1024,
     "video_codec": "h264",
@@ -117,7 +183,7 @@
   },
   "panorama_image": {
     "file": "events/student/event_002/panorama/first-concert-360.background.png",
-    "sha256": "904863877db9788805a8ced5c4c3b20644c219700b9fa880e849df424ac732ab",
+    "sha256": "30a6ffbcfb89de9b2ec8eb60e1b5ed495762d0863ded1dd27b78fe8cc1662cab",
     "role": "frozen_generated_surroundings"
   }
 }
