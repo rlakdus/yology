@@ -1163,27 +1163,31 @@ button {
   font-size: 21px;
 }
 
-
 /* ========================================
-   PROJECT FILM SECTION
+   VIVIA FILM
 ======================================== */
 
 .vh3-film-section {
-  padding:
-    100px
-    0
-    110px;
+  padding: 100px 0 110px;
 
-  border-top:
-    1px solid
-    #ece8e2;
+  border-top: 1px solid #ece8e2;
 
   background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(53, 200, 197, 0.07),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 92% 82%,
+      rgba(255, 138, 97, 0.09),
+      transparent 30%
+    ),
     linear-gradient(
       135deg,
-      #f5f9fd 0%,
-      #fffaf6 52%,
-      #fff5ed 100%
+      #fbfcfd 0%,
+      #fffaf6 55%,
+      #fff7f1 100%
     );
 }
 
@@ -1191,14 +1195,8 @@ button {
   display: grid;
 
   grid-template-columns:
-    minmax(
-      320px,
-      0.6fr
-    )
-    minmax(
-      0,
-      1.4fr
-    );
+    minmax(300px, 0.56fr)
+    minmax(0, 1.44fr);
 
   gap: 62px;
 
@@ -1231,6 +1229,8 @@ button {
   font-weight: 800;
 
   letter-spacing: -0.045em;
+
+  word-break: keep-all;
 }
 
 .vh3-film-heading p {
@@ -1239,86 +1239,155 @@ button {
   color: #788091;
 
   font-size: 13px;
+
   line-height: 1.82;
+
+  word-break: keep-all;
 }
 
 
 /* ========================================
-   FILM FRAME
+   FILM PREVIEW CARD
 ======================================== */
 
 .vh3-film-frame {
   position: relative;
 
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  min-height: 0;
+
+  padding: 0;
+
   overflow: hidden;
 
-  min-height: 430px;
+  display: block;
 
   border:
     1px solid
-    #e5e2dc;
+    rgba(16, 32, 74, 0.1);
 
   border-radius: 30px;
 
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(
-        53,
-        200,
-        197,
-        0.15
-      ),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 85% 78%,
-      rgba(
-        255,
-        138,
-        97,
-        0.16
-      ),
-      transparent 30%
-    ),
-    linear-gradient(
-      145deg,
-      #0a1c3e,
-      #12355f 58%,
-      #3a2a43 130%
-    );
+  background: #0d1c44;
 
   box-shadow:
-    0 25px 60px
-    rgba(
-      20,
-      34,
-      67,
-      0.12
-    );
+    0 26px 60px
+    rgba(20, 34, 67, 0.12);
+
+  cursor: pointer;
+
+  text-align: inherit;
+
+  appearance: none;
+
+  transition:
+    transform 0.35s
+      cubic-bezier(
+        0.2,
+        0.8,
+        0.2,
+        1
+      ),
+    box-shadow 0.35s ease;
 }
 
-.vh3-film-frame::before {
-  content: "";
+.vh3-film-frame:hover {
+  transform:
+    translateY(-5px);
 
+  box-shadow:
+    0 34px 72px
+    rgba(20, 34, 67, 0.18);
+}
+
+.vh3-film-frame:focus-visible {
+  outline:
+    3px solid
+    rgba(35, 135, 245, 0.34);
+
+  outline-offset: 5px;
+}
+
+
+/* ========================================
+   FILM PREVIEW VIDEO
+======================================== */
+
+.vh3-film-preview-image {
   position: absolute;
 
   inset: 0;
 
+  overflow: hidden;
+
+  background: #0d1c44;
+}
+
+.vh3-film-preview-image video {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  pointer-events: none;
+
+  transform:
+    scale(1.015);
+
+  transition:
+    transform
+    0.8s
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.2,
+      1
+    );
+}
+
+.vh3-film-frame:hover
+.vh3-film-preview-image video {
+  transform:
+    scale(1.045);
+}
+
+
+/* ========================================
+   FILM SHADE
+======================================== */
+
+.vh3-film-shade {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
   background:
     linear-gradient(
-      135deg,
-      rgba(
-        255,
-        255,
-        255,
-        0.025
-      ),
-      transparent 45%
+      180deg,
+      rgba(7, 21, 47, 0.04)
+        0%,
+      rgba(7, 21, 47, 0.12)
+        42%,
+      rgba(7, 21, 47, 0.58)
+        100%
     );
 
   pointer-events: none;
 }
+
+
+/* ========================================
+   FILM CENTER CONTENT
+======================================== */
 
 .vh3-film-placeholder {
   position: absolute;
@@ -1328,93 +1397,261 @@ button {
   z-index: 2;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 35px;
 
   text-align: center;
+
+  color: white;
+
+  pointer-events: none;
 }
 
 .vh3-film-play {
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
 
-  margin-bottom: 22px;
+  margin-bottom: 20px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.45);
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.18);
+
+  color: white;
+
+  backdrop-filter:
+    blur(13px);
+
+  -webkit-backdrop-filter:
+    blur(13px);
+
+  box-shadow:
+    0 14px 35px
+    rgba(0, 0, 0, 0.16);
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.vh3-film-play svg {
+  margin-left: 3px;
+}
+
+.vh3-film-frame:hover
+.vh3-film-play {
+  transform:
+    scale(1.09);
+
+  background:
+    rgba(255, 255, 255, 0.25);
+
+  box-shadow:
+    0 18px 42px
+    rgba(0, 0, 0, 0.22);
+}
+
+.vh3-film-placeholder strong {
+  display: block;
+
+  color: white;
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.02em;
+
+  text-shadow:
+    0 3px 18px
+    rgba(0, 0, 0, 0.22);
+}
+
+.vh3-film-placeholder small {
+  display: block;
+
+  margin-top: 8px;
+
+  color:
+    rgba(255, 255, 255, 0.76);
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.16em;
+}
+
+
+/* ========================================
+   FULLSCREEN FILM OVERLAY
+======================================== */
+
+.vh3-film-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    #05070c;
+
+  animation:
+    vh3FilmOverlayIn
+    0.28s ease both;
+}
+
+@keyframes vh3FilmOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* ========================================
+   FULLSCREEN VIDEO
+======================================== */
+
+.vh3-film-overlay-video {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #05070c;
+}
+
+.vh3-film-overlay-video video {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  background: #05070c;
+}
+
+
+/* ========================================
+   BACK BUTTON
+======================================== */
+.vh3-film-back {
+  position: fixed;
+
+  top: 28px;
+  left: 30px;
+
+  z-index: 10001;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
 
   display: grid;
   place-items: center;
 
   border:
     1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.25
-    );
+    rgba(255, 255, 255, 0.22);
 
   border-radius: 50%;
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.12
-    );
+    rgba(7, 15, 30, 0.58);
 
   color: white;
 
-  backdrop-filter:
-    blur(10px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 
   box-shadow:
-    0 10px 30px
-    rgba(
-      0,
-      0,
-      0,
-      0.18
-    );
+    0 8px 28px
+    rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.vh3-film-placeholder > span {
-  margin-bottom: 10px;
+.vh3-film-back:hover {
+  transform: translateX(-3px);
 
-  color: #6fe1dc;
+  background:
+    rgba(255, 255, 255, 0.16);
 
-  font-size: 10px;
-  font-weight: 850;
-
-  letter-spacing: 0.14em;
+  border-color:
+    rgba(255, 255, 255, 0.42);
 }
 
-.vh3-film-placeholder strong {
-  color: white;
+.vh3-film-back:focus-visible {
+  outline:
+    2px solid white;
 
-  font-size: 27px;
-  font-weight: 800;
-
-  letter-spacing: -0.035em;
+  outline-offset: 3px;
 }
 
-.vh3-film-placeholder p {
-  margin-top: 11px;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.62
-    );
-
+.vh3-film-back span {
   font-size: 12px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.01em;
 }
 
+.vh3-film-back:hover {
+  transform:
+    translateX(-2px);
+
+  background:
+    rgba(255, 255, 255, 0.16);
+
+  border-color:
+    rgba(255, 255, 255, 0.42);
+}
+
+.vh3-film-back:focus-visible {
+  outline:
+    2px solid white;
+
+  outline-offset: 3px;
+}
 
 /* ========================================
    FOOTER
