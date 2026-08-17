@@ -1,34 +1,76 @@
+:root {
+  --event-navy: #0d1c44;
+  --event-navy2: #09152f;
+
+  --event-blue: #4b9ed2;
+  --event-aqua: #32bfc5;
+
+  --event-orange: #f4874d;
+  --event-orange-soft: #fff2e9;
+
+  --event-lavender: #9388ee;
+
+  --event-text: #17213d;
+  --event-muted: #788091;
+
+  --event-line: #e8edf3;
+
+  --event-white: #ffffff;
+}
+
+
 /* ========================================
-   VIVIA · EVENT PAGE
+   BASE
 ======================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 .vivia-event-page {
   min-height: 100vh;
-  padding: 38px 24px 90px;
+
+  overflow-x: hidden;
+
+  color: var(--event-text);
 
   background:
     radial-gradient(
-      circle at 10% 3%,
-      rgba(15, 111, 255, 0.08),
-      transparent 24%
+      circle at 7% 3%,
+      rgba(75, 158, 210, 0.11),
+      transparent 27%
     ),
     radial-gradient(
-      circle at 92% 10%,
-      rgba(255, 138, 61, 0.09),
-      transparent 22%
+      circle at 93% 5%,
+      rgba(244, 135, 77, 0.12),
+      transparent 27%
     ),
     linear-gradient(
       180deg,
-      #fbfdff 0%,
-      #f6f9fd 100%
+      #fffdfa 0%,
+      #f9fbfd 55%,
+      #ffffff 100%
     );
-
-  color: #0f172a;
 }
 
-.vivia-event-container {
-  width: min(1080px, 100%);
+.vivia-event-shell {
+  width: min(
+    1320px,
+    calc(100% - 64px)
+  );
+
   margin: 0 auto;
+
+  padding:
+    52px
+    0
+    92px;
 }
 
 
@@ -37,171 +79,143 @@
 ======================================== */
 
 .vivia-event-back {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 30px;
 
-  border: 1px solid #e2e8f0;
+  padding: 0;
+
+  border: 1px solid #e3e8ef;
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.95);
-  color: #334155;
+  display: grid;
+  place-items: center;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  color: #69768a;
 
   cursor: pointer;
 
   box-shadow:
-    0 7px 20px rgba(15, 23, 42, 0.045);
+    0 7px 18px
+    rgba(16, 32, 74, 0.035);
 
   transition:
-    transform 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    transform .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease;
 }
+
 
 .vivia-event-back:hover {
-  transform: translateX(-2px);
+  transform: translateX(-3px);
 
-  color: #0f6fff;
-  border-color: #b9d5ff;
+  border-color: #c9dcef;
 
-  box-shadow:
-    0 10px 24px rgba(15, 111, 255, 0.09);
+  background: white;
+
+  color: var(--event-blue);
 }
-
 
 /* ========================================
-   HEADER
+   HERO
 ======================================== */
 
-.vivia-event-header {
-  max-width: 760px;
-
-  margin: 56px auto 46px;
-
-  text-align: center;
-}
-
-.vivia-event-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 9px 17px;
-
-  margin-bottom: 20px;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(15, 111, 255, 0.1),
-      rgba(255, 138, 61, 0.11)
-    );
-
-  color: #0f6fff;
-
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0.1em;
-}
-
-.vivia-event-header h1 {
-  margin: 0;
-
-  color: #0f172a;
-
-  font-size: clamp(42px, 5vw, 58px);
-  line-height: 1.16;
-
-  font-weight: 850;
-  letter-spacing: -0.045em;
-}
-
-.vivia-event-header p {
-  margin: 16px auto 0;
-
-  color: #ff7a2a;
-
-  font-size: 17px;
-  line-height: 1.6;
-
-  font-weight: 750;
-}
-
-
-/* ========================================
-   MAIN EVENT CARD
-======================================== */
-
-.vivia-event-card {
+.vivia-event-hero {
   position: relative;
 
   overflow: hidden;
 
-  padding: 38px;
+  min-height: 520px;
 
-  border: 1px solid #dee8f4;
-  border-radius: 30px;
+  padding:
+    56px
+    58px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.94fr)
+    minmax(420px, 1.06fr);
+
+  gap: 58px;
+
+  align-items: center;
+
+  border:
+    1px solid
+    #e6e9ee;
+
+  border-radius: 34px;
 
   background:
+    radial-gradient(
+      circle at 8% 15%,
+      rgba(64, 181, 195, 0.09),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 91% 14%,
+      rgba(244, 135, 77, 0.13),
+      transparent 30%
+    ),
     linear-gradient(
-      145deg,
-      #ffffff 0%,
-      #fbfdff 62%,
-      #fffaf6 100%
+      135deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(249, 252, 255, 0.97) 48%,
+      rgba(255, 248, 242, 0.96)
     );
 
   box-shadow:
-    0 24px 60px rgba(25, 46, 78, 0.08);
+    0 26px 70px
+    rgba(22, 42, 72, 0.07);
 }
 
-.vivia-event-card::before {
+.vivia-event-hero::before {
   content: "";
 
   position: absolute;
 
-  width: 300px;
-  height: 300px;
+  left: -140px;
+  bottom: -210px;
 
-  top: -140px;
-  right: -110px;
+  width: 380px;
+  height: 380px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(255, 138, 61, 0.14),
-      rgba(255, 138, 61, 0.035) 58%,
-      transparent 72%
+      rgba(50, 191, 197, 0.12),
+      transparent 68%
     );
 
   pointer-events: none;
 }
 
-.vivia-event-card::after {
+.vivia-event-hero::after {
   content: "";
 
   position: absolute;
 
-  width: 260px;
-  height: 260px;
+  right: -150px;
+  top: -190px;
 
-  left: -130px;
-  bottom: -150px;
+  width: 390px;
+  height: 390px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(15, 111, 255, 0.09),
-      transparent 70%
+      rgba(244, 135, 77, 0.14),
+      transparent 68%
     );
 
   pointer-events: none;
@@ -209,371 +223,1061 @@
 
 
 /* ========================================
-   CARD TOP
+   HERO COPY
 ======================================== */
 
-.vivia-event-card-top {
+.vivia-event-hero-copy {
   position: relative;
-  z-index: 2;
 
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  z-index: 3;
 
-  gap: 32px;
-
-  padding-bottom: 30px;
-
-  border-bottom: 1px solid #e9eef5;
+  min-width: 0;
 }
 
-.vivia-event-date {
+.vivia-event-eyebrow {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: var(--event-blue);
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 0.14em;
+}
+
+.vivia-event-category {
   display: inline-flex;
+  align-items: center;
 
-  margin-bottom: 10px;
+  width: fit-content;
 
-  padding: 7px 12px;
+  gap: 7px;
 
+  margin-bottom: 20px;
+
+  padding: 8px 11px;
+
+  border: 1px solid #e5ebf3;
   border-radius: 999px;
 
-  background: #fff2e8;
-  color: #e86d1e;
+  background: rgba(255, 255, 255, 0.82);
 
-  font-size: 12px;
+  color: #63728a;
+
+  font-size: 10px;
   font-weight: 850;
+
+  letter-spacing: 0.08em;
 }
 
-.vivia-event-card-top h2 {
-  margin: 0 0 12px;
-
-  color: #0f172a;
-
-  font-size: 30px;
-  font-weight: 830;
-  letter-spacing: -0.03em;
+.vivia-event-category svg {
+  color: var(--event-orange);
 }
 
-.vivia-event-card-top p {
-  max-width: 650px;
-
+.vivia-event-hero h1 {
   margin: 0;
 
-  color: #64748b;
+  color: var(--event-navy);
 
-  font-size: 15px;
-  line-height: 1.85;
+  font-size:
+    clamp(
+      46px,
+      4.2vw,
+      62px
+    );
+
+  line-height: 1.13;
+
+  font-weight: 820;
+
+  letter-spacing: -0.055em;
+
+  word-break: keep-all;
 }
 
-.vivia-event-match-badge {
-  flex-shrink: 0;
+.vivia-event-hero h2 {
+  margin:
+    15px
+    0
+    0;
 
+  color: var(--event-orange);
+
+  font-size: 17px;
+  font-weight: 800;
+
+  line-height: 1.5;
+}
+
+.vivia-event-hero-copy > p {
+  max-width: 650px;
+
+  margin:
+    20px
+    0
+    0;
+
+  color: var(--event-muted);
+
+  font-size: 14px;
+  line-height: 1.82;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   META
+======================================== */
+
+.vivia-event-meta {
+  margin-top: 27px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex-wrap: wrap;
+}
+
+.vivia-event-meta span {
   display: inline-flex;
   align-items: center;
 
   gap: 7px;
 
-  padding: 10px 14px;
+  padding:
+    8px
+    11px;
+
+  border:
+    1px solid
+    #e3e8ef;
 
   border-radius: 999px;
 
-  background: #edf5ff;
-  color: #0f6fff;
+  background:
+    rgba(255, 255, 255, 0.82);
 
-  font-size: 12px;
+  color: #66738a;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.vivia-event-meta span:nth-child(1) svg,
+.vivia-event-meta span:nth-child(3) svg {
+  color: var(--event-blue);
+}
+
+.vivia-event-meta span:nth-child(2) svg,
+.vivia-event-meta span:nth-child(4) svg {
+  color: var(--event-orange);
+}
+
+
+/* ========================================
+   HERO ACTIONS
+======================================== */
+
+.vivia-event-actions {
+  margin-top: 32px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+
+/* ========================================
+   VR MAIN BUTTON
+======================================== */
+
+.vivia-event-vr-button {
+  min-height: 54px;
+
+  padding:
+    0
+    21px;
+
+  border: none;
+
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  background:
+    linear-gradient(
+      105deg,
+      #0b1c3f,
+      #174876 68%,
+      #225b79
+    );
+
+  color: white;
+
+  font-size: 13px;
   font-weight: 850;
 
-  box-shadow:
-    inset 0 0 0 1px rgba(15, 111, 255, 0.05);
-}
-
-
-/* ========================================
-   INFO GRID
-======================================== */
-
-.vivia-event-info-grid {
-  position: relative;
-  z-index: 2;
-
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-
-  gap: 14px;
-
-  margin-top: 28px;
-}
-
-.vivia-event-info-item {
-  min-height: 104px;
-
-  padding: 19px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  border: 1px solid #e8edf4;
-  border-radius: 19px;
-
-  background: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
 
   box-shadow:
-    0 8px 22px rgba(15, 23, 42, 0.035);
+    0 15px 32px
+    rgba(13, 45, 82, 0.21);
 
   transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.23s ease,
+    box-shadow 0.23s ease,
+    background 0.23s ease;
 }
 
-.vivia-event-info-item:hover {
-  transform: translateY(-2px);
+.vivia-event-vr-button:hover {
+  transform:
+    translateY(-3px);
 
-  border-color: #c9ddfa;
+  background:
+    linear-gradient(
+      105deg,
+      #12305f,
+      #19719a 64%,
+      #dc7543
+    );
 
   box-shadow:
-    0 12px 28px rgba(15, 111, 255, 0.07);
+    0 21px 42px
+    rgba(14, 54, 94, 0.26);
 }
 
-.vivia-event-info-icon {
-  width: 46px;
-  height: 46px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 15px;
+.vivia-event-vr-button svg:first-child {
+  color: #76ded8;
 }
 
-.vivia-event-info-icon.blue {
-  background: #eaf3ff;
-  color: #0f6fff;
+.vivia-event-vr-button svg:last-child {
+  transition:
+    transform 0.2s ease;
 }
 
-.vivia-event-info-icon.orange {
-  background: #fff1e8;
-  color: #ff7a2a;
-}
-
-.vivia-event-info-item span {
-  display: block;
-
-  margin-bottom: 4px;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-  font-weight: 750;
-}
-
-.vivia-event-info-item strong {
-  color: #1e293b;
-
-  font-size: 14px;
-  font-weight: 820;
+.vivia-event-vr-button:hover
+svg:last-child {
+  transform:
+    translateX(3px);
 }
 
 
 /* ========================================
-   SIGNAL ROW
+   RECONSTRUCTION SECONDARY BUTTON
 ======================================== */
 
-.vivia-event-signal-row {
+.vivia-event-reconstruction-button {
+  min-height: 54px;
+
+  padding:
+    0
+    19px;
+
+  border:
+    1px solid
+    #d6dce5;
+
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  color: var(--event-navy);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease;
+}
+
+.vivia-event-reconstruction-button:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    #efb087;
+
+  background: white;
+
+  color: #d36f3c;
+}
+
+
+/* ========================================
+   HERO VISUAL
+======================================== */
+
+.vivia-event-hero-visual {
   position: relative;
+
   z-index: 2;
+
+  min-height: 390px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vivia-event-core {
+  position: relative;
+
+  z-index: 4;
+
+  width: 108px;
+  height: 108px;
 
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  place-items: center;
 
-  gap: 14px;
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.45);
 
-  margin-top: 18px;
-}
-
-.vivia-event-signal-card {
-  min-height: 90px;
-
-  padding: 18px 20px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  border: 1px solid #e7edf4;
-  border-radius: 18px;
+  border-radius: 50%;
 
   background:
     linear-gradient(
       145deg,
-      #f9fbff,
-      #fffaf6
+      rgba(255, 255, 255, 0.94),
+      rgba(235, 247, 255, 0.92)
     );
 
-  color: #0f6fff;
+  color: var(--event-aqua);
+
+  box-shadow:
+    0 0 0 18px
+      rgba(65, 180, 193, 0.06),
+    0 20px 45px
+      rgba(37, 79, 119, 0.12);
 }
 
-.vivia-event-signal-card:nth-child(2) {
-  color: #ff7a2a;
+.vivia-event-orbit {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
 }
 
-.vivia-event-signal-card:nth-child(3) {
-  color: #64748b;
+.vivia-event-orbit.orbit-one {
+  width: 260px;
+  height: 260px;
+
+  border:
+    1px solid
+    rgba(50, 191, 197, 0.28);
+
+  animation:
+    eventOrbitPulse
+    5s
+    ease-in-out
+    infinite;
 }
 
-.vivia-event-signal-card span {
-  display: block;
+.vivia-event-orbit.orbit-two {
+  width: 350px;
+  height: 210px;
 
-  margin-bottom: 4px;
+  transform:
+    rotate(-18deg);
 
-  color: #94a3b8;
+  border:
+    1px solid
+    rgba(244, 135, 77, 0.32);
 
-  font-size: 11px;
-  font-weight: 750;
+  animation:
+    eventOrbitPulseWide
+    6s
+    ease-in-out
+    infinite;
 }
 
-.vivia-event-signal-card strong {
-  color: #1e293b;
+@keyframes eventOrbitPulse {
+  0%,
+  100% {
+    transform:
+      scale(1);
+  }
 
-  font-size: 14px;
-  font-weight: 820;
+  50% {
+    transform:
+      scale(1.045);
+  }
+}
+
+@keyframes eventOrbitPulseWide {
+  0%,
+  100% {
+    transform:
+      rotate(-18deg)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      rotate(-18deg)
+      scale(1.045);
+  }
 }
 
 
 /* ========================================
-   AI SUMMARY
+   HERO CHIPS
 ======================================== */
 
-.vivia-event-summary {
-  position: relative;
-  z-index: 2;
+.vivia-event-chip {
+  position: absolute;
 
-  margin-top: 24px;
+  z-index: 5;
 
-  padding: 25px;
+  padding:
+    8px
+    12px;
 
-  display: flex;
-  align-items: flex-start;
+  border:
+    1px solid
+    #dde5ee;
 
-  gap: 17px;
-
-  border: 1px solid #d8e9ff;
-  border-radius: 21px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(15, 111, 255, 0.07),
-      rgba(255, 138, 61, 0.055)
-    );
-}
-
-.vivia-event-summary-icon {
-  width: 48px;
-  height: 48px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 15px;
+  border-radius: 999px;
 
   background:
-    linear-gradient(
-      145deg,
-      #eaf3ff,
-      #fff1e8
-    );
+    rgba(255, 255, 255, 0.84);
 
-  color: #ff7a2a;
+  color: #637087;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  backdrop-filter:
+    blur(10px);
+
+  box-shadow:
+    0 8px 22px
+    rgba(22, 42, 72, 0.06);
 }
 
-.vivia-event-summary span {
+.vivia-event-chip.chip-signal {
+  left: 10%;
+  top: 19%;
+}
+
+.vivia-event-chip.chip-context {
+  right: 6%;
+  top: 47%;
+}
+
+.vivia-event-chip.chip-memory {
+  left: 11%;
+  bottom: 17%;
+}
+
+
+/* ========================================
+   COMMON SECTION
+======================================== */
+
+.vivia-event-section {
+  margin-top: 74px;
+}
+
+.vivia-event-section-heading {
+  margin-bottom: 25px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+.vivia-event-section-heading > div > span {
   display: block;
 
   margin-bottom: 7px;
 
-  color: #0f6fff;
+  color: var(--event-orange);
 
   font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 0.11em;
+}
+
+.vivia-event-section-heading h2 {
+  margin: 0;
+
+  color: var(--event-navy);
+
+  font-size: 31px;
+  font-weight: 820;
+
+  letter-spacing: -0.035em;
+
+  word-break: keep-all;
+}
+
+.vivia-event-section-heading > p {
+  max-width: 340px;
+
+  margin: 0;
+
+  color: #939baa;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  text-align: right;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   SIGNAL GRID
+======================================== */
+
+.vivia-event-signal-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 15px;
+}
+
+.vivia-event-signal-grid article {
+  min-width: 0;
+
+  min-height: 155px;
+
+  padding: 22px;
+
+  border:
+    1px solid
+    #e7ebf0;
+
+  border-radius: 21px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfdff
+    );
+
+  box-shadow:
+    0 10px 26px
+    rgba(24, 45, 76, 0.04);
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.vivia-event-signal-grid article:hover {
+  transform:
+    translateY(-5px);
+
+  border-color:
+    #f0b38d;
+
+  box-shadow:
+    0 18px 38px
+    rgba(219, 113, 59, 0.08);
+}
+
+.signal-icon {
+  width: 46px;
+  height: 46px;
+
+  margin-bottom: 21px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+}
+
+.signal-icon.aqua {
+  background: #e9f9f8;
+
+  color: var(--event-aqua);
+}
+
+.signal-icon.orange {
+  background: var(--event-orange-soft);
+
+  color: var(--event-orange);
+}
+
+.signal-icon.lavender {
+  background: #f2efff;
+
+  color: var(--event-lavender);
+}
+
+.vivia-event-signal-grid article > span {
+  display: block;
+
+  color: #929baa;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.vivia-event-signal-grid article > strong {
+  display: block;
+
+  margin-top: 6px;
+
+  color: var(--event-navy);
+
+  font-size: 18px;
+  font-weight: 820;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   CONTEXT GRID
+======================================== */
+
+.vivia-event-context-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 16px;
+}
+
+.vivia-event-context-grid article {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 220px;
+
+  padding: 26px;
+
+  border:
+    1px solid
+    #e7ebf0;
+
+  border-radius: 23px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfdff
+    );
+
+  box-shadow:
+    0 12px 30px
+    rgba(21, 43, 73, 0.04);
+
+  transition:
+    transform 0.23s ease,
+    border-color 0.23s ease,
+    box-shadow 0.23s ease;
+}
+
+.vivia-event-context-grid article:hover {
+  transform:
+    translateY(-6px);
+
+  border-color:
+    #f0b18d;
+
+  box-shadow:
+    0 20px 42px
+    rgba(219, 113, 59, 0.08);
+}
+
+.context-number {
+  position: absolute;
+
+  right: 19px;
+  top: 16px;
+
+  color: #d7dde6;
+
+  font-size: 10px;
   font-weight: 850;
-  letter-spacing: 0.08em;
+}
+
+.context-icon {
+  width: 50px;
+  height: 50px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+}
+
+.context-icon.aqua {
+  background: #eaf9f8;
+
+  color: var(--event-aqua);
+}
+
+.context-icon.orange {
+  background: #fff0e7;
+
+  color: var(--event-orange);
+}
+
+.context-icon.blue {
+  background: #edf6ff;
+
+  color: var(--event-blue);
+}
+
+.context-icon.lavender {
+  background: #f2efff;
+
+  color: var(--event-lavender);
+}
+
+.vivia-event-context-grid h3 {
+  margin:
+    22px
+    0
+    9px;
+
+  color: var(--event-navy);
+
+  font-size: 18px;
+  font-weight: 820;
+}
+
+.vivia-event-context-grid p {
+  margin: 0;
+
+  color: #8590a0;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   INSIGHT
+======================================== */
+
+.vivia-event-insight {
+  margin-top: 76px;
+
+  padding: 40px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 25px;
+
+  border:
+    1px solid
+    #dce8f3;
+
+  border-radius: 29px;
+
+  background:
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(244, 135, 77, 0.10),
+      transparent 27%
+    ),
+    linear-gradient(
+      135deg,
+      #edf6ff,
+      #ffffff 56%,
+      #fff7f1
+    );
+
+  box-shadow:
+    0 18px 50px
+    rgba(35, 81, 136, 0.06);
+}
+
+.vivia-event-insight-icon {
+  width: 60px;
+  height: 60px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 19px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #0f6fff,
+      #3b95e8
+    );
+
+  color: white;
+
+  box-shadow:
+    0 12px 28px
+    rgba(15, 111, 255, 0.18);
+}
+
+.vivia-event-insight-content {
+  width: 100%;
+}
+
+.vivia-event-insight-content > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--event-orange);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 0.12em;
+}
+
+.vivia-event-insight-content h2 {
+  margin: 0;
+
+  color: var(--event-navy);
+
+  font-size: 28px;
+  line-height: 1.35;
+
+  font-weight: 820;
+
+  letter-spacing: -0.035em;
+}
+
+.vivia-event-insight-content > p {
+  max-width: 900px;
+
+  margin:
+    17px
+    0
+    0;
+
+  color: #66748a;
+
+  font-size: 13px;
+  line-height: 1.85;
+
+  word-break: keep-all;
+}
+
+
+/* ========================================
+   SUMMARY
+======================================== */
+
+.vivia-event-summary {
+  margin-top: 21px;
+
+  padding:
+    15px
+    17px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  border:
+    1px solid
+    #e8e4df;
+
+  border-radius: 15px;
+
+  background: white;
+
+  color: var(--event-orange);
 }
 
 .vivia-event-summary p {
   margin: 0;
 
-  color: #475569;
+  color: #536078;
 
-  font-size: 15px;
-  line-height: 1.85;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 
 /* ========================================
-   PRIMARY CTA
+   CONFIDENCE
 ======================================== */
 
-.vivia-event-primary {
-  position: relative;
-  z-index: 2;
+.vivia-event-confidence {
+  margin-top: 24px;
+}
 
-  width: 100%;
-  height: 60px;
+.vivia-event-confidence > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  margin-top: 28px;
+  margin-bottom: 9px;
+}
 
-  border: none;
-  border-radius: 17px;
+.vivia-event-confidence span {
+  color: #8791a1;
+
+  font-size: 11px;
+}
+
+.vivia-event-confidence strong {
+  color: var(--event-blue);
+
+  font-size: 13px;
+}
+
+.vivia-event-confidence-track {
+  height: 7px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #dce5ef;
+}
+
+.vivia-event-confidence-track > span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
 
   background:
     linear-gradient(
       90deg,
-      #0f6fff,
-      #247eff
+      var(--event-blue),
+      var(--event-aqua),
+      var(--event-orange)
+    );
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.vivia-event-footer {
+  padding:
+    52px
+    0
+    58px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #07152f,
+      #0b224a
     );
 
   color: white;
+}
+
+.vivia-event-footer-inner {
+  width: min(
+    1320px,
+    calc(100% - 64px)
+  );
+
+  margin: 0 auto;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
 
-  gap: 10px;
+  align-items: flex-end;
+  justify-content: space-between;
 
-  font-size: 16px;
-  font-weight: 820;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 13px 28px rgba(15, 111, 255, 0.2);
-
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
+  gap: 48px;
 }
 
-.vivia-event-primary:hover {
-  transform: translateY(-2px);
+.vivia-event-footer-brand img {
+  width: 124px;
 
-  box-shadow:
-    0 17px 34px rgba(15, 111, 255, 0.26);
+  filter:
+    brightness(0)
+    invert(1);
+
+  opacity: 0.95;
 }
 
-.vivia-event-primary svg {
-  transition:
-    transform 0.2s ease;
+.vivia-event-footer-brand p {
+  margin-top: 14px;
+
+  color: #aebdd0;
+
+  font-size: 11px;
 }
 
-.vivia-event-primary:hover svg {
-  transform: translateX(4px);
+.vivia-event-footer-team {
+  display: grid;
+
+  justify-items: end;
+
+  gap: 7px;
+
+  text-align: right;
+}
+
+.vivia-event-footer-team strong {
+  margin-bottom: 4px;
+
+  color: #d9e4ef;
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+}
+
+.vivia-event-footer-team span {
+  color: #9fadc0;
+
+  font-size: 11px;
 }
 
 
@@ -581,20 +1285,98 @@
    TABLET
 ======================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
 
-  .vivia-event-info-grid {
+  .vivia-event-shell,
+  .vivia-event-footer-inner {
+    width:
+      min(
+        100% - 40px,
+        1320px
+      );
+  }
+
+  .vivia-event-hero {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      1fr;
+
+    gap: 22px;
   }
 
-  .vivia-event-signal-row {
-    grid-template-columns: 1fr;
+  .vivia-event-hero-visual {
+    min-height: 320px;
   }
 
-  .vivia-event-card-top {
+  .vivia-event-section-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .vivia-event-section-heading > p {
+    max-width: 600px;
+
+    text-align: left;
+  }
+
+}
+
+
+/* ========================================
+   MOBILE / SMALL TABLET
+======================================== */
+
+@media (max-width: 760px) {
+
+  .vivia-event-shell {
+    padding-top: 36px;
+  }
+
+  .vivia-event-hero {
+    padding:
+      42px
+      28px;
+
+    min-height: 0;
+  }
+
+  .vivia-event-hero h1 {
+    font-size: 40px;
+  }
+
+  .vivia-event-hero-visual {
+    min-height: 280px;
+  }
+
+  .vivia-event-orbit.orbit-one {
+    width: 210px;
+    height: 210px;
+  }
+
+  .vivia-event-orbit.orbit-two {
+    width: 290px;
+    height: 170px;
+  }
+
+  .vivia-event-core {
+    width: 90px;
+    height: 90px;
+  }
+
+  .vivia-event-signal-grid,
+  .vivia-event-context-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .vivia-event-insight {
+    padding: 28px;
+
     flex-direction: column;
   }
+
 }
 
 
@@ -602,53 +1384,113 @@
    MOBILE
 ======================================== */
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
 
-  .vivia-event-page {
-    padding: 28px 17px 70px;
+  .vivia-event-shell,
+  .vivia-event-footer-inner {
+    width:
+      min(
+        100% - 28px,
+        1320px
+      );
   }
 
   .vivia-event-back {
-    width: 42px;
-    height: 42px;
+    margin-bottom: 23px;
   }
 
-  .vivia-event-header {
-    margin-top: 42px;
-    margin-bottom: 36px;
+  .vivia-event-hero {
+    padding:
+      36px
+      22px;
+
+    border-radius: 26px;
   }
 
-  .vivia-event-header h1 {
-    font-size: 38px;
+  .vivia-event-hero h1 {
+    font-size: 36px;
   }
 
-  .vivia-event-header p {
+  .vivia-event-hero h2 {
     font-size: 15px;
   }
 
-  .vivia-event-card {
-    padding: 24px;
-
-    border-radius: 24px;
+  .vivia-event-hero-copy > p {
+    font-size: 13px;
   }
 
-  .vivia-event-card-top h2 {
+  .vivia-event-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .vivia-event-vr-button,
+  .vivia-event-reconstruction-button {
+    width: 100%;
+  }
+
+  .vivia-event-hero-visual {
+    min-height: 240px;
+  }
+
+  .vivia-event-chip {
+    font-size: 9px;
+  }
+
+  .vivia-event-chip.chip-signal {
+    left: 2%;
+  }
+
+  .vivia-event-chip.chip-context {
+    right: 1%;
+  }
+
+  .vivia-event-chip.chip-memory {
+    left: 3%;
+  }
+
+  .vivia-event-section {
+    margin-top: 58px;
+  }
+
+  .vivia-event-section-heading h2 {
+    font-size: 27px;
+  }
+
+  .vivia-event-insight-content h2 {
     font-size: 25px;
   }
 
-  .vivia-event-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .vivia-event-info-item {
-    min-height: 90px;
-  }
-
-  .vivia-event-summary {
+  .vivia-event-footer-inner {
     flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 30px;
   }
 
-  .vivia-event-primary {
-    height: 56px;
+  .vivia-event-footer-team {
+    justify-items: end;
+
+    text-align: right;
   }
+
+}
+
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+
+  .vivia-event-orbit.orbit-one,
+  .vivia-event-orbit.orbit-two {
+    animation: none;
+  }
+
 }

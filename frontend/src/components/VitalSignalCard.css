@@ -1,0 +1,256 @@
+.vital-card {
+  background: var(--surface, #fff);
+  border-radius: 24px;
+  padding: 26px 28px 22px;
+  box-shadow: 0 20px 50px -30px rgba(13, 28, 68, 0.35);
+  border: 1px solid var(--border, #e8e5df);
+}
+
+.vital-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.vital-card-head h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text, #17213d);
+}
+
+.vital-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d03b3b;
+  background: rgba(208, 59, 59, 0.1);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.vital-status-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d03b3b;
+}
+
+.vital-card-body {
+  display: grid;
+  grid-template-columns: minmax(160px, 210px) 1fr;
+  gap: 20px;
+}
+
+/* STATS */
+
+.vital-stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vital-stat {
+  background: var(--background, #f7fafc);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vital-stat-label {
+  font-size: 13px;
+  color: var(--subtext, #717989);
+}
+
+.vital-stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vital-stat-value-row strong {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text, #17213d);
+  line-height: 1;
+}
+
+.vital-stat-value-row strong em {
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--subtext, #717989);
+  margin-left: 4px;
+}
+
+.vital-stat-delta {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d03b3b;
+}
+
+.vital-stat-average {
+  font-size: 12px;
+  color: var(--subtext, #717989);
+}
+
+/* CHART */
+
+.vital-chart-col {
+  min-width: 0;
+}
+
+.vital-chart-col h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #17213d);
+  margin-bottom: 4px;
+}
+
+.vital-chart-body {
+  position: relative;
+}
+
+.vital-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.vital-grid {
+  stroke: var(--border, #e8e5df);
+  stroke-width: 1;
+}
+
+.vital-tick {
+  fill: var(--subtext, #717989);
+  font-size: 11px;
+}
+
+.vital-band {
+  fill: rgba(208, 59, 59, 0.08);
+}
+
+.vital-area {
+  fill: #ec835a;
+  opacity: 0.12;
+  stroke: none;
+}
+
+.vital-line {
+  fill: none;
+  stroke: #ec835a;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.vital-leader {
+  stroke: #d03b3b;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.vital-peak-dot {
+  fill: #d03b3b;
+  stroke: var(--surface, #fff);
+  stroke-width: 2;
+}
+
+.vital-peak-label {
+  fill: #d03b3b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vital-crosshair {
+  stroke: var(--border, #e8e5df);
+  stroke-width: 1;
+}
+
+.vital-hover-dot {
+  fill: #ec835a;
+  stroke: var(--surface, #fff);
+  stroke-width: 2;
+}
+
+.vital-tooltip {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  background: var(--text, #17213d);
+  color: white;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.22);
+}
+
+.vital-tooltip strong {
+  display: block;
+  font-size: 13px;
+}
+
+.vital-tooltip span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ALERT */
+
+.vital-alert {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(208, 59, 59, 0.07);
+  border: 1px solid rgba(208, 59, 59, 0.18);
+  border-radius: 16px;
+  padding: 14px 18px;
+  color: #d03b3b;
+}
+
+.vital-alert-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.vital-alert-head strong {
+  font-size: 14px;
+  color: #a72f2f;
+}
+
+.vital-alert-head span {
+  font-size: 12px;
+  color: rgba(167, 47, 47, 0.75);
+}
+
+.vital-alert-body {
+  font-size: 13px;
+  color: #a72f2f;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .vital-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .vital-stats-col {
+    flex-direction: row;
+  }
+
+  .vital-stat {
+    flex: 1;
+  }
+}

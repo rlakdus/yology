@@ -1,73 +1,324 @@
 import "../styles/event.css";
 
-import {
-  ArrowLeft,
-  ArrowRight,
-  CalendarDays,
-  Clock3,
-  HeartPulse,
-  MapPin,
-  Sparkles,
-  Activity,
-  Image,
-} from "lucide-react";
-
 import { useLocation, useNavigate } from "react-router-dom";
 
+import {
+  Activity,
+  ArrowLeft,
+  ArrowRight,
+  BrainCircuit,
+  CalendarDays,
+  Clock3,
+  Film,
+  Glasses,
+  GraduationCap,
+  HeartPulse,
+  Image,
+  MapPin,
+  MessageCircle,
+  Music,
+  Plane,
+  Sparkles,
+  Ticket,
+  Video,
+  type LucideIcon,
+} from "lucide-react";
+
+import SiteNav from "../components/SiteNav";
+
+
+type Accent =
+  | "aqua"
+  | "orange"
+  | "blue"
+  | "lavender";
+
+
 type EventDetail = {
+  category: string;
+
+  icon: LucideIcon;
+
   time: string;
-  signal: string;
+
   heartRate: string;
-  stress: string;
-  aiSummary: string;
-  evidenceCount: number;
+
+  signal: string;
+
+  state: string;
+
+  confidence: number;
+
+  summary: string;
+
+  insight: string;
+
+  context: {
+    title: string;
+    description: string;
+    icon: LucideIcon;
+    accent: Accent;
+  }[];
 };
 
-const eventDetails: Record<string, EventDetail> = {
+
+const eventDetails: Record<
+  string,
+  EventDetail
+> = {
+
+  /* ========================================
+     01 · 면접 결과 확인
+  ======================================== */
+
   "interview-result": {
+    category:
+      "CAREER · RESULT CHECK",
+
+    icon: GraduationCap,
+
     time: "14:25",
-    signal: "Stress Spike",
+
     heartRate: "112 bpm",
-    stress: "High",
-    aiSummary:
+
+    signal: "Stress Spike",
+
+    state: "Tension Release",
+
+    confidence: 91,
+
+    summary:
       "면접 결과를 확인하는 동안 긴장과 안도가 교차하며 심박이 크게 상승한 순간으로 탐지되었습니다.",
-    evidenceCount: 3,
+
+    insight:
+      "결과를 확인하기 직전 심박과 긴장 신호가 함께 상승했고, 확인 직후 안도감으로 이어지는 변화가 시간과 맥락 분석을 통해 확인되었습니다.",
+
+    context: [
+      {
+        title: "면접 결과 확인 일정",
+        description:
+          "해당 시간대에 등록된 면접 결과 확인 일정과 감지 시점이 일치합니다.",
+
+        icon: CalendarDays,
+
+        accent: "blue",
+      },
+
+      {
+        title: "결과 확인 기록",
+        description:
+          "면접 결과를 확인하던 순간의 영상 기록이 존재합니다.",
+
+        icon: MessageCircle,
+
+        accent: "orange",
+      },
+
+      {
+        title: "생체 변화",
+        description:
+          "결과 확인 전후로 심박과 긴장 지표가 함께 상승했습니다.",
+
+        icon: HeartPulse,
+
+        accent: "aqua",
+      },
+    ],
   },
+
+
+  /* ========================================
+     02 · 첫 콘서트
+  ======================================== */
 
   "first-concert": {
+    category:
+      "MUSIC · HIGH AROUSAL",
+
+    icon: Music,
+
     time: "19:42",
-    signal: "High Arousal",
+
     heartRate: "126 bpm",
-    stress: "Excited",
-    aiSummary:
-      "공연이 시작된 직후 심박과 활동량이 빠르게 증가하며 강한 설렘과 몰입이 나타난 순간으로 추정됩니다.",
-    evidenceCount: 4,
+
+    signal: "Arousal Peak",
+
+    state: "Excited",
+
+    confidence: 94,
+
+    summary:
+      "공연이 시작된 직후 심박과 활동량이 빠르게 증가하며 강한 설렘과 몰입이 나타난 순간으로 탐지되었습니다.",
+
+    insight:
+      "공연 기록과 시간 정보, 생체 신호를 연결했을 때 공연 시작과 함께 신체적 각성이 빠르게 증가하고 높은 몰입 상태가 유지된 순간으로 해석됩니다.",
+
+    context: [
+      {
+        title: "공연 영상",
+        description:
+          "해당 시간대에 직접 촬영된 공연 영상 기록이 존재합니다.",
+
+        icon: Video,
+
+        accent: "orange",
+      },
+
+      {
+        title: "공연 일정",
+        description:
+          "공연 시간과 생체 신호가 변화한 시점이 일치합니다.",
+
+        icon: Ticket,
+
+        accent: "blue",
+      },
+
+      {
+        title: "활동량 변화",
+        description:
+          "공연 시작 이후 움직임과 심박이 동시에 증가했습니다.",
+
+        icon: Activity,
+
+        accent: "aqua",
+      },
+    ],
   },
+
+
+  /* ========================================
+     03 · 몽골 여행
+  ======================================== */
 
   "mongolia-trip": {
+    category:
+      "TRAVEL · ACTIVE MEMORY",
+
+    icon: Plane,
+
     time: "16:18",
-    signal: "Activity Peak",
+
     heartRate: "118 bpm",
-    stress: "Positive",
-    aiSummary:
-      "승마 활동 중 움직임과 심박이 크게 증가했으며, 높은 활동성과 긍정적 각성이 동시에 나타난 순간으로 탐지되었습니다.",
-    evidenceCount: 5,
+
+    signal: "Activity Peak",
+
+    state: "Positive",
+
+    confidence: 96,
+
+    summary:
+      "승마 활동 중 움직임과 심박이 크게 증가했으며 높은 활동성과 긍정적 각성이 함께 나타난 순간으로 탐지되었습니다.",
+
+    insight:
+      "승마 영상과 활동 데이터가 같은 시간대에 나타났습니다. 지속적인 움직임과 심박 증가를 기반으로 강한 활력과 몰입이 있었던 순간으로 재구성할 수 있습니다.",
+
+    context: [
+      {
+        title: "승마 영상",
+        description:
+          "초원에서 말을 타던 순간의 실제 영상 기록이 존재합니다.",
+
+        icon: Video,
+
+        accent: "orange",
+      },
+
+      {
+        title: "여행 이미지",
+        description:
+          "같은 장소와 시간대에 촬영된 여행 이미지가 확인되었습니다.",
+
+        icon: Image,
+
+        accent: "blue",
+      },
+
+      {
+        title: "활동량 기록",
+        description:
+          "승마 구간에서 움직임 데이터가 뚜렷하게 증가했습니다.",
+
+        icon: Activity,
+
+        accent: "aqua",
+      },
+    ],
   },
 
+
+  /* ========================================
+     04 · 영화 관람
+  ======================================== */
+
   "favorite-movie": {
+    category:
+      "CINEMA · EMOTIONAL MEMORY",
+
+    icon: Film,
+
     time: "20:31",
-    signal: "Emotional Shift",
+
     heartRate: "82 bpm",
-    stress: "Stable",
-    aiSummary:
-      "영화의 특정 장면을 중심으로 심박 변화는 크지 않았지만 감정 상태의 미세한 변화가 지속적으로 나타났습니다.",
-    evidenceCount: 2,
+
+    signal: "Emotional Shift",
+
+    state: "Immersed",
+
+    confidence: 88,
+
+    summary:
+      "영화 관람 중 전체 생체 상태는 비교적 안정적이었지만 특정 구간에서 반복적인 심박 변화가 나타나 감정적 몰입 순간으로 탐지되었습니다.",
+
+    insight:
+      "큰 활동 변화는 없었지만 특정 시간대에서 미세한 심박 변화가 반복되었습니다. 관람 기록과 시간 정보를 연결해 특정 장면에 깊게 몰입한 순간으로 추정했습니다.",
+
+    context: [
+      {
+        title: "관람 기록",
+        description:
+          "영화 상영 시간과 감지 이벤트가 같은 시간대에 존재합니다.",
+
+        icon: Ticket,
+
+        accent: "orange",
+      },
+
+      {
+        title: "시간 맥락",
+        description:
+          "관람 시작 이후 특정 구간에서 반복적인 신호 변화가 나타났습니다.",
+
+        icon: Clock3,
+
+        accent: "blue",
+      },
+
+      {
+        title: "감정 변화",
+        description:
+          "안정 상태 안에서 미세한 심박 변화가 지속되었습니다.",
+
+        icon: HeartPulse,
+
+        accent: "lavender",
+      },
+    ],
   },
 };
 
+
 const Event = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate =
+    useNavigate();
+
+  const location =
+    useLocation();
+
+
+  /* ========================================
+     DATA FROM MY MOMENTS
+  ======================================== */
 
   const {
     ageLabel = "20대",
@@ -77,357 +328,669 @@ const Event = () => {
     momentTitle = "면접 결과 확인",
 
     momentSubtitle =
-      "긴장과 몰입이 가장 높았던 순간",
+    "긴장과 몰입이 가장 높았던 순간",
 
     momentDescription =
       "면접 결과를 확인하며 긴장과 안도가 교차했던 순간을 다시 살펴봅니다.",
 
-    /* Moment 카드용 월 단위 */
-    momentDate = "2026.04",
+    momentDate =
+    "2026.04",
 
-    /* Event 상세용 정확한 날짜 */
     momentExactDate,
 
-    momentLocation = "Campus",
+    momentLocation =
+    "Campus",
 
-    demoSource = "student",
+    demoSource =
+    "student",
 
-    eventId = "event_001",
+    eventId =
+    "event_001",
   } = location.state || {};
+
 
   const detail =
     eventDetails[momentId] ??
     eventDetails["interview-result"];
 
-  /*
-    정확한 날짜가 있으면 exactDate 사용
-    없으면 월 단위 date 사용
-  */
+
+  const EventIcon =
+    detail.icon;
+
   const displayDate =
-    momentExactDate || momentDate;
+    momentExactDate ||
+    momentDate;
 
-  const handleReconstruction = () => {
-    navigate("/reconstruction", {
-      state: {
-        ageLabel,
 
-        momentId,
+  /* ========================================
+     RECONSTRUCTION
+  ======================================== */
 
-        momentTitle,
+  const openReconstruction =
+    () => {
+      navigate(
+        "/reconstruction",
+        {
+          state: {
+            ageLabel,
 
-        momentSubtitle,
+            momentId,
 
-        momentDescription,
+            momentTitle,
 
-        momentDate,
+            momentSubtitle,
 
-        momentExactDate,
+            momentDescription,
 
-        momentLocation,
+            momentDate,
 
-        demoSource,
+            momentExactDate,
 
-        eventId,
+            momentLocation,
 
-        eventTime: detail.time,
+            demoSource,
 
-        eventSignal: detail.signal,
+            eventId,
 
-        eventHeartRate: detail.heartRate,
+            eventTime:
+              detail.time,
 
-        eventStress: detail.stress,
+            eventHeartRate:
+              detail.heartRate,
 
-        eventSummary: detail.aiSummary,
+            eventSignal:
+              detail.signal,
 
-        evidenceCount:
-          detail.evidenceCount,
-      },
-    });
+            eventStress:
+              detail.state,
+
+            eventSummary:
+              detail.summary,
+
+            reconstructionConfidence:
+              detail.confidence,
+          },
+        }
+      );
+    };
+
+
+  /* ========================================
+     VR
+  ======================================== */
+
+  const openVr = () => {
+    navigate(
+      `/vr/${demoSource}/${eventId}`
+    );
   };
+
 
   return (
     <div className="vivia-event-page">
 
-      {/* =====================
-          BACK
-      ===================== */}
+      {/* ========================================
+          GLOBAL NAV
+      ======================================== */}
 
-      <button
-        className="vivia-event-back"
-        onClick={() => navigate("/moment")}
-        aria-label="기록 목록으로 돌아가기"
-      >
-        <ArrowLeft size={20} />
-      </button>
+      <SiteNav />
 
-      <main className="vivia-event-container">
 
-        {/* =====================
-            HEADER
-        ===================== */}
+      <main className="vivia-event-shell">
 
-        <header className="vivia-event-header">
+        {/* ========================================
+            BACK
+        ======================================== */}
 
-          <span className="vivia-event-eyebrow">
-            VIVIA · SELECTED MEMORY
-          </span>
+        <button
+          className="vivia-event-back"
+          onClick={() =>
+            navigate("/moment")
+          }
+          aria-label="My Moments로 돌아가기"
+        >
+          <ArrowLeft size={18} />
+        </button>
 
-          <h1>
-            {momentTitle}
-          </h1>
 
-          <p>
-            {momentSubtitle}
-          </p>
+        {/* ========================================
+            HERO
+        ======================================== */}
 
-        </header>
+        <section className="vivia-event-hero">
 
-        {/* =====================
-            MAIN CARD
-        ===================== */}
+          <div className="vivia-event-hero-copy">
 
-        <section className="vivia-event-card">
+            <span className="vivia-event-eyebrow">
 
-          {/* TOP */}
+              VIVIA · SELECTED MOMENT
 
-          <div className="vivia-event-card-top">
+            </span>
 
-            <div>
 
-              <span className="vivia-event-date">
+            <div className="vivia-event-category">
+
+              <EventIcon size={18} />
+
+              {detail.category}
+
+            </div>
+
+
+            <h1>
+
+              {momentTitle}
+
+            </h1>
+
+
+            <h2>
+
+              {momentSubtitle}
+
+            </h2>
+
+
+            <p>
+
+              {momentDescription}
+
+            </p>
+
+
+            {/* =====================
+                META
+            ===================== */}
+
+            <div className="vivia-event-meta">
+
+              <span>
+
+                <CalendarDays
+                  size={15}
+                />
+
                 {displayDate}
+
               </span>
 
-              <h2>
-                그날의 기록을 찾았습니다.
-              </h2>
 
-              <p>
-                {momentDescription}
-              </p>
+              <span>
 
-            </div>
+                <Clock3
+                  size={15}
+                />
 
-            <div className="vivia-event-match-badge">
+                {detail.time}
 
-              <Sparkles size={17} />
+              </span>
 
-              AI MATCH
 
-            </div>
+              <span>
 
-          </div>
+                <MapPin
+                  size={15}
+                />
 
-          {/* =====================
-              BASIC INFO
-          ===================== */}
+                {momentLocation}
 
-          <div className="vivia-event-info-grid">
+              </span>
 
-            {/* DATE */}
 
-            <div className="vivia-event-info-item">
+              <span>
 
-              <div className="vivia-event-info-icon blue">
+                <HeartPulse
+                  size={15}
+                />
 
-                <CalendarDays size={20} />
+                {detail.heartRate}
 
-              </div>
-
-              <div>
-
-                <span>
-                  Date
-                </span>
-
-                <strong>
-                  {displayDate}
-                </strong>
-
-              </div>
+              </span>
 
             </div>
 
-            {/* TIME */}
 
-            <div className="vivia-event-info-item">
+            {/* =====================
+                MAIN ACTIONS
+            ===================== */}
 
-              <div className="vivia-event-info-icon orange">
+            <div className="vivia-event-actions">
 
-                <Clock3 size={20} />
+              <button
+                className="vivia-event-vr-button"
+                onClick={openVr}
+              >
 
-              </div>
+                <Glasses size={19} />
 
-              <div>
+                VR로 이 순간 재현하기
 
-                <span>
-                  Time
-                </span>
+                <ArrowRight size={17} />
 
-                <strong>
-                  {detail.time}
-                </strong>
+              </button>
 
-              </div>
 
-            </div>
+              <button
+                className="vivia-event-reconstruction-button"
+                onClick={
+                  openReconstruction
+                }
+              >
 
-            {/* HEART RATE */}
+                <BrainCircuit
+                  size={18}
+                />
 
-            <div className="vivia-event-info-item">
+                AI 재구성 보기
 
-              <div className="vivia-event-info-icon blue">
-
-                <HeartPulse size={20} />
-
-              </div>
-
-              <div>
-
-                <span>
-                  Heart Rate
-                </span>
-
-                <strong>
-                  {detail.heartRate}
-                </strong>
-
-              </div>
-
-            </div>
-
-            {/* LOCATION */}
-
-            <div className="vivia-event-info-item">
-
-              <div className="vivia-event-info-icon orange">
-
-                <MapPin size={20} />
-
-              </div>
-
-              <div>
-
-                <span>
-                  Location
-                </span>
-
-                <strong>
-                  {momentLocation}
-                </strong>
-
-              </div>
+              </button>
 
             </div>
 
           </div>
 
-          {/* =====================
-              SIGNAL INFO
-          ===================== */}
 
-          <div className="vivia-event-signal-row">
+          {/* ========================================
+              HERO VISUAL
+          ======================================== */}
 
-            <div className="vivia-event-signal-card">
+          <div className="vivia-event-hero-visual">
 
-              <Activity size={21} />
+            <div className="vivia-event-orbit orbit-one" />
 
-              <div>
+            <div className="vivia-event-orbit orbit-two" />
 
-                <span>
-                  Detected Signal
-                </span>
 
-                <strong>
-                  {detail.signal}
-                </strong>
+            <div className="vivia-event-core">
 
-              </div>
+              <EventIcon
+                size={38}
+              />
 
             </div>
 
-            <div className="vivia-event-signal-card">
 
-              <HeartPulse size={21} />
+            <span className="vivia-event-chip chip-signal">
 
-              <div>
+              Signal
 
-                <span>
-                  State
-                </span>
+            </span>
 
-                <strong>
-                  {detail.stress}
-                </strong>
 
-              </div>
+            <span className="vivia-event-chip chip-context">
 
-            </div>
+              Context
 
-            <div className="vivia-event-signal-card">
+            </span>
 
-              <Image size={21} />
 
-              <div>
+            <span className="vivia-event-chip chip-memory">
 
-                <span>
-                  Evidence
-                </span>
+              Memory
 
-                <strong>
-                  {detail.evidenceCount} records
-                </strong>
-
-              </div>
-
-            </div>
+            </span>
 
           </div>
 
-          {/* =====================
-              AI SUMMARY
-          ===================== */}
+        </section>
 
-          <div className="vivia-event-summary">
 
-            <div className="vivia-event-summary-icon">
+        {/* ========================================
+            01 · SIGNAL
+        ======================================== */}
 
-              <Sparkles size={22} />
+        <section className="vivia-event-section">
 
-            </div>
+          <div className="vivia-event-section-heading">
 
             <div>
 
               <span>
-                AI SUMMARY
+
+                01 · SIGNAL
+
               </span>
 
+              <h2>
+
+                몸에 남은 변화
+
+              </h2>
+
+            </div>
+
+
+            <p>
+
+              선택된 순간 전후에서
+              평소와 다른 생체 신호가
+              감지되었습니다.
+
+            </p>
+
+          </div>
+
+
+          <div className="vivia-event-signal-grid">
+
+            <article>
+
+              <div className="signal-icon aqua">
+
+                <HeartPulse
+                  size={23}
+                />
+
+              </div>
+
+              <span>
+                Heart Rate
+              </span>
+
+              <strong>
+
+                {detail.heartRate}
+
+              </strong>
+
+            </article>
+
+
+            <article>
+
+              <div className="signal-icon orange">
+
+                <Activity
+                  size={23}
+                />
+
+              </div>
+
+              <span>
+                Detected Signal
+              </span>
+
+              <strong>
+
+                {detail.signal}
+
+              </strong>
+
+            </article>
+
+
+            <article>
+
+              <div className="signal-icon lavender">
+
+                <Sparkles
+                  size={23}
+                />
+
+              </div>
+
+              <span>
+                State
+              </span>
+
+              <strong>
+
+                {detail.state}
+
+              </strong>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+        {/* ========================================
+            02 · CONTEXT
+        ======================================== */}
+
+        <section className="vivia-event-section">
+
+          <div className="vivia-event-section-heading">
+
+            <div>
+
+              <span>
+
+                02 · CONTEXT
+
+              </span>
+
+              <h2>
+
+                이 순간을 설명하는 기록
+
+              </h2>
+
+            </div>
+
+
+            <p>
+
+              생체 신호만으로 알 수 없는
+              당시의 상황을 주변 기록과
+              연결했습니다.
+
+            </p>
+
+          </div>
+
+
+          <div className="vivia-event-context-grid">
+
+            {detail.context.map(
+              (
+                item,
+                index
+              ) => {
+
+                const Icon =
+                  item.icon;
+
+                return (
+                  <article
+                    key={
+                      item.title
+                    }
+                  >
+
+                    <span className="context-number">
+
+                      0{index + 1}
+
+                    </span>
+
+
+                    <div
+                      className={`context-icon ${item.accent}`}
+                    >
+
+                      <Icon
+                        size={23}
+                      />
+
+                    </div>
+
+
+                    <h3>
+
+                      {item.title}
+
+                    </h3>
+
+
+                    <p>
+
+                      {
+                        item.description
+                      }
+
+                    </p>
+
+                  </article>
+                );
+              }
+            )}
+
+          </div>
+
+        </section>
+
+
+        {/* ========================================
+            03 · VIVIA INSIGHT
+        ======================================== */}
+
+        <section className="vivia-event-insight">
+
+          <div className="vivia-event-insight-icon">
+
+            <BrainCircuit
+              size={27}
+            />
+
+          </div>
+
+
+          <div className="vivia-event-insight-content">
+
+            <span>
+
+              03 · VIVIA INSIGHT
+
+            </span>
+
+
+            <h2>
+
+              신호와 맥락이
+              <br />
+
+              하나의 순간으로
+              연결되었습니다.
+
+            </h2>
+
+
+            <p>
+
+              {detail.insight}
+
+            </p>
+
+
+            <div className="vivia-event-summary">
+
+              <Sparkles
+                size={18}
+              />
+
               <p>
-                {detail.aiSummary}
+
+                {detail.summary}
+
               </p>
+
+            </div>
+
+
+            <div className="vivia-event-confidence">
+
+              <div>
+
+                <span>
+
+                  Reconstruction
+                  Confidence
+
+                </span>
+
+                <strong>
+
+                  {detail.confidence}%
+
+                </strong>
+
+              </div>
+
+
+              <div className="vivia-event-confidence-track">
+
+                <span
+                  style={{
+                    width:
+                      `${detail.confidence}%`,
+                  }}
+                />
+
+              </div>
 
             </div>
 
           </div>
 
-          {/* =====================
-              RECONSTRUCTION CTA
-          ===================== */}
-
-          <button
-            className="vivia-event-primary"
-            onClick={handleReconstruction}
-          >
-
-            이 순간 재구성하기
-
-            <ArrowRight size={19} />
-
-          </button>
-
         </section>
 
       </main>
+
+
+      {/* ========================================
+          FOOTER
+      ======================================== */}
+
+      <footer className="vivia-event-footer">
+
+        <div className="vivia-event-footer-inner">
+
+          <div className="vivia-event-footer-brand">
+
+            <img
+              src="/assets/logo.png"
+              alt="VIVIA"
+            />
+
+            <p>
+
+              몸의 신호가
+              삶의 이야기가 됩니다.
+
+            </p>
+
+          </div>
+
+
+          <div className="vivia-event-footer-team">
+
+            <strong>
+
+              TEAM YOLOGY
+
+            </strong>
+
+            <span>
+
+              Samsung Life
+              Lifenology Lab
+
+            </span>
+
+            <span>
+
+              2026
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </footer>
 
     </div>
   );

@@ -378,7 +378,7 @@ const LiveDemo = () => {
           <div>
             <span className="live-eyebrow"><Radio size={13} /> LIVE SIGNAL LAB</span>
             <h1>Signal, observed<br />in the moment.</h1>
-            <p>Apple Watch의 실시간 심박을 개인 baseline과 비교해 평소와 다른 변화 구간을 관찰합니다. 신호는 감정의 정답이 아니라, 기록을 시작하는 단서입니다.</p>
+            <p>Apple Watch의 실시간 심박을 개인 baseline과 비교해 평소와 다른 변화 구간을 관찰합니다. <br /> 신호는 감정의 정답이 아니라, 기록을 시작하는 단서입니다.</p>
           </div>
           <div className={`source-panel ${previewMode ? "preview" : "live"}`}>
             <span className="source-indicator" />
@@ -391,12 +391,27 @@ const LiveDemo = () => {
         </div>
       </section>
 
-      {previewMode && (
-        <div className="shell preview-notice">
+      <div className="preview-notice-slot">
+
+        <div
+          className={`shell preview-notice ${previewMode ? "is-visible" : "is-hidden"
+            }`}
+        >
           <WifiOff size={16} />
-          <div><strong>현재는 미리보기 데이터입니다.</strong><span>Apple Watch와 로컬 서버가 연결되면 별도 조작 없이 실제 신호로 자동 전환됩니다.</span></div>
+
+          <div>
+            <strong>
+              현재는 미리보기 데이터입니다.
+            </strong>
+
+            <span>
+              Apple Watch와 로컬 서버가 연결되면
+              별도 조작 없이 실제 신호로 자동 전환됩니다.
+            </span>
+          </div>
         </div>
-      )}
+
+      </div>
 
       <section className="shell live-workspace">
         <div className="signal-summary-row multisignal">
@@ -498,6 +513,48 @@ const LiveDemo = () => {
           </div>
         </section>
       </section>
+
+            {/* ========================================
+          FOOTER
+      ======================================== */}
+
+      <footer className="live-footer">
+
+        <div className="shell live-footer-inner">
+
+          <div className="live-footer-brand">
+
+            <img
+              src="/assets/logo.png"
+              alt="VIVIA"
+            />
+
+            <p>
+              몸의 신호가 삶의 이야기가 됩니다.
+            </p>
+
+          </div>
+
+
+          <div className="live-footer-team">
+
+            <strong>
+              TEAM YOLOGY
+            </strong>
+
+            <span>
+              Samsung Life Lifenology Lab
+            </span>
+
+            <span>
+              2026
+            </span>
+
+          </div>
+
+        </div>
+
+      </footer>
 
       {recordOpen && (
         <div className="record-backdrop" role="presentation" onMouseDown={(e) => { if (e.currentTarget === e.target) resetRecorder(); }}>

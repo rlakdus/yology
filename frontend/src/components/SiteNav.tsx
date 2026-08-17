@@ -18,8 +18,8 @@ const SiteNav = () => {
         <div className="site-nav-links">
           <NavLink to="/" end className={({ isActive }) => (isActive ? "is-active" : "")}>Home</NavLink>
           <NavLink to="/how-it-works" className={({ isActive }) => (isActive ? "is-active" : "")}>How it works</NavLink>
+          <NavLink to="/signal-insight" className={({ isActive }) => (isActive ? "is-active" : "")}>Signal Insight</NavLink>
           <NavLink to="/moment" className={({ isActive }) => (isActive ? "is-active" : "")}>My Moments</NavLink>
-          <NavLink to="/live-demo" className={({ isActive }) => (isActive ? "is-active" : "")}>Live Demo</NavLink>
         </div>
       </nav>
     </header>

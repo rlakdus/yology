@@ -41,11 +41,21 @@ body {
   color: #0b1b38;
 
   background:
+    radial-gradient(
+      circle at 8% 4%,
+      rgba(75, 158, 210, 0.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 92% 6%,
+      rgba(244, 135, 77, 0.11),
+      transparent 30%
+    ),
     linear-gradient(
       180deg,
       #fffdfa 0%,
-      #f8fbff 48%,
-      #ffffff 100%
+      #f8fbff 50%,
+      #fffaf6 100%
     );
 }
 
