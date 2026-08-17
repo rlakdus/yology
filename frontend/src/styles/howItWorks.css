@@ -1302,24 +1302,6 @@ body {
 
   border-radius: 22px;
 
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(53, 200, 197, 0.16),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 85% 80%,
-      rgba(244, 135, 77, 0.17),
-      transparent 32%
-    ),
-    linear-gradient(
-      145deg,
-      #0a1c3e,
-      #12355f 60%,
-      #3a2a43 135%
-    );
-
   box-shadow:
     0 22px 50px
     rgba(12, 32, 71, 0.13);
@@ -1337,8 +1319,56 @@ body {
     rgba(12, 32, 71, 0.2);
 }
 
+.hiw-replay-photo {
+  position: absolute;
+
+  z-index: 0;
+
+  inset: 0;
+
+  background-image: url("/assets/mongolia-thumb.jpg");
+  background-size: cover;
+  background-position: center 62%;
+
+  transform: scale(1.04);
+
+  transition: transform 0.4s ease;
+}
+
+.hiw-replay:hover .hiw-replay-photo {
+  transform: scale(1.09);
+}
+
+.hiw-replay-tint {
+  position: absolute;
+
+  z-index: 1;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(53, 200, 197, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(244, 135, 77, 0.22),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(9, 21, 47, 0.82),
+      rgba(15, 44, 79, 0.72) 60%,
+      rgba(47, 34, 54, 0.72) 135%
+    );
+}
+
 .hiw-replay-orbit {
   position: absolute;
+
+  z-index: 1;
 
   left: 50%;
   top: 50%;

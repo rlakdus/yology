@@ -803,6 +803,10 @@ const HowItWorks = () => {
             }}
           >
 
+            <div className="hiw-replay-photo" aria-hidden="true" />
+
+            <div className="hiw-replay-tint" aria-hidden="true" />
+
             <div className="hiw-replay-orbit orbit-one" />
 
             <div className="hiw-replay-orbit orbit-two" />
