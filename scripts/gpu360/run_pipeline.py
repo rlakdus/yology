@@ -36,6 +36,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--checkpoint-id", default=os.getenv("ARGUS_CHECKPOINT_ID"))
     parser.add_argument("--from-stage", choices=STAGES, default="prepare")
+    parser.add_argument(
+        "--to-stage",
+        choices=STAGES,
+        default="validate",
+        help="이 단계까지만 실행합니다. 고정 파노라마 이미지를 쓸 때 infer까지만 돌리는 용도.",
+    )
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--check-config", action="store_true")
@@ -147,6 +153,33 @@ def probe(path: Path) -> dict[str, Any]:
     }
 
 
+def validate_audio(job: dict[str, Any], path: Path) -> None:
+    """Check the optional ``audio`` block.
+
+    ``original`` keeps the recorded track; ``synthesized`` discards it and renders a
+    procedural bed from a layer spec instead. Only ``synthesized`` needs extra files.
+    """
+    audio = job.get("audio")
+    if audio is None:
+        return
+    mode = audio.get("mode")
+    if mode not in ("original", "synthesized"):
+        raise SystemExit(f"audio.mode는 original 또는 synthesized여야 합니다 ({path}): {mode}")
+    if float(audio.get("target_lufs", -18.0)) > 0:
+        raise SystemExit("audio.target_lufs는 0 이하여야 합니다.")
+    if float(audio.get("true_peak_db", -1.0)) > 0:
+        raise SystemExit("audio.true_peak_db는 0 이하여야 합니다.")
+    if mode != "synthesized":
+        return
+    for key in ("spec", "file"):
+        if key not in audio:
+            raise SystemExit(f"audio.mode가 synthesized면 audio.{key}가 필요합니다 ({path}).")
+    if not resolve_project_path(audio["spec"]).is_file():
+        raise SystemExit(f"사운드 베드 사양이 없습니다: {audio['spec']}")
+    if resolve_project_path(audio["file"]).suffix.lower() != ".wav":
+        raise SystemExit("audio.file은 .wav여야 합니다.")
+
+
 def validate_job(job: dict[str, Any], path: Path) -> tuple[Path, Path, Path]:
     required = (
         "event", "source", "expected_source_sha256", "output",
@@ -204,7 +237,31 @@ def validate_job(job: dict[str, Any], path: Path) -> tuple[Path, Path, Path]:
         raise SystemExit("color_stabilization_transition은 0 이상이어야 합니다.")
     if composite.get("freeze_generated_surroundings", False) and stabilize_after is not None:
         raise SystemExit("주변부 고정과 시간축 안정화는 동시에 사용할 수 없습니다.")
+    frozen_image = composite.get("frozen_panorama_image")
+    if frozen_image is not None:
+        if stabilize_after is not None:
+            raise SystemExit("고정 파노라마 이미지와 시간축 안정화는 동시에 사용할 수 없습니다.")
+        if not resolve_project_path(frozen_image).is_file():
+            raise SystemExit(f"고정 파노라마 이미지가 없습니다: {frozen_image}")
+    validate_audio(job, path)
     return source, output, record
+
+
+def wrap_panorama_image(image: Path, work_dir: Path) -> Path:
+    """Wrap a still equirectangular panorama as a one-frame video.
+
+    ``composite_recorded_front.py`` reads the generated surroundings from a video, so a
+    still background is supplied as a single frame that ``--freeze-generated-surroundings``
+    then holds for the whole timeline.
+    """
+    work_dir.mkdir(parents=True, exist_ok=True)
+    wrapped = work_dir / f"{image.stem}_frozen.mp4"
+    run(conda(
+        "360VG", "ffmpeg", "-y", "-loglevel", "warning",
+        "-loop", "1", "-i", str(image),
+        "-t", "1", "-r", "24", "-pix_fmt", "yuv420p", str(wrapped),
+    ))
+    return wrapped
 
 
 def discover_one(folder: Path, pattern: str, label: str) -> Path:
@@ -237,6 +294,28 @@ def update_event_metadata(job: dict[str, Any]) -> None:
     )
     metadata["view"] = job["view"]
     write_json(metadata_path, metadata)
+
+
+def audio_record(job: dict[str, Any]) -> dict[str, Any]:
+    """Describe what ended up on the audio track, for generation.json."""
+    audio = job.get("audio", {})
+    if audio.get("mode") != "synthesized":
+        return {"mode": "original", "codec": "aac", "source": job["source"]}
+    bed = resolve_project_path(audio["file"])
+    if not bed.is_file():
+        # --from-stage validate로 들어오면 compose를 건너뛰므로 베드가 없을 수 있습니다.
+        raise SystemExit(f"사운드 베드가 없습니다. compose부터 실행하세요: {audio['file']}")
+    return {
+        "mode": "synthesized",
+        "codec": "aac",
+        "spec": audio["spec"],
+        "file": audio["file"],
+        "sha256": sha256(bed),
+        "target_lufs": float(audio.get("target_lufs", -18.0)),
+        "true_peak_db": float(audio.get("true_peak_db", -1.0)),
+        "recorded_audio_discarded": True,
+        "reason": audio.get("reason"),
+    }
 
 
 def write_run_record(
@@ -288,10 +367,19 @@ def write_run_record(
             "height": job["composite"].get("output_height", job["enhancement"]["height"]),
             "video_codec": "h264",
             "pixel_format": "yuv420p",
-            "audio": "original_aac",
+            "audio": audio_record(job),
             "faststart": True,
         },
     }
+    frozen_image = job["composite"].get("frozen_panorama_image")
+    if frozen_image is not None:
+        frozen_image_path = resolve_project_path(frozen_image)
+        payload["panorama_image"] = {
+            "file": frozen_image,
+            "sha256": sha256(frozen_image_path),
+            "role": "frozen_generated_surroundings",
+        }
+        payload["generation"]["generated_region"] = "recorded_front_view_only"
     write_json(path, payload)
 
 
@@ -302,6 +390,9 @@ def main() -> int:
     lock = load_json(LOCK_PATH)
     source, output, record = validate_job(job, job_path)
     start_index = STAGES.index(args.from_stage)
+    stop_index = STAGES.index(args.to_stage)
+    if stop_index < start_index:
+        raise SystemExit(f"--to-stage는 --from-stage 이후여야 합니다: {args.from_stage} -> {args.to_stage}")
 
     if args.check_config:
         print(f"OK: {job['event']} -> {output.relative_to(PROJECT_ROOT)}")
@@ -415,13 +506,18 @@ def main() -> int:
             command.append("--reset_batch_conditioning")
         run(command, cwd=args.argus_dir)
 
+    if stop_index <= STAGES.index("infer"):
+        print(f"{args.to_stage} 단계까지 완료했습니다: {work}")
+        return 0
+
     if start_index < STAGES.index("validate"):
         raw_video = discover_one(raw_dir, f"{prepared_source.stem}_output_fov*_hw*.mp4", "Argus 출력")
         camera_metadata = raw_dir / f"{prepared_source.stem}_camera.json"
         if not camera_metadata.is_file():
             raise SystemExit(f"카메라 메타데이터가 없습니다: {camera_metadata}")
 
-        if start_index <= STAGES.index("enhance") and enhancement["enabled"]:
+        frozen_image = composite.get("frozen_panorama_image")
+        if start_index <= STAGES.index("enhance") and enhancement["enabled"] and frozen_image is None:
             target_fps = max(1, round(prepared_probe["fps_float"]))
             run(
                 conda(
@@ -444,13 +540,39 @@ def main() -> int:
                 },
             )
 
-        generated_video = (
-            enhanced_dir / f"{raw_video.stem}_enhanced.mp4"
-            if enhancement["enabled"]
-            else raw_video
-        )
+        if frozen_image is not None:
+            # The Argus panorama is discarded here; only its camera calibration is reused.
+            generated_video = wrap_panorama_image(resolve_project_path(frozen_image), enhanced_dir)
+        else:
+            generated_video = (
+                enhanced_dir / f"{raw_video.stem}_enhanced.mp4"
+                if enhancement["enabled"]
+                else raw_video
+            )
         if not generated_video.is_file():
             raise SystemExit(f"향상 영상이 없습니다: {generated_video}")
+
+        if stop_index <= STAGES.index("enhance"):
+            print(f"{args.to_stage} 단계까지 완료했습니다: {generated_video}")
+            return 0
+
+        audio_config = job.get("audio", {})
+        audio_source = source
+        if audio_config.get("mode") == "synthesized":
+            audio_source = resolve_project_path(audio_config["file"])
+            if start_index <= STAGES.index("compose"):
+                # 베드 길이는 사양이 아니라 실제 합성 타임라인을 따라야 합니다.
+                run(conda(
+                    "360VG", "python", str(Path(__file__).with_name("make_audio_bed.py")),
+                    "--spec", str(resolve_project_path(audio_config["spec"])),
+                    "--output", str(audio_source),
+                    "--duration", f"{prepared_probe['duration_seconds']:.3f}",
+                    "--target-lufs", str(audio_config.get("target_lufs", -18.0)),
+                    "--true-peak-db", str(audio_config.get("true_peak_db", -1.0)),
+                    "--force",
+                ))
+            elif not audio_source.is_file():
+                raise SystemExit(f"사운드 베드가 없습니다: {audio_config['file']}")
 
         if start_index <= STAGES.index("compose"):
             compose_command = conda(
@@ -458,7 +580,7 @@ def main() -> int:
                 "--argus-dir", str(args.argus_dir.resolve()),
                 "--generated", str(generated_video),
                 "--source", str(prepared_source),
-                "--audio-source", str(source),
+                "--audio-source", str(audio_source),
                 "--camera-metadata", str(camera_metadata),
                 "--output", str(final_candidate),
                 "--fps", prepared_probe["fps"],
@@ -469,10 +591,10 @@ def main() -> int:
                 "--seam-blend", str(composite["seam_blend"]),
                 "--device", args.device,
             )
-            if composite.get("freeze_generated_surroundings", False):
+            if composite.get("freeze_generated_surroundings", False) or frozen_image is not None:
                 compose_command.append("--freeze-generated-surroundings")
                 freeze_seconds = composite.get("freeze_frame_seconds")
-                if freeze_seconds is not None:
+                if freeze_seconds is not None and frozen_image is None:
                     compose_command.extend(["--freeze-frame-seconds", str(freeze_seconds)])
             stabilize_after = composite.get("stabilize_generated_color_after")
             if stabilize_after is not None:
@@ -486,6 +608,10 @@ def main() -> int:
             if args.force:
                 compose_command.append("--force")
             run(compose_command)
+
+        if stop_index <= STAGES.index("compose"):
+            print(f"{args.to_stage} 단계까지 완료했습니다: {final_candidate}")
+            return 0
 
     if not final_candidate.is_file():
         raise SystemExit(f"최종 후보 영상이 없습니다: {final_candidate}")

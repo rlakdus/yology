@@ -1,0 +1,128 @@
+{
+  "status": "complete",
+  "completed_at": "2026-08-17T07:22:17.597718+00:00",
+  "model": {
+    "name": "Beyond the Frame (Argus)",
+    "repository": "https://github.com/Red-Fairy/argus-code.git",
+    "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
+    "checkpoint": "official-argus-unet"
+  },
+  "source": {
+    "file": "events/student/event_001/source/interview-result.trimmed.mov",
+    "sha256": "4a3cf71f83432c2c409123aab474553f3312867da8a047c5d69231a9d5c1bc16",
+    "duration_seconds": 10.01,
+    "fps": "30000/1001",
+    "fps_float": 29.97002997002997,
+    "frames": 299,
+    "width": 1594,
+    "height": 908,
+    "video_codec": "h264"
+  },
+  "preparation": {
+    "source": "/root/yology/events/student/event_001/source/interview-result.trimmed.mov",
+    "output": "/root/yology/gpu360/work/student/event_001/prepared/fixed-view.mp4",
+    "frames": 299,
+    "fps": 29.97002997002997,
+    "source_width": 1594,
+    "source_height": 908,
+    "display_aspect_ratio": 1.7555066079295154,
+    "anchor_frame_seconds": 0.0,
+    "anchor_frame_index": 0,
+    "tracking_failures": 0,
+    "tracking_failure_ratio": 0.0,
+    "tracking_exclude_rect": null,
+    "common_crop": {
+      "x": 120,
+      "y": 69,
+      "width": 1354,
+      "height": 770,
+      "valid_area_ratio": 0.720336
+    },
+    "inverse_scale_range": [
+      0.855731,
+      1.000395
+    ],
+    "inverse_rotation_deg_range": [
+      -0.184095,
+      0.927932
+    ],
+    "stabilization_mode": "affine_zoom_roll",
+    "zoom_removed": true,
+    "roll_removed": true,
+    "translation_preserved": true,
+    "source_orientation_metadata_applied": true,
+    "aspect_policy": "preserve",
+    "intermediate_codec": "h264_crf10",
+    "probe": {
+      "duration_seconds": 9.976633,
+      "fps": "30000/1001",
+      "fps_float": 29.97002997002997,
+      "frames": 299,
+      "width": 1594,
+      "height": 908,
+      "video_codec": "h264"
+    }
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "reset_batch_conditioning": true,
+    "guidance_scale": 3.0,
+    "inference_steps": 25,
+    "fixed_fov_deg": 90,
+    "camera_motion_prediction": false,
+    "rotation_during_inference": false,
+    "roll_pitch_yaw": "fixed_zero",
+    "full_sampling": true,
+    "preserve_source_timeline": true,
+    "generated_region": "recorded_front_view_only"
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": true,
+    "frozen_panorama_image": "events/student/event_001/panorama/interview-result-360.background.png"
+  },
+  "output": {
+    "file": "events/student/event_001/panorama/interview-result-360.mp4",
+    "sha256": "74ec7da641130ecae8e0585795868f4583682156032067bf7798a9700b4a1b96",
+    "width": 2048,
+    "height": 1024,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": {
+      "mode": "synthesized",
+      "codec": "aac",
+      "spec": "events/student/event_001/audio/bed.json",
+      "file": "events/student/event_001/audio/interview-result-bed.wav",
+      "sha256": "c7f16f31378d3edf42baeaab0e92e2e73bf5f16586f7c97ddda45065190230a2",
+      "target_lufs": -18.0,
+      "true_peak_db": -1.0,
+      "recorded_audio_discarded": true,
+      "reason": "녹음 오디오가 -36.7 LUFS에 1kHz 이상이 -51dB 이하로 죽어 있어 게인·디노이즈로 복구할 수 없다. 초당 RMS 변동도 4dB뿐이라 발화 구조가 없다. 원본을 버리고 절차적 사운드 베드로 대체한다."
+    },
+    "faststart": true
+  },
+  "panorama_image": {
+    "file": "events/student/event_001/panorama/interview-result-360.background.png",
+    "sha256": "15600e389b734e7557eaaa935fcc79c2ab259e879ed63da2174032c6a330a3f5",
+    "role": "frozen_generated_surroundings"
+  }
+}

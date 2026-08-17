@@ -20,7 +20,7 @@
   "availability": {
     "anomaly_ready": false,
     "source_video_ready": true,
-    "panorama_ready": false,
+    "panorama_ready": true,
     "vr_ready": false
   },
   "view": {
@@ -59,5 +59,11 @@
       "taken_at": "2026-04-12T14:22:21+09:00",
       "source_taken_at": "2026-08-12T15:05:00+09:00"
     }
-  ]
+  ],
+  "panorama_video": {
+    "file": "panorama/interview-result-360.mp4",
+    "projection": "equirectangular",
+    "fallback_image_file": null,
+    "yaw_offset_deg": 0.0
+  }
 }
