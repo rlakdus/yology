@@ -9,7 +9,6 @@ import {
   MapPin,
   Moon,
   Play,
-  Search,
   Sparkles,
   Waves,
 } from "lucide-react";
