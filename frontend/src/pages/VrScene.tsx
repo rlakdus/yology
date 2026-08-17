@@ -5,6 +5,7 @@ import { XR, createXRStore } from "@react-three/xr";
 import { ArrowLeft, Square } from "lucide-react";
 
 import HeartbeatPrelude, {
+  REVEAL_SECONDS,
   type HeartbeatPreludePhase,
 } from "../components/vr/HeartbeatPrelude";
 import ImmersiveStopControl from "../components/vr/ImmersiveStopControl";
@@ -80,6 +81,8 @@ const VrScene = () => {
   const [playbackError, setPlaybackError] = useState("");
   const [retrying, setRetrying] = useState(false);
   const [phaseProgress, setPhaseProgress] = useState(0);
+  // 시작 버튼이 사라지고 검은 베일이 걷힐 때까지 그 자리에 띄우는 둘러보기 안내.
+  const [showLookHint, setShowLookHint] = useState(false);
 
   const phaseRef = useRef<ExperiencePhase>("intro");
   const progressRef = useRef(0);
@@ -95,6 +98,7 @@ const VrScene = () => {
   const leadInBeatCountRef = useRef(0);
   const startMediaRef = useRef<() => void>(() => undefined);
   const primingPromiseRef = useRef<Promise<void> | null>(null);
+  const lookHintRef = useRef(false);
   const listenerInputRef = useRef<HeartRateInputSnapshot>(UNAVAILABLE_INPUT);
 
   const playback = useMemo<PlaybackRefs>(
@@ -207,6 +211,8 @@ const VrScene = () => {
   const failPlayback = useCallback((message: string) => {
     mediaStartPendingRef.current = false;
     setRetrying(false);
+    lookHintRef.current = false;
+    setShowLookHint(false);
     stopHeartbeat();
     stopBreathing();
     stopAmbience();
@@ -275,6 +281,8 @@ const VrScene = () => {
       listenerInputRef.current,
     );
     breathingPresenceRef.current = 0;
+    lookHintRef.current = true;
+    setShowLookHint(true);
     resetVideos();
     enterPhase("prelude");
 
@@ -314,6 +322,8 @@ const VrScene = () => {
     setRetrying(true);
     progressRef.current = 0;
     mediaStartPendingRef.current = true;
+    lookHintRef.current = true;
+    setShowLookHint(true);
     listenerInputRef.current = readHeartRateInput();
     targetBpmRef.current = translateEventBpm(
       firstSourceBpm,
@@ -399,6 +409,11 @@ const VrScene = () => {
       if (phaseRef.current === "vr") {
         targetBpmRef.current = experienceBpmAt(progressRef.current);
         breathingPresenceRef.current = 0.18 + toneRef.current * 0.42;
+        // 베일이 다 걷히면 장면이 보이므로 안내도 같이 물러난다.
+        if (lookHintRef.current && elapsedSeconds >= REVEAL_SECONDS) {
+          lookHintRef.current = false;
+          setShowLookHint(false);
+        }
         return;
       }
 
@@ -497,6 +512,13 @@ const VrScene = () => {
             </span>
           </button>
         </div>
+      )}
+
+      {/* 시작 버튼과 같은 자리. waiting부터 걸어 두어야 버튼이 사라지는 순간 페이드로 들어온다. */}
+      {(phase === "waiting" || phase === "prelude" || phase === "vr") && (
+        <p className={`vr-look-hint${showLookHint ? " is-visible" : ""}`} role="status">
+          마우스를 움직여 주변을 둘러보세요
+        </p>
       )}
 
       {sceneError && phase === "waiting" && (

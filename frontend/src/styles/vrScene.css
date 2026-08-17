@@ -113,7 +113,7 @@
   padding: 11px 8px;
   color: rgba(242, 245, 248, .9);
   background: transparent;
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 600;
   letter-spacing: .035em;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 1);
@@ -123,9 +123,37 @@
 
 .vr-spatial-prompt-hint {
   color: rgba(242, 245, 248, .55);
-  font-size: 9px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: .16em;
+}
+
+/**
+ * 시작 버튼이 있던 자리에 들어서는 둘러보기 안내.
+ *
+ * 버튼과 같은 좌표에 두어 글씨가 그 자리에서 바뀐 것처럼 보이게 한다. waiting부터
+ * 투명한 상태로 걸려 있어야 프리루드로 넘어갈 때 팝업이 아니라 페이드로 들어온다.
+ */
+.vr-look-hint {
+  position: absolute;
+  right: 20px;
+  bottom: 10vh;
+  left: 20px;
+  z-index: 5;
+  margin: 0;
+  color: rgba(242, 245, 248, .9);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: .035em;
+  text-align: center;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 1);
+  opacity: 0;
+  transition: opacity .5s ease;
+  pointer-events: none;
+}
+
+.vr-look-hint.is-visible {
+  opacity: 1;
 }
 
 .vr-scene-floating-error {

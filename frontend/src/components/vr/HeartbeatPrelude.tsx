@@ -17,7 +17,8 @@ import type { VrEvent } from "../../data/vrEvent";
 export type HeartbeatPreludePhase = "intro" | "waiting" | "prelude" | "vr" | "cooldown";
 
 const INTRO_SECONDS = 4.2;
-const REVEAL_SECONDS = 1.2;
+/** 재생이 시작된 뒤 검은 베일이 완전히 걷히기까지. VrScene의 안내 문구가 여기 맞춰 사라진다. */
+export const REVEAL_SECONDS = 1.2;
 const TEXTURE_WIDTH = 2048;
 const TEXTURE_HEIGHT = 512;
 const BLACK = new Color("#000000");
