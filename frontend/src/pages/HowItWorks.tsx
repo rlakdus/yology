@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import {
   Activity,
+  ArrowLeft,
   ArrowRight,
   BrainCircuit,
   Clock3,
@@ -47,6 +48,12 @@ const processNav = [
 
 const HowItWorks = () => {
   const [activeStep, setActiveStep] = useState(1);
+
+  /* =========================
+     VR OVERLAY
+  ========================= */
+
+  const [isVrOpen, setIsVrOpen] = useState(false);
 
   /* =========================
      STEP NAVIGATION
@@ -178,8 +185,47 @@ const HowItWorks = () => {
     };
   }, []);
 
+  /* =========================
+     VR OVERLAY BEHAVIOR
+     - background scroll lock
+     - ESC to close
+  ========================= */
+
+  useEffect(() => {
+    if (!isVrOpen) return;
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (
+      event: KeyboardEvent
+    ) => {
+      if (event.key === "Escape") {
+        setIsVrOpen(false);
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [isVrOpen]);
+
   return (
     <div className="hiw-page hiw-v6">
+
       {/* =========================
           NAV
       ========================= */}
@@ -187,13 +233,18 @@ const HowItWorks = () => {
       <SiteNav />
 
       <main>
+
         {/* =========================
             HERO
         ========================= */}
 
         <section className="hiw-hero shell">
+
           <div className="hiw-hero-copy">
-            <span>HOW VIVIA WORKS</span>
+
+            <span>
+              HOW VIVIA WORKS
+            </span>
 
             <h1>
               몸의 신호에서 시작해,
@@ -215,6 +266,7 @@ const HowItWorks = () => {
               360° VR과 심박 리듬으로
               다시 경험할 수 있습니다.
             </p>
+
           </div>
 
           {/* =====================
@@ -222,29 +274,41 @@ const HowItWorks = () => {
           ===================== */}
 
           <div className="hiw-dashboard interactive-panel">
+
             <div className="hiw-dashboard-glow" />
 
             <div className="hiw-dashboard-top">
+
               <span>
                 실시간 신호 대시보드
               </span>
 
-              <b>● LIVE</b>
+              <b>
+                ● LIVE
+              </b>
+
             </div>
 
             <div className="hiw-dashboard-grid">
+
               {signalCards.map(
                 ([label, value, Icon]) => (
+
                   <div
                     className="hiw-dashboard-card"
                     key={label}
                   >
+
                     <div className="hiw-dashboard-card-copy">
-                      <small>{label}</small>
+
+                      <small>
+                        {label}
+                      </small>
 
                       <strong>
                         {value}
                       </strong>
+
                     </div>
 
                     <Icon size={20} />
@@ -253,21 +317,32 @@ const HowItWorks = () => {
                       aria-hidden="true"
                       className="hiw-dashboard-bars"
                     />
+
                   </div>
+
                 )
               )}
 
               {/* DEVICE */}
 
               <div className="hiw-device">
+
                 <div className="hiw-device-body" />
 
-                <span>VIVIA</span>
+                <span>
+                  VIVIA
+                </span>
 
-                <b>signal source</b>
+                <b>
+                  signal source
+                </b>
+
               </div>
+
             </div>
+
           </div>
+
         </section>
 
         {/* =========================
@@ -275,12 +350,15 @@ const HowItWorks = () => {
         ========================= */}
 
         <section className="hiw-process-nav-wrap">
+
           <div className="hiw-process-nav shell">
+
             {processNav.map(
               (
                 [no, en, ko, Icon],
                 index
               ) => (
+
                 <button
                   key={en}
                   className={
@@ -292,21 +370,34 @@ const HowItWorks = () => {
                     jumpToStep(index + 1)
                   }
                 >
+
                   <span>
                     <Icon size={19} />
                   </span>
 
                   <div>
-                    <small>{no}</small>
 
-                    <strong>{en}</strong>
+                    <small>
+                      {no}
+                    </small>
 
-                    <em>{ko}</em>
+                    <strong>
+                      {en}
+                    </strong>
+
+                    <em>
+                      {ko}
+                    </em>
+
                   </div>
+
                 </button>
+
               )
             )}
+
           </div>
+
         </section>
 
         {/* =========================
@@ -321,7 +412,9 @@ const HowItWorks = () => {
               : ""
             }`}
         >
+
           <aside>
+
             <span>
               01 · CAPTURE
             </span>
@@ -335,18 +428,23 @@ const HowItWorks = () => {
             <p>
               심박·활동량·산소포화도 등
               웨어러블 데이터를 수집하고,
-              개인 baseline과 비교해 <br/>
+              개인 baseline과 비교해 <br />
               평소와 다른 신호 변화가
               이어지는 순간을 감지합니다.
             </p>
+
           </aside>
 
           <div className="hiw-capture">
+
             {/* SIGNAL AREA */}
 
             <div className="hiw-capture-signal">
+
               <div className="hiw-capture-heading">
+
                 <div>
+
                   <small>
                     LIVE SIGNAL
                   </small>
@@ -355,18 +453,23 @@ const HowItWorks = () => {
                     개인 baseline과
                     비교한 변화
                   </strong>
+
                 </div>
 
                 <span>
                   DETECTING
                 </span>
+
               </div>
 
               <div className="hiw-capture-chart">
+
                 <div className="hiw-baseline">
+
                   <span>
                     PERSONAL BASELINE
                   </span>
+
                 </div>
 
                 <svg
@@ -374,12 +477,15 @@ const HowItWorks = () => {
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
+
                   <defs>
+
                     <linearGradient
                       id="captureGradient"
                       x1="0"
                       x2="1"
                     >
+
                       <stop
                         offset="0%"
                         stopColor="#35c8c5"
@@ -394,7 +500,9 @@ const HowItWorks = () => {
                         offset="100%"
                         stopColor="#ff7e73"
                       />
+
                     </linearGradient>
+
                   </defs>
 
                   <path
@@ -426,13 +534,17 @@ const HowItWorks = () => {
                     r="6"
                     className="hiw-chart-point"
                   />
+
                 </svg>
+
               </div>
 
               <div className="hiw-capture-status">
+
                 <HeartPulse size={17} />
 
                 <div>
+
                   <small>
                     MOMENT DETECTED
                   </small>
@@ -441,13 +553,17 @@ const HowItWorks = () => {
                     평소와 다른 변화가
                     지속되고 있습니다.
                   </strong>
+
                 </div>
+
               </div>
+
             </div>
 
             {/* SIGNAL CARDS */}
 
             <div className="hiw-capture-metrics">
+
               {[
                 [
                   HeartPulse,
@@ -480,13 +596,16 @@ const HowItWorks = () => {
                   value,
                   unit,
                 ]) => {
+
                   const MetricIcon =
                     Icon as typeof HeartPulse;
 
                   return (
+
                     <article
                       key={label as string}
                     >
+
                       <MetricIcon />
 
                       <small>
@@ -494,6 +613,7 @@ const HowItWorks = () => {
                       </small>
 
                       <strong>
+
                         {value as string}
 
                         {unit && (
@@ -501,13 +621,19 @@ const HowItWorks = () => {
                             {unit as string}
                           </em>
                         )}
+
                       </strong>
+
                     </article>
+
                   );
                 }
               )}
+
             </div>
+
           </div>
+
         </section>
 
         {/* =========================
@@ -522,7 +648,9 @@ const HowItWorks = () => {
               : ""
             }`}
         >
+
           <aside>
+
             <span>
               02 · RECONSTRUCT
             </span>
@@ -538,12 +666,15 @@ const HowItWorks = () => {
               감지 시점의 생체신호와
               시간·위치·주변 기록을
               하나의 순간으로 결합해,
-              <br/> 당시의 상황과 변화 흐름을
+              <br />
+              당시의 상황과 변화 흐름을
               다시 구성합니다.
             </p>
+
           </aside>
 
           <div className="hiw-reconstruct">
+
             {[
               [
                 BrainCircuit,
@@ -573,13 +704,16 @@ const HowItWorks = () => {
                 [Icon, title, desc],
                 index
               ) => {
+
                 const IconComp =
                   Icon as typeof HeartPulse;
 
                 return (
+
                   <article
                     key={title as string}
                   >
+
                     <IconComp />
 
                     <small>
@@ -597,11 +731,15 @@ const HowItWorks = () => {
                     {index < 3 && (
                       <ArrowRight />
                     )}
+
                   </article>
+
                 );
               }
             )}
+
           </div>
+
         </section>
 
         {/* =========================
@@ -616,7 +754,9 @@ const HowItWorks = () => {
               : ""
             }`}
         >
+
           <aside>
+
             <span>
               03 · REPLAY
             </span>
@@ -629,58 +769,130 @@ const HowItWorks = () => {
 
             <p>
               재구성된 장면을
-              360° VR로 되살리고, <br/>
+              360° VR로 되살리고, <br />
               당시의 심박 리듬까지 더해
-              그 순간을 <br/> 몰입감 있게
+              그 순간을 <br />
+              몰입감 있게
               재현합니다.
             </p>
+
           </aside>
 
-          <div className="hiw-replay">
+          {/* =====================
+              VR PREVIEW
+              오른쪽 재현 영역만 클릭 가능
+          ===================== */}
+
+          <div
+            className="hiw-replay hiw-replay-clickable"
+            onClick={() =>
+              setIsVrOpen(true)
+            }
+            role="button"
+            tabIndex={0}
+            aria-label="몽골 여행 360 VR 재현 보기"
+            onKeyDown={(event) => {
+              if (
+                event.key === "Enter" ||
+                event.key === " "
+              ) {
+                event.preventDefault();
+
+                setIsVrOpen(true);
+              }
+            }}
+          >
+
             <div className="hiw-replay-orbit orbit-one" />
+
             <div className="hiw-replay-orbit orbit-two" />
 
             <div className="hiw-replay-placeholder">
+
               <div className="hiw-replay-play">
                 <Play size={27} />
               </div>
 
               <span>
-                IMMERSIVE REPLAY
+                VR EXPERIENCE SAMPLE
               </span>
 
               <strong>
-                그 순간을 다시
-                바라보다
+                재구성된 순간을 직접 경험해보세요
               </strong>
 
               <p>
-                360° 장면과 기록된
-                심박 리듬을 통해
+                실제 이벤트를 바탕으로 재현된
+                몽골 승마 순간을
                 <br />
-                재구성된 순간을
-                다시 경험합니다.
+                360° VR로 체험할 수 있습니다.
               </p>
 
               <div className="hiw-replay-tags">
                 <b>360° VR</b>
-
-                <b>heartbeat</b>
-
-                <b>immersive scene</b>
+                <b>몽골 승마</b>
+                <b>Sample Event</b>
               </div>
+
             </div>
+
           </div>
+
         </section>
+
       </main>
+
+      {/* =========================
+          VR FULLSCREEN OVERLAY
+      ========================= */}
+
+      {isVrOpen && (
+
+        <div
+          className="hiw-vr-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="몽골 여행 360 VR 재현"
+        >
+
+          {/* 뒤로가기 */}
+
+          <button
+            type="button"
+            className="hiw-vr-back"
+            onClick={() =>
+              setIsVrOpen(false)
+            }
+            aria-label="VR 닫기"
+          >
+
+            <ArrowLeft size={20} />
+
+          </button>
+
+          {/* 기존 몽골 VR 그대로 재사용 */}
+
+          <iframe
+            className="hiw-vr-frame"
+            src="/vr/student/event_003"
+            title="몽골 여행 360 VR"
+            allow="autoplay; fullscreen"
+          />
+
+        </div>
+
+      )}
 
       {/* =========================
           FOOTER
       ========================= */}
 
       <footer className="hiw-footer">
+
         <div className="shell hiw-footer-inner">
+
           <div className="hiw-footer-brand">
+
             <img
               src="/assets/logo.png"
               alt="VIVIA"
@@ -690,9 +902,11 @@ const HowItWorks = () => {
               몸의 신호가 삶의 이야기가
               됩니다.
             </p>
+
           </div>
 
           <div className="hiw-footer-team">
+
             <strong>
               TEAM YOLOGY
             </strong>
@@ -701,10 +915,16 @@ const HowItWorks = () => {
               Samsung Life Lifenology Lab
             </span>
 
-            <span>2026</span>
+            <span>
+              2026
+            </span>
+
           </div>
+
         </div>
+
       </footer>
+
     </div>
   );
 };
