@@ -1,6 +1,6 @@
 {
   "status": "complete",
-  "completed_at": "2026-08-17T12:59:07.787523+00:00",
+  "completed_at": "2026-08-17T14:18:56.354215+00:00",
   "model": {
     "name": "Beyond the Frame (Argus)",
     "repository": "https://github.com/Red-Fairy/argus-code.git",
@@ -109,9 +109,10 @@
       ],
       "front_image": "prepared 첫 프레임 (fov_x 60도, yaw/pitch/roll 0)",
       "angle_convention": "Argus pers2equi_batch: M = Rz(yaw)·Ry(-pitch)·Rx(-roll)",
+      "photo_dir": "events/student/event_002/source/photos",
       "references": [
         {
-          "source": "user photo (연세대 노천극장 현장 사진)",
+          "source": "photos/venue-dusk-stage-hillside.jpg",
           "yaw_deg": 11.1,
           "pitch_deg": 28.01,
           "roll_deg": -0.45,
@@ -152,24 +153,59 @@
           "pitch_deg": 20.12,
           "roll_deg": 13.47,
           "fov_x_deg": 67.2
+        },
+        {
+          "source": "photos/venue-night-purple-wide.jpg",
+          "yaw_deg": 5.36,
+          "pitch_deg": -13.81,
+          "roll_deg": -6.65,
+          "fov_x_deg": 84.0,
+          "residual_deg": 1.61,
+          "note": "잔차가 기준(1.0도)을 넘지만 발밑과 무대 왼쪽에 +5.17%p의 새 실측을 더한다. 정면 안쪽은 녹화 영상이 먼저 차지하므로 어긋남이 페더 구간에만 남는다. 하늘 밝기 99로 원본 범위(106~139)보다 어둡지만 겹침이 넓어 Lab 보정이 잘 먹는다."
         }
       ],
       "rejected_references": [
         {
-          "source": "user photo (무대 캐노피를 올려다본 사진)",
+          "source": "photos/venue-dusk-canopy-uplook.jpg",
           "residual_deg": 23.45,
-          "reason": "촬영 위치가 달라 순수 회전으로 설명되지 않는다(시차). 투영하지 않고 프롬프트를 고치는 데만 참고했다 — 왼쪽에는 LED 스크린과 파란 배너, 나무가 있고 산이나 도시 불빛은 없다."
+          "reason": "촬영 위치가 달라 순수 회전으로 설명되지 않는다(시차)."
+        },
+        {
+          "source": "photos/venue-night-purple-runway.jpg",
+          "residual_deg": 2.61,
+          "sky_luma": 57,
+          "reason": "기존 커버리지 안에 완전히 들어가 새로 덮는 영역이 0.00%p이고, 하늘 밝기가 원본 영상 범위(106~139) 밖이다."
+        },
+        {
+          "source": "photos/venue-sunset-hillside.jpg",
+          "residual_deg": 2.46,
+          "sky_luma": 186,
+          "reason": "새로 덮는 영역 0.00%p, 노을 촬영이라 정면의 저녁 하늘과 충돌한다."
         }
       ],
+      "selection_rule": "잔차와 조명을 함께 본다. 원본 영상의 하늘 밝기 범위는 회전 보정 후 106~139로 31.5초 내내 안정적이다. 조명이 벗어나도 새 실측을 유의미하게 더하면 채택한다.",
       "video_fov_note": "원본 1080px 가로 화각 67.2도는 stabilization crop(938/1080)과 prepared fov 60도에서 유도했다. 화각은 회전과 축퇴되어 추정값이 흔들리므로 고정하고 각도만 풀었다.",
-      "real_coverage_ratio": 0.204,
+      "real_coverage_ratio": 0.256,
       "sdxl_seed": 5,
       "seam_heal_deg": 12.0
+    },
+    "surround_motion": {
+      "strength": 1.0,
+      "yaw_half_deg": 78,
+      "yaw_feather_deg": 18,
+      "pitch_center_deg": -13,
+      "pitch_half_deg": 21,
+      "pitch_feather_deg": 8,
+      "twinkle_hz": 2.6,
+      "sway_px": 2.5,
+      "seed": 0,
+      "reason": "Argus가 만든 움직이는 360 영상은 정면 밖에서 프레임간 변화가 실제 장면(9.5)의 1.6~3.3배로 끓고 선명도가 사진 기반 정지 배경의 1/64이라 채택하지 않았다. 대신 정지 배경 위에 통제 가능한 움직임을 합성한다. 세 성분이다 — 언덕을 메운 휴대폰 불빛을 점광원으로 찾아 개별 위상으로 점멸시키고, 무대 조명이 관중석을 훑는 밝기 변동을 녹화 정면의 휘도에서 그대로 가져오고, 군중 웅성임을 느린 미세 워프로 더한다. 워시가 없으면 점광원이 23개뿐인 왼쪽은 아무리 밀어도 죽어 있다. 창은 yaw ±78도(정면 ±30도 바깥으로 48도씩)로 넓고 pitch는 -13±21도로 좁아 좌우 위주로 자라며, 그 pitch 범위는 refine_frozen_background.py가 평평하게 다시 칠하는 하늘(+16도 위)과 바닥(-42도 아래) 사이에 정확히 갇힌다.",
+      "wash": 0.8
     }
   },
   "output": {
     "file": "events/student/event_002/panorama/first-concert-360.mp4",
-    "sha256": "a5f83b7e44d13256f70b9124b7a5f6baa2b7a784afaf30cfa75f1e573855421f",
+    "sha256": "50589ba4bc3f9ab539c3c62ec65581dc45fe3676e180e9e67b94477a81451bb6",
     "width": 2048,
     "height": 1024,
     "video_codec": "h264",
@@ -183,7 +219,7 @@
   },
   "panorama_image": {
     "file": "events/student/event_002/panorama/first-concert-360.background.png",
-    "sha256": "30a6ffbcfb89de9b2ec8eb60e1b5ed495762d0863ded1dd27b78fe8cc1662cab",
+    "sha256": "8172e437949c7a947f61f6811cb75236d1771bece4d100272c4fbd9516bec533",
     "role": "frozen_generated_surroundings"
   }
 }
