@@ -1,8 +1,15 @@
 {
   "event": "student/event_002",
   "label": "대학 입학 후 첫 콘서트",
-  "source": "events/student/event_002/source/first-concert.original.mov",
-  "expected_source_sha256": "70a25bbc14cca583bcaad39e883c1d1a33de4cd6613c37ab7535d88dc92e4ee1",
+  "source": "events/student/event_002/source/first-concert.trimmed.mov",
+  "expected_source_sha256": "35b7d8eacd94e1ba866b2969d7bb8a296ebabf1e6bb4336b7a4b5e6d5dd02245",
+  "source_trim": {
+    "original": "events/student/event_002/source/first-concert.original.mov",
+    "original_sha256": "70a25bbc14cca583bcaad39e883c1d1a33de4cd6613c37ab7535d88dc92e4ee1",
+    "start_seconds": 8,
+    "duration_seconds": 10,
+    "reason": "31.5초 전체는 생성 비용이 과하다. 무대 위 퍼포머와 응원하는 관중이 안정적으로 담긴 구간만 남긴다. 세로 원본의 rotation -90 메타데이터는 트림 시 실제 픽셀로 적용했다."
+  },
   "output": "events/student/event_002/panorama/first-concert-360.mp4",
   "generation_record": "events/student/event_002/panorama/generation.json",
   "generation": {
@@ -18,9 +25,10 @@
     "aspect_policy": "preserve",
     "stabilize_zoom": true,
     "stabilize_rotation": true,
-    "fixed_fov_deg": 90,
+    "fixed_fov_deg": 60,
     "minimum_valid_area_ratio": 0.7,
-    "maximum_tracking_failure_ratio": 0.1
+    "maximum_tracking_failure_ratio": 0.1,
+    "fixed_fov_reason": "세로(1080x1920) 원본이라 다른 이벤트의 fov_x 90을 쓰면 세로 화각이 121도가 되어 실제 폰 카메라 범위를 벗어나고 트러스 수직선이 눈에 띄게 배럴 왜곡된다. 60도면 세로 91도로 실제에 가깝고 직선이 유지된다."
   },
   "view": {
     "anchor_frame_seconds": 0,
@@ -40,6 +48,8 @@
     "recorded_front_preserved": true,
     "edge_feather": 0.05,
     "seam_blend": 0.01,
-    "freeze_generated_surroundings": false
+    "freeze_generated_surroundings": true,
+    "frozen_panorama_image": "events/student/event_002/panorama/first-concert-360.background.png",
+    "frozen_reason": "Argus 전체 생성본을 검수한 결과 주변부가 실제 야외 공연장과 맞지 않아 채택하지 않았다. event_001과 같이 한 장의 파노라마 이미지를 주변부로 고정하고 정면만 실제 녹화 영상으로 재생한다."
   }
 }

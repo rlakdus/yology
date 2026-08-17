@@ -20,7 +20,7 @@
   "availability": {
     "anomaly_ready": false,
     "source_video_ready": true,
-    "panorama_ready": false,
+    "panorama_ready": true,
     "vr_ready": false
   },
   "view": {
@@ -34,5 +34,11 @@
       "taken_at": "2026-05-15T19:42:00+09:00",
       "source_time_basis": "ui_configured_peak"
     }
-  ]
+  ],
+  "panorama_video": {
+    "file": "panorama/first-concert-360.mp4",
+    "projection": "equirectangular",
+    "fallback_image_file": null,
+    "yaw_offset_deg": 0.0
+  }
 }

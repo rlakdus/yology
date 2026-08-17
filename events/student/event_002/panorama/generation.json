@@ -1,0 +1,123 @@
+{
+  "status": "complete",
+  "completed_at": "2026-08-17T08:38:54.177547+00:00",
+  "model": {
+    "name": "Beyond the Frame (Argus)",
+    "repository": "https://github.com/Red-Fairy/argus-code.git",
+    "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
+    "checkpoint": "official-argus-unet"
+  },
+  "source": {
+    "file": "events/student/event_002/source/first-concert.trimmed.mov",
+    "sha256": "35b7d8eacd94e1ba866b2969d7bb8a296ebabf1e6bb4336b7a4b5e6d5dd02245",
+    "duration_seconds": 10.0,
+    "fps": "30",
+    "fps_float": 30.0,
+    "frames": 300,
+    "width": 1080,
+    "height": 1920,
+    "video_codec": "h264"
+  },
+  "preparation": {
+    "source": "/root/yology/events/student/event_002/source/first-concert.trimmed.mov",
+    "output": "/root/yology/gpu360/work/student/event_002/prepared/fixed-view.mp4",
+    "frames": 300,
+    "fps": 30.0,
+    "source_width": 1080,
+    "source_height": 1920,
+    "display_aspect_ratio": 0.5625,
+    "anchor_frame_seconds": 0.0,
+    "anchor_frame_index": 0,
+    "tracking_failures": 0,
+    "tracking_failure_ratio": 0.0,
+    "tracking_exclude_rect": null,
+    "common_crop": {
+      "x": 71,
+      "y": 125,
+      "width": 938,
+      "height": 1670,
+      "valid_area_ratio": 0.75543
+    },
+    "inverse_scale_range": [
+      0.877952,
+      1.0
+    ],
+    "inverse_rotation_deg_range": [
+      -0.203562,
+      0.363644
+    ],
+    "stabilization_mode": "affine_zoom_roll",
+    "zoom_removed": true,
+    "roll_removed": true,
+    "translation_preserved": true,
+    "source_orientation_metadata_applied": true,
+    "aspect_policy": "preserve",
+    "intermediate_codec": "h264_crf10",
+    "probe": {
+      "duration_seconds": 10.0,
+      "fps": "30",
+      "fps_float": 30.0,
+      "frames": 300,
+      "width": 1080,
+      "height": 1920,
+      "video_codec": "h264"
+    }
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "reset_batch_conditioning": true,
+    "guidance_scale": 3.0,
+    "inference_steps": 25,
+    "fixed_fov_deg": 60,
+    "camera_motion_prediction": false,
+    "rotation_during_inference": false,
+    "roll_pitch_yaw": "fixed_zero",
+    "full_sampling": true,
+    "preserve_source_timeline": true,
+    "generated_region": "recorded_front_view_only"
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": true,
+    "frozen_panorama_image": "events/student/event_002/panorama/first-concert-360.background.png",
+    "frozen_reason": "Argus 전체 생성본을 검수한 결과 주변부가 실제 야외 공연장과 맞지 않아 채택하지 않았다. event_001과 같이 한 장의 파노라마 이미지를 주변부로 고정하고 정면만 실제 녹화 영상으로 재생한다."
+  },
+  "output": {
+    "file": "events/student/event_002/panorama/first-concert-360.mp4",
+    "sha256": "3bd1deba74b1d9755af2af9349a4503560cfd758c7fc70690e842733ee39ea80",
+    "width": 2048,
+    "height": 1024,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": {
+      "mode": "original",
+      "codec": "aac",
+      "source": "events/student/event_002/source/first-concert.trimmed.mov"
+    },
+    "faststart": true
+  },
+  "panorama_image": {
+    "file": "events/student/event_002/panorama/first-concert-360.background.png",
+    "sha256": "904863877db9788805a8ced5c4c3b20644c219700b9fa880e849df424ac732ab",
+    "role": "frozen_generated_surroundings"
+  }
+}

@@ -86,10 +86,22 @@ def fill_faces(
             kernel = np.ones((args.mask_dilate_px, args.mask_dilate_px), np.uint8)
             face_mask = cv2.dilate(face_mask, kernel)
 
+        # The zenith and nadir see nothing but their neighbours, so without their own
+        # prompt they simply extend whatever surrounds them — a crowd drawn across the sky.
+        if pitch_deg > 0:
+            prompt = args.up_prompt or args.prompt
+            negative_prompt = args.up_negative_prompt or args.negative_prompt
+        elif pitch_deg < 0:
+            prompt = args.down_prompt or args.prompt
+            negative_prompt = args.down_negative_prompt or args.negative_prompt
+        else:
+            prompt = args.prompt
+            negative_prompt = args.negative_prompt
+
         generator = torch.Generator(device=device).manual_seed(args.seed + yaw_deg + pitch_deg)
         filled = pipe(
-            prompt=args.prompt,
-            negative_prompt=args.negative_prompt,
+            prompt=prompt,
+            negative_prompt=negative_prompt,
             image=Image.fromarray(face_rgb),
             mask_image=Image.fromarray(face_mask),
             height=size,
@@ -180,6 +192,10 @@ def parse_args() -> argparse.Namespace:
             "늘어난 형태가 나오는 문제를 피한다."
         ),
     )
+    parser.add_argument("--up-prompt", help="천정(위) 면 전용 프롬프트. 없으면 --prompt를 쓴다.")
+    parser.add_argument("--up-negative-prompt")
+    parser.add_argument("--down-prompt", help="바닥(아래) 면 전용 프롬프트. 없으면 --prompt를 쓴다.")
+    parser.add_argument("--down-negative-prompt")
     parser.add_argument("--face-size", type=int, default=1024)
     parser.add_argument("--face-fov-deg", type=float, default=90.0)
     parser.add_argument(

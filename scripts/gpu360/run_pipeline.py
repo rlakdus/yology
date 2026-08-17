@@ -479,6 +479,10 @@ def main() -> int:
     prepared_probe = probe(prepared_source)
     preparation = load_json(preparation_report)
 
+    if stop_index <= STAGES.index("prepare"):
+        print(f"{args.to_stage} 단계까지 완료했습니다: {prepared_source}")
+        return 0
+
     if start_index <= STAGES.index("infer"):
         command = conda(
             "360VG", "accelerate", "launch", "--num_processes", "1", "inference.py",

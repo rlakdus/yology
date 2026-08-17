@@ -91,12 +91,16 @@ python scripts/gpu360/run_pipeline.py \
 
 등록된 작업:
 
-| 설정 | 원본 | 예정 출력 |
-| --- | --- | --- |
-| `student/event_001.json` | 면접 결과 확인 | `interview-result-360.mp4` |
-| `student/event_002.json` | 대학 입학 후 첫 콘서트 | `first-concert-360.mp4` |
-| `student/event_003.json` | 몽골 승마 | `mongolia-horse-riding-360.mp4` |
-| `student/event_004.json` | 영화 관람 | `favorite-movie-360.mp4` |
+| 설정 | 원본 | 출력 | 주변부 |
+| --- | --- | --- | --- |
+| `student/event_002.json` | 대학 입학 후 첫 콘서트 | `first-concert-360.mp4` | 고정 파노라마 이미지 |
+| `student/event_003.json` | 몽골 승마 | `mongolia-horse-riding-360.mp4` | Argus 생성 |
+| `student/event_004.json` | 영화 관람 | `favorite-movie-360.mp4` | 고정 파노라마 이미지 |
+
+`event_002`는 원본을 10초로 자른 `*.trimmed.mov`를 쓴다. job의 `source_trim`에 원본
+경로·SHA-256·구간과 자른 이유를 남긴다. 세로 원본이라 `input.fixed_fov_deg`도 90이 아닌
+60이다 — 90이면 세로 화각이 121°가 되어 실제 폰 카메라 범위를 벗어나고 조명 트러스의
+수직선이 배럴 왜곡된다.
 
 ## 4. 전체 파이프라인 실행
 
@@ -137,6 +141,57 @@ python scripts/gpu360/run_pipeline.py \
 ```
 
 기존 최종 출력 또는 중간 합성 결과를 의도적으로 교체할 때만 `--force`를 사용한다.
+`--to-stage`로 특정 단계까지만 실행할 수도 있다 (아래 고정 배경 방식에서 사용한다).
+
+## 4-1. 생성 주변부가 실제 장소와 다를 때
+
+Argus는 정면 FOV 밖의 모든 픽셀을 UNet에 넣기 전에 `-1`로 비운다
+(`src/pers2equi.py`, `src/sampling_svd.py`). 즉 주변부는 **항상 상상해서 그리며**, 우리가
+만든 파노라마를 시드로 넣을 수단이 없다. `--equirectangular_input`도 이 동작을 바꾸지
+않는다. `event_004`(영화관)에서는 정면에 실제 극장 벽이 그대로 보이는데도 창문 있는
+거실을 만들어냈다.
+
+이럴 때는 주변부를 한 장의 파노라마 이미지로 만들어 **고정 배경**으로 쓰고, 정면만 실제
+녹화 영상으로 재생한다.
+
+```bash
+# 1) 카메라 보정값만 얻으면 되므로 infer까지만 돌린다 (VEnhancer 생략)
+python scripts/gpu360/run_pipeline.py \
+  --job gpu360/jobs/student/event_004.json --to-stage infer
+
+# 2) 준비된 정면 첫 프레임에서 파노라마 이미지를 만든다
+conda run -n 360VG python scripts/gpu360/generate_panorama_image.py \
+  --argus-dir .gpu360/argus-code \
+  --front-image <prepared 첫 프레임 PNG> \
+  --fov-x-deg 90 --width 2048 --height 1024 --multi-view \
+  --prompt "<장면에 맞는 환경 묘사>" \
+  --output events/student/event_004/panorama/favorite-movie-360.background.png
+
+# 3) job의 composite.frozen_panorama_image에 위 경로를 넣고 합성한다
+python scripts/gpu360/run_pipeline.py \
+  --job gpu360/jobs/student/event_004.json --from-stage compose
+```
+
+`composite.frozen_panorama_image`가 있으면 실행기는 enhance 단계를 건너뛰고(Argus 파노라마를
+쓰지 않으므로) 이미지를 1프레임 영상으로 감싸 주변부로 고정한다.
+
+`--multi-view`는 필수에 가깝다. SDXL에는 equirectangular 사전지식이 없어서 2:1 캔버스를
+직접 채우게 하면 비어 있는 92.5%를 스튜디오 배경으로 해석해 검은 바탕에 물체만 그린다.
+`--multi-view`는 주변부를 큐브 면 단위의 평범한 원근 이미지로 나눠 생성한 뒤
+`pers2equi_batch`로 되돌려 붙이며, 정면에 가까운 면부터 채워 나가 각 면이 이미 채워진
+이웃을 보고 그리도록 한다. 프롬프트는 반드시 장면에 맞게 바꾼다 — 극장용 프롬프트를
+카페에 그대로 쓰면 안 된다.
+
+천정과 바닥 면은 이웃 말고는 볼 것이 없어서, 따로 지정하지 않으면 주변을 그대로 이어
+그린다. `event_002`에서는 하늘 자리에 관중이 그려졌다. `--up-prompt`(천정)와
+`--down-prompt`(바닥)로 그 두 면만 다른 장면으로 지정한다.
+
+```bash
+  --up-prompt "clear dark night sky seen straight up, faint stars, no people, no ground" \
+  --up-negative-prompt "people, crowd, hands, faces, ground, stage" \
+  --down-prompt "ground level view looking straight down at a dark grass field" \
+  --down-negative-prompt "sky, stars, ceiling"
+```
 
 `event_003`은 모든 시점에서 생성 주변부 움직임을 100% 유지한다. 4초 이후에 발생했던
 채도 상승과 삼각형 경계는 프레임을 고정하는 후처리가 아니라 Argus 배치 조건 초기화로
@@ -179,6 +234,5 @@ python scripts/gpu360/run_parallel_events.py
 완성 MP4는 크기를 확인한 뒤 Git LFS 또는 팀의 대용량 에셋 저장소를 사용한다.
 체크포인트와 `gpu360/work`은 커밋하지 않는다.
 
-`event_003` 생성과 검증이 끝나면 실행기가 메타데이터를 `mongolia-horse-riding-360.mp4`로 자동 전환한다.
-`event_001`, `event_002`, `event_004`는 검수가 끝날 때까지 현재 원본 평면 영상을 유지하며,
-검수 후 각 `metadata.json`에 `panorama_video`를 추가해 명시적으로 전환한다.
+생성과 검증이 끝나면 실행기가 각 `metadata.json`에 `panorama_video`를 추가하고
+`availability.panorama_ready`를 켠다. `event_002`, `event_003`, `event_004`는 전환을 마쳤다.
