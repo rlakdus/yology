@@ -231,6 +231,9 @@ const VrScene = () => {
         if (primaryVideo.error) primaryVideo.load();
         if (primaryVideo.readyState > 0) primaryVideo.currentTime = 0;
         await primaryVideo.play();
+        // 여기가 현장음이 처음 들려야 하는 지점이다. 프라이밍은 음소거로 지나갔고,
+        // 재생이 실제로 시작된 뒤에 푸는 것이라 자동재생 정책에도 걸리지 않는다.
+        primaryVideo.muted = false;
         if (phaseRef.current === "prelude") markPlaybackStarted();
       } catch {
         failPlayback("영상을 자동으로 이어가지 못했습니다.");
@@ -266,6 +269,9 @@ const VrScene = () => {
     if (vrSupported) void xrStore.enterVR().catch(() => undefined);
 
     if (primaryVideo) {
+      // 자동재생 잠금을 푸는 재생일 뿐이라 소리는 나오면 안 된다. 음소거를 하지 않으면
+      // 버튼을 누른 순간 현장음이 한 번 튀었다가 곧바로 멈춘다.
+      primaryVideo.muted = true;
       const prime = primaryVideo.play();
       primingPromiseRef.current = prime;
       void prime.then(() => {
@@ -311,8 +317,13 @@ const VrScene = () => {
       return;
     }
 
+    // 재시도는 사용자 탭 안에서 바로 재생하므로 프리루드를 거치지 않는다. 현장음도
+    // 그 자리에서 같이 들어와야 한다.
     void primaryVideo.play()
-      .then(markPlaybackStarted)
+      .then(() => {
+        primaryVideo.muted = false;
+        markPlaybackStarted();
+      })
       .catch(() => failPlayback("영상 재생을 시작하지 못했습니다."));
   }, [
     failPlayback,

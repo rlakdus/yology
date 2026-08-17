@@ -63,7 +63,7 @@
   "panorama_video": {
     "file": "panorama/favorite-movie-360.mp4",
     "projection": "equirectangular",
-    "fallback_image_file": null,
+    "fallback_image_file": "panorama/favorite-movie-360.background.png",
     "yaw_offset_deg": 0.0
   }
 }

@@ -38,7 +38,7 @@
   "panorama_video": {
     "file": "panorama/first-concert-360.mp4",
     "projection": "equirectangular",
-    "fallback_image_file": null,
+    "fallback_image_file": "panorama/first-concert-360.background.png",
     "yaw_offset_deg": 0.0
   }
 }

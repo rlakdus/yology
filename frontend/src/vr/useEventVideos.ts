@@ -26,10 +26,15 @@ export const useEventVideos = (event: VrEvent | null): EventVideos => {
     let cancelled = false;
     const elements = new Map<string, HTMLVideoElement>();
 
-    const mediaSources = event.media
-      .filter((entry) => entry.kind === "video")
-      .map((entry) => entry.src);
     const panoramaSource = event.panorama_video?.src;
+    // 파노라마 영상이 있으면 ReconstructionScene이 SceneMediaPanel을 아예 띄우지 않으므로
+    // 원본 클립은 화면에 나올 일이 없다. 그런데도 여기서 같이 열면 수십 MB짜리 원본(.mov)의
+    // 메타데이터를 기다리느라 시작 게이트가 늦게 뜨고, 브라우저가 그 컨테이너를 해석하지
+    // 못하면(예: Apple APAC 오디오·mebx 트랙) loadedmetadata도 error도 오지 않아 게이트가
+    // 영영 뜨지 않는다. 쓰지 않을 영상은 열지 않는다.
+    const mediaSources = panoramaSource
+      ? []
+      : event.media.filter((entry) => entry.kind === "video").map((entry) => entry.src);
     const sources = [...new Set([
       ...(panoramaSource ? [panoramaSource] : []),
       ...mediaSources,
@@ -41,8 +46,11 @@ export const useEventVideos = (event: VrEvent | null): EventVideos => {
       element.preload = src === panoramaSource ? "auto" : "metadata";
       element.playsInline = true;
       element.crossOrigin = "anonymous";
-      // 파노라마에는 원본 현장음을 그대로 사용한다.
+      // 파노라마에는 원본 현장음을 그대로 사용한다. 다만 시작 게이트에서 자동재생 잠금을
+      // 푸는 프라이밍 재생까지 소리를 내면 안 되므로 음소거로 만들어 두고, 실제 재생이
+      // 시작되는 순간 VrScene이 음소거를 푼다.
       element.volume = src === panoramaSource ? 1 : 0.55;
+      element.muted = src === panoramaSource;
       elements.set(src, element);
 
       element.addEventListener(

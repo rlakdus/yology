@@ -20,6 +20,8 @@ type PanoramaVideoEnvironmentProps = {
   panorama: NonNullable<VrEvent["panorama_video"]>;
   playback: PlaybackRefs;
   video: HTMLVideoElement;
+  /** 구가 실제 프레임을 그리기 시작했는지 알린다. 정지 파노라마 폴백이 이 값으로 비켜난다. */
+  onLiveChange?: (live: boolean) => void;
 };
 
 /**
@@ -33,8 +35,10 @@ const PanoramaVideoEnvironment = ({
   panorama,
   playback,
   video,
+  onLiveChange,
 }: PanoramaVideoEnvironmentProps) => {
   const meshRef = useRef<Mesh>(null);
+  const liveRef = useRef(false);
   const gl = useThree((state) => state.gl);
 
   const texture = useMemo(() => {
@@ -74,7 +78,17 @@ const PanoramaVideoEnvironment = ({
       && video.error === null;
     material.opacity = hasFrame ? 1 : 0;
     material.color.setScalar(1 - playback.tone.current * 0.08);
+
+    if (hasFrame !== liveRef.current) {
+      liveRef.current = hasFrame;
+      onLiveChange?.(hasFrame);
+    }
   });
+
+  // 언마운트되면 더 이상 프레임을 내놓지 않는다. 폴백이 계속 숨어 있지 않게 알려 둔다.
+  useEffect(() => () => {
+    if (liveRef.current) onLiveChange?.(false);
+  }, [onLiveChange]);
 
   // PanoramaEnvironment와 같은 이유로 x축을 뒤집는다. 뒤집지 않으면 구 안쪽에서
   // equirect의 u가 오른쪽으로 갈수록 작아져 영상 전체가 좌우 반전으로 보인다.
