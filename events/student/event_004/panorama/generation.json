@@ -1,12 +1,8 @@
 {
   "status": "complete",
-  "completed_at": "2026-08-17T03:57:50.732050+00:00",
-  "model": {
-    "name": "Beyond the Frame (Argus)",
-    "repository": "https://github.com/Red-Fairy/argus-code.git",
-    "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
-    "checkpoint": "official-argus-unet"
-  },
+  "completed_at": "2026-08-17T06:15:00+00:00",
+  "method": "frozen_panorama_image",
+  "method_note": "Argus 비디오 outpainting은 주변 환경을 영화관과 무관한 방으로 hallucinate했다 (창문 포함). 단일 이미지 SDXL 인페인팅으로 만든 정지 파노라마를 주변부로 고정하고, 실제 녹화된 정면 영상만 시간축으로 계속 재생하는 방식으로 대체했다.",
   "source": {
     "file": "events/student/event_004/source/favorite-movie.original.mov",
     "sha256": "84082238a4538b908c727a21345b40aefeb0fd563d125bc3da5c2f8251f3e294",
@@ -25,82 +21,54 @@
     "fps": 30.151650312221232,
     "source_width": 1920,
     "source_height": 1080,
-    "display_aspect_ratio": 1.7777777777777777,
     "anchor_frame_seconds": 0.0,
     "anchor_frame_index": 0,
     "tracking_failures": 0,
-    "tracking_failure_ratio": 0.0,
-    "tracking_exclude_rect": null,
-    "common_crop": {
-      "x": 0,
-      "y": 0,
-      "width": 1920,
-      "height": 1080,
-      "valid_area_ratio": 1.0
-    },
-    "inverse_scale_range": [
-      1.0,
-      1.0
-    ],
-    "inverse_rotation_deg_range": [
-      0.0,
-      0.0
-    ],
     "stabilization_mode": "identity_fixed_camera",
-    "zoom_removed": false,
-    "roll_removed": false,
-    "translation_preserved": true,
-    "source_orientation_metadata_applied": true,
-    "aspect_policy": "preserve",
-    "probe": {
-      "duration_seconds": 5.604935,
-      "fps": "3769/125",
-      "fps_float": 30.152,
-      "frames": 169,
-      "width": 1920,
-      "height": 1080,
-      "video_codec": "mpeg4"
-    }
+    "aspect_policy": "preserve"
   },
   "view": {
     "anchor_frame_seconds": 0,
     "initial_yaw_deg": 0,
-    "initial_pitch_deg": 0
+    "initial_pitch_deg": 0,
+    "fixed_fov_deg": 90
   },
-  "generation": {
-    "width": 1024,
-    "height": 512,
-    "batch_frames": 25,
-    "blend_frames": 4,
-    "reset_batch_conditioning": true,
-    "guidance_scale": 3.0,
-    "inference_steps": 25,
-    "fixed_fov_deg": 90,
-    "camera_motion_prediction": false,
-    "rotation_during_inference": false,
-    "roll_pitch_yaw": "fixed_zero",
-    "full_sampling": true,
-    "preserve_source_timeline": true,
-    "generated_region": "outside_recorded_front_view"
-  },
-  "enhancement": {
-    "enabled": true,
-    "scale": 2,
+  "panorama_image_generation": {
+    "script": "scripts/gpu360/generate_panorama_image.py",
+    "front_image_source": "anchor frame (t=0) of preparation.output, projected via Argus pers2equi_batch (fov_x_deg=90, roll=pitch=yaw=0)",
+    "model": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+    "prompt": "interior of a dark movie theater auditorium, black walls, rows of empty cinema seats, no windows, dim ambient lighting, cinematic, photorealistic",
+    "negative_prompt": "windows, daylight, sunlight, bright walls, blinds, curtains, living room, home interior, furniture, people, text, watermark",
+    "guidance_scale": 8.0,
+    "num_inference_steps": 30,
+    "strength": 0.99,
+    "mask_dilate_px": 8,
+    "seed": 0,
     "width": 2048,
     "height": 1024,
-    "noise_augmentation": 150,
-    "solver_mode": "fast",
-    "steps": 15
+    "output_file": "gpu360/work/student/event_004_panorama_image/panorama.png",
+    "output_sha256": "f188ddf9d50d8579b5d996a67a7b97e4ed69e7bde3bc3df7083c384c5c9fcdda"
   },
   "composite": {
     "recorded_front_preserved": true,
+    "freeze_generated_surroundings": true,
+    "frozen_panorama_source": "panorama_image_generation.output_file (wrapped as a 1-frame video)",
     "edge_feather": 0.05,
-    "seam_blend": 0.01,
-    "freeze_generated_surroundings": false
+    "seam_blend": 0.01
   },
+  "rejected_attempts": [
+    {
+      "label": "guidance_scale=6.0 Argus 비디오 재생성",
+      "reason": "주변부 hallucination이 줄었지만 여전히 창문/커튼 형태 잔존, 영화관으로 보기엔 부족 (작업 파일 폐기)"
+    },
+    {
+      "label": "위 Argus 결과 t=2.8s 프레임을 주변부로 고정",
+      "reason": "생성 비디오에서 뽑은 프레임이라 사용자 요청(별도 이미지 생성)과 불일치, 채택되지 않음 (작업 파일 폐기)"
+    }
+  ],
   "output": {
     "file": "events/student/event_004/panorama/favorite-movie-360.mp4",
-    "sha256": "29f6fd2700badbbdca49990b759e4bf8811ccb55eca0169a19f1ba89c84d392c",
+    "sha256": "5a6969e4eca0c58859aee3263ee5b2caf1a2e8a7501393c6966baa3c1770e513",
     "width": 2048,
     "height": 1024,
     "video_codec": "h264",

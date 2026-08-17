@@ -471,6 +471,9 @@ def main() -> int:
             )
             if composite.get("freeze_generated_surroundings", False):
                 compose_command.append("--freeze-generated-surroundings")
+                freeze_seconds = composite.get("freeze_frame_seconds")
+                if freeze_seconds is not None:
+                    compose_command.extend(["--freeze-frame-seconds", str(freeze_seconds)])
             stabilize_after = composite.get("stabilize_generated_color_after")
             if stabilize_after is not None:
                 compose_command.extend([

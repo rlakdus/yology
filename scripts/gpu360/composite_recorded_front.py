@@ -36,6 +36,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seam-blend", type=float, default=0.01)
     parser.add_argument("--freeze-generated-surroundings", action="store_true")
     parser.add_argument(
+        "--freeze-frame-seconds",
+        type=float,
+        default=0.0,
+        help="고정할 생성 파노라마 프레임의 시점(초). --freeze-generated-surroundings와 함께 사용합니다.",
+    )
+    parser.add_argument(
         "--stabilize-generated-color-after",
         type=float,
         help="이 시점(초) 이후 생성 주변부의 색상 통계만 기준 프레임에 맞춥니다.",
@@ -165,6 +171,8 @@ def main() -> int:
         and args.stabilize_generated_color_after is not None
     ):
         raise SystemExit("주변부 고정과 시간축 안정화 옵션은 동시에 사용할 수 없습니다.")
+    if args.freeze_frame_seconds < 0:
+        raise SystemExit("--freeze-frame-seconds는 0 이상이어야 합니다.")
 
     try:
         fps = float(Fraction(args.fps))
@@ -207,9 +215,12 @@ def main() -> int:
     frozen_generated_frame = None
     stabilization_reference_frame = None
     if args.freeze_generated_surroundings:
+        if args.freeze_frame_seconds > 0:
+            generated_fps = generated.get(cv2.CAP_PROP_FPS) or fps
+            generated.set(cv2.CAP_PROP_POS_FRAMES, round(args.freeze_frame_seconds * generated_fps))
         frozen_ok, frozen_generated_frame = generated.read()
         if not frozen_ok:
-            raise SystemExit("고정할 생성 파노라마 첫 프레임을 읽지 못했습니다.")
+            raise SystemExit("고정할 생성 파노라마 프레임을 읽지 못했습니다.")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     ffmpeg = [
