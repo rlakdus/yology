@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import {
@@ -174,19 +174,23 @@ const SceneMediaPanel = ({ event, playback, videos, running }: SceneMediaPanelPr
     return map;
   }, [loadedDepths, depthSources]);
 
-  const videoTextures = useMemo(() => {
+  // useMemo가 아니라 effect에서 만든다. dispose()가 VideoTexture의 rVFC 갱신 체인을
+  // 영구히 끊는데, StrictMode remount는 cleanup만 다시 돌리고 useMemo 값을 재사용해
+  // 죽은 텍스처(영영 검은 영상)로 렌더링하게 된다. PanoramaVideoEnvironment 참고.
+  const [videoTextures, setVideoTextures] = useState<Map<string, VideoTexture>>(new Map());
+
+  useEffect(() => {
     const map = new Map<string, VideoTexture>();
     videos.forEach((element, src) => {
       const texture = new VideoTexture(element);
       texture.colorSpace = SRGBColorSpace;
+      // 이미 디코드된 프레임은 다음 rVFC를 기다리지 않고 바로 올린다.
+      if (element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) texture.needsUpdate = true;
       map.set(src, texture);
     });
-    return map;
+    setVideoTextures(map);
+    return () => map.forEach((texture) => texture.dispose());
   }, [videos]);
-
-  useEffect(() => () => {
-    videoTextures.forEach((texture) => texture.dispose());
-  }, [videoTextures]);
 
   const layerFor = (media: VrMedia | null, opacity: number): Layer => {
     if (!media) return { media: null, texture: null, depth: null, fill: null, opacity: 0 };

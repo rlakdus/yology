@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
   ClampToEdgeWrapping,
@@ -41,7 +41,15 @@ const PanoramaVideoEnvironment = ({
   const liveRef = useRef(false);
   const gl = useThree((state) => state.gl);
 
-  const texture = useMemo(() => {
+  // VideoTexture는 useMemo가 아니라 effect에서 만든다. VideoTexture는 생성자에서
+  // requestVideoFrameCallback 체인을 걸고 dispose()가 그 체인을 영구히 끊는데,
+  // StrictMode의 mount→unmount→remount 시뮬레이션은 cleanup(dispose)만 다시 실행하고
+  // useMemo 값은 그대로 재사용한다. 그 결과 죽은 텍스처로 계속 렌더링해 프레임이
+  // 한 장도 올라가지 않는 검은 구가 된다. effect에서 만들면 remount가 체인이 살아
+  // 있는 새 텍스처를 다시 만든다.
+  const [texture, setTexture] = useState<VideoTexture | null>(null);
+
+  useEffect(() => {
     const next = new VideoTexture(video);
     next.colorSpace = SRGBColorSpace;
     next.minFilter = LinearFilter;
@@ -52,10 +60,14 @@ const PanoramaVideoEnvironment = ({
     // 360 영상은 구 안쪽을 거의 정면으로 샘플링한다. 높은 이방성 필터링은
     // 체감 화질 차이보다 모바일 VR GPU의 샘플링 비용을 더 키운다.
     next.anisotropy = Math.min(2, gl.capabilities.getMaxAnisotropy());
-    return next;
+    // 첫 프레임의 presentation은 대개 이 텍스처가 생기기 전에 지나갔다. rVFC는
+    // 다음 새 프레임에만 오므로, 이미 디코드된 프레임은 기다리지 않고 바로 올린다.
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) next.needsUpdate = true;
+    setTexture(next);
+    return () => next.dispose();
   }, [gl, video]);
 
-  const material = useMemo(() => new MeshBasicMaterial({
+  const material = useMemo(() => texture && new MeshBasicMaterial({
     map: texture,
     side: BackSide,
     // 화면 전체를 덮는 구를 transparent로 그리면 양안 전체 픽셀에 알파
@@ -66,13 +78,12 @@ const PanoramaVideoEnvironment = ({
   }), [texture]);
 
   useEffect(() => () => {
-    material.dispose();
-    texture.dispose();
-  }, [material, texture]);
+    material?.dispose();
+  }, [material]);
 
   useFrame(({ camera }) => {
     const mesh = meshRef.current;
-    if (!mesh) return;
+    if (!mesh || !material) return;
 
     const viewerCamera = gl.xr.isPresenting ? gl.xr.getCamera() : camera;
     viewerCamera.getWorldPosition(mesh.position);
@@ -103,6 +114,8 @@ const PanoramaVideoEnvironment = ({
   // 시선을 고르는 initial_yaw는 정면이 따로 없는 정지 360용 값이고, 영상에 그대로
   // 쓰면 진짜 기록이 시야 밖으로 밀린다. 정중앙이 아닌 합성물이 나올 때만
   // yaw_offset_deg로 보정한다.
+  if (!material) return null;
+
   return (
     <mesh
       ref={meshRef}

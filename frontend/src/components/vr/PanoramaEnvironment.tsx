@@ -16,8 +16,10 @@ import {
 import { EYE_HEIGHT, type VrEvent } from "../../data/vrEvent";
 import type { PlaybackRefs } from "./ReconstructionScene";
 
+// SceneMediaPanel과 같은 픽셀. 이전 값은 이미지 데이터 블록이 아예 없는 GIF라
+// 디코드는 통과해도 WebGL 업로드에서 INVALID_VALUE(bad image data)가 났다.
 const TRANSPARENT_PIXEL =
-  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 /**
  * 깊이 맵이 만들어내는 부조의 앞뒤 한계. 단위는 미터.
