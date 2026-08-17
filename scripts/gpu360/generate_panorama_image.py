@@ -304,6 +304,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--coverage-output",
+        type=Path,
+        help=(
+            "정면과 참조들이 실제로 덮은 영역을 bool .npy로 저장한다. "
+            "refine_frozen_background.py --coverage에 그대로 넣는다."
+        ),
+    )
+    parser.add_argument(
         "--ref-feather",
         type=float,
         default=0.03,
@@ -420,6 +428,13 @@ def main() -> int:
         )
         print(f"참조 병합 {ref_path.name} yaw={ref_yaw} pitch={ref_pitch} roll={ref_roll} "
               f"fov={ref_fov}: 커버리지 {known_mask.mean() * 100:.1f}%")
+
+    if args.coverage_output is not None:
+        # refine_frozen_background.py가 천정/바닥을 어디까지 덮어써도 되는지 판단하는
+        # 근거다. 여기서 내보내지 않으면 그 마스크를 손으로 다시 만들어야 한다.
+        args.coverage_output.parent.mkdir(parents=True, exist_ok=True)
+        np.save(args.coverage_output, known_mask)
+        print(f"실측 커버리지 저장: {args.coverage_output} ({known_mask.mean() * 100:.1f}%)")
 
     inpaint_mask = (~known_mask).astype(np.uint8) * 255
     if args.mask_dilate_px > 0:

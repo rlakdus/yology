@@ -197,6 +197,64 @@ python scripts/gpu360/run_pipeline.py \
 채도 상승과 삼각형 경계는 프레임을 고정하는 후처리가 아니라 Argus 배치 조건 초기화로
 해결한다. 정면 마스크는 바깥쪽 1.5%를 제외하고 10% 폭의 smoothstep 페더를 사용한다.
 
+## 4-2. 현장 사진이 있으면 주변부를 상상하지 않는다
+
+위 방식은 정면 한 장에서 나머지 92%를 상상한다. 같은 자리에서 다른 방향을 찍은 사진이
+있으면 그 자리를 실측으로 덮고 SDXL은 빈틈만 채우게 할 수 있다. 사진은 추적되는
+`events/<persona>/<event>/source/photos/`에 둔다 — `gpu360/work/`는 gitignore 대상이라
+거기 두면 커밋된 배경을 재현할 수 없다.
+
+```bash
+# 1) 각 사진의 yaw/pitch/roll과 화각을 추정한다. 잔차(도)가 채택 기준이다.
+conda run -n 360VG python scripts/gpu360/estimate_reference_pose.py \
+  --front-image <prepared 첫 프레임> --front-fov-deg 60 \
+  --anchor "<이미 푼 사진>,YAW,PITCH,FOV" \
+  --reference "<새 사진>" --output <poses.json>
+
+# 2) 실측을 깔고 생성한다. 앞에 적은 참조가 우선권을 갖는다.
+conda run -n 360VG python scripts/gpu360/generate_panorama_image.py \
+  --argus-dir .gpu360/argus-code --front-image <...> --fov-x-deg 60 --multi-view \
+  --ref-image "<사진>,YAW,PITCH,ROLL,FOV" \
+  --coverage-output <mask.npy> --output <background.png>
+
+# 3) 모델이 어차피 못 채우는 천정/바닥을 실측 하늘·지면으로 정리한다.
+conda run -n 360VG python scripts/gpu360/refine_frozen_background.py \
+  --input <background.png> --output <refined.png> --coverage <mask.npy>
+```
+
+자세 추정은 순수 회전을 전제한다. 몇 미터 떨어진 곳에서 찍은 사진은 시차 때문에 잔차가
+커지므로 그 값으로 거른다 — `event_002`에서 같은 자리 사진은 0.06도, 무대에 더 가까이
+가서 찍은 사진은 23.45도가 나와 후자는 프롬프트 참고용으로만 썼다. 조명도 함께 본다.
+원본 영상의 하늘 밝기 범위를 재고(회전 메타데이터를 실제로 적용한 뒤에) 그 밖의 사진은
+색이 튄다. 다만 **새로 덮는 영역이 유의미하면** 잔차·조명이 조금 벗어나도 채택할 만하다.
+`merge_reference`가 겹치는 구간의 Lab 통계로 노출을 맞춰 준다.
+
+## 4-3. 고정 주변부에 움직임을 입힐 때
+
+정면만 움직이고 360도가 완전히 정지하면 공간이 사진처럼 느껴진다. Argus가 만든 움직이는
+파노라마를 주변부로 되쓰는 방법을 먼저 검토했지만 `event_002`에서 채택하지 않았다 —
+정면 밖 프레임간 변화가 실제 장면(9.5)의 1.6~3.3배로 끓고, 선명도가 사진 기반 정지
+배경의 1/64이었다. 대신 정지 배경 위에 통제 가능한 움직임을 합성한다.
+
+`composite_recorded_front.py`의 `--surround-motion`(0이면 꺼짐)을 쓰고, job에서는
+`composite.surround_motion` 블록으로 넘긴다. 성분은 셋이다.
+
+- **점광원 점멸**: 배경에서 주변보다 뚜렷이 밝은 작은 점을 찾아 각자 다른 위상으로
+  밝기를 흔든다. 관중이 든 휴대폰 불빛에 해당한다.
+- **무대 조명 워시**: 녹화 정면의 프레임별 휘도를 그대로 창 전체 밝기에 옮긴다.
+  점광원이 거의 없는 쪽(`event_002` 왼쪽은 23개, 오른쪽 언덕은 535개)을 살리는 유일한
+  성분이라 이것이 없으면 한쪽이 죽는다.
+- **웅성임 워프**: 주기가 어긋나는 저주파 사인으로 만든 몇 픽셀짜리 느린 변위.
+
+창은 yaw 반폭이 pitch 반높이보다 훨씬 커야 좌우로 자란다. 기본값 yaw ±78도(+18도 페더)는
+정면 ±30도 바깥으로 48도씩 새 영역을 잡고, pitch 기본값 −13±21도(+8도 페더)는
+`refine_frozen_background.py`가 평평하게 다시 칠하는 하늘(+16도 위)과 바닥(−42도 아래)
+사이에 창을 가둔다. 평평한 하늘이 깜빡이는 것이 가장 눈에 띄는 실패다. 창이 경도 180도
+이음새에 닿으면 실행이 중단된다.
+
+검수는 프레임간 변화량으로 한다. 창 안이 정면의 절반 안팎, 창 밖이 0이면 된다
+(`event_002`: 정면 8.9 / 창 안 3.9~4.7 / 창 밖 0.000).
+
 ## 5. 다중 GPU로 남은 학생 이벤트 동시 생성
 
 GPU가 3개 이상 보이는 한 워크스페이스에서는 다음 실행기로 남은 세 이벤트를 동시에

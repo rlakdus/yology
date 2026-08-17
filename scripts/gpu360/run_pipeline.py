@@ -603,6 +603,20 @@ def main() -> int:
                 "--seam-blend", str(composite["seam_blend"]),
                 "--device", args.device,
             )
+            motion = composite.get("surround_motion")
+            if motion:
+                compose_command.extend([
+                    "--surround-motion", str(motion["strength"]),
+                    "--surround-motion-yaw-deg", str(motion.get("yaw_half_deg", 78)),
+                    "--surround-motion-yaw-feather-deg", str(motion.get("yaw_feather_deg", 18)),
+                    "--surround-motion-pitch-deg", str(motion.get("pitch_half_deg", 21)),
+                    "--surround-motion-pitch-feather-deg", str(motion.get("pitch_feather_deg", 8)),
+                    "--surround-motion-pitch-center-deg", str(motion.get("pitch_center_deg", -13)),
+                    "--surround-twinkle-hz", str(motion.get("twinkle_hz", 2.6)),
+                    "--surround-sway-px", str(motion.get("sway_px", 2.5)),
+                    "--surround-wash", str(motion.get("wash", 0.8)),
+                    "--surround-motion-seed", str(motion.get("seed", 0)),
+                ])
             if composite.get("freeze_generated_surroundings", False) or frozen_image is not None:
                 compose_command.append("--freeze-generated-surroundings")
                 freeze_seconds = composite.get("freeze_frame_seconds")
