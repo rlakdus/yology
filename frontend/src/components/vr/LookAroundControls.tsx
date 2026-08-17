@@ -3,10 +3,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useXR } from "@react-three/xr";
 import { MathUtils } from "three";
 
-import { LOOK, MOTION } from "../../data/vrEvent";
+import { EYE_HEIGHT, LOOK, MOTION } from "../../data/vrEvent";
 import type { PlaybackRefs } from "./ReconstructionScene";
-
-const EYE_HEIGHT = 1.6;
 
 /** 시선이 정면으로 돌아오는 속도 (1/초). */
 const RECENTER_RATE = 0.9;

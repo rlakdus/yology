@@ -107,7 +107,6 @@ const SurroundBackdrop = ({ event, playback, blurred, videos }: SurroundBackdrop
           panorama={event.panorama_video}
           playback={playback}
           video={videos.get(event.panorama_video.src)!}
-          view={event.view}
         />
       )}
 

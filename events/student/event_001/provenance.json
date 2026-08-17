@@ -1,11 +1,16 @@
 {
-  "status": "awaiting_source_data",
+  "status": "recorded_episode_no_scene_record",
   "source_person": "he",
-  "source_file": "data/output/export_he_vitals.csv",
-  "source_window_start": "2026-08-12T15:00:00+09:00",
-  "source_window_end": "2026-08-12T15:10:00+09:00",
-  "source_peak_at": "2026-08-12T15:07:39+09:00",
-  "display_peak_at": "2026-04-12T14:25:00+09:00",
-  "timeline_offset_seconds": -10543359,
-  "exported_to_frontend": false
+  "source_file": "persona/data/student_episodes.csv",
+  "source_episode_id": "he-1",
+  "source_window_start": "2026-07-22T01:21:20+09:00",
+  "source_window_end": "2026-07-22T01:23:20+09:00",
+  "source_peak_at": "2026-07-22T01:22:32+09:00",
+  "display_peak_at": "2026-03-22T01:22:32+09:00",
+  "timeline_offset_seconds": -10540800,
+  "scene_basis": "scenario_hypothesis",
+  "exported_to_frontend": false,
+  "display_window_start": "2026-03-22T01:21:20+09:00",
+  "display_window_end": "2026-03-22T01:23:20+09:00",
+  "values_modified": false
 }

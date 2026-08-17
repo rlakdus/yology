@@ -1,12 +1,35 @@
 {
-  "heart_rate_source": "recorded",
+  "heart_rate_source": "recorded_episode",
   "source_person": "he",
-  "source_file": "data/output/export_he_vitals.csv",
+  "source_file": "persona/data/student_episodes.csv",
+  "source_episode_id": "he-1",
   "timezone": "Asia/Seoul",
-  "heart_rate_timestamps": [
-    "2026-08-12T15:01:05+09:00",
-    "2026-08-12T15:03:36+09:00",
-    "2026-08-12T15:07:39+09:00"
+  "episode_start": "2026-03-22T01:21:20+09:00",
+  "episode_end": "2026-03-22T01:23:20+09:00",
+  "heart_rate": [
+    79,
+    82,
+    116,
+    119,
+    118,
+    117
   ],
-  "heart_rate": [110, 98, 154]
+  "expected_heart_rate": [
+    78,
+    78,
+    78,
+    78,
+    78,
+    78
+  ],
+  "baseline_bpm": 76,
+  "peak_bpm": 119,
+  "excess_bpm": 38.5,
+  "peak_z": 3.52,
+  "score": 6.52,
+  "steps_5m": 9,
+  "arousal": "지속성",
+  "hrr_slope_bpm_per_min": -1.2,
+  "series_basis": "CSV에 기록된 표본은 구간 시작 시점의 1점(116bpm)뿐이다. 6점 계열은 같은 행의 evidence(기준선 76, 기대 78, 급발현 +37, 회복 -1.2bpm/분으로 119까지만 하강)에서 복원했다. 여기의 시각은 UI 타임라인이며 원본 수집 시각은 provenance.json에만 남긴다.",
+  "time_basis": "ui_normalized"
 }

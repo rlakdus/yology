@@ -32,6 +32,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--target-lufs", type=float, default=-18.0)
     parser.add_argument("--true-peak-db", type=float, default=-1.0)
+    parser.add_argument(
+        "--channels",
+        type=int,
+        choices=(1, 2),
+        default=2,
+        help="믹스 자체는 모노다. 웹으로 바로 내보내는 파일은 1을 써서 크기를 절반으로 줄인다.",
+    )
     parser.add_argument("--force", action="store_true")
     return parser.parse_args()
 
@@ -167,14 +174,14 @@ def render_bed(spec: dict[str, Any], duration: float) -> np.ndarray:
     return mix / peak * 0.89
 
 
-def write_wave(path: Path, mono: np.ndarray) -> None:
-    stereo = np.stack([mono, mono], axis=1)
+def write_wave(path: Path, mono: np.ndarray, channels: int = 2) -> None:
+    frames = mono if channels == 1 else np.stack([mono, mono], axis=1)
     path.parent.mkdir(parents=True, exist_ok=True)
     with wave.open(str(path), "wb") as handle:
-        handle.setnchannels(2)
+        handle.setnchannels(channels)
         handle.setsampwidth(2)
         handle.setframerate(SAMPLE_RATE)
-        handle.writeframes((stereo * 32767).astype(np.int16).tobytes())
+        handle.writeframes((frames * 32767).astype(np.int16).tobytes())
 
 
 def measure_loudness(path: Path, target_lufs: float, true_peak_db: float) -> dict[str, str]:
@@ -193,7 +200,7 @@ def measure_loudness(path: Path, target_lufs: float, true_peak_db: float) -> dic
     return json.loads(result.stderr[start:end + 1])
 
 
-def normalise(path: Path, target_lufs: float, true_peak_db: float) -> None:
+def normalise(path: Path, target_lufs: float, true_peak_db: float, channels: int = 2) -> None:
     """2-pass loudnorm. 녹음 이벤트와 같은 기준으로 맞춰야 이동 시 음량이 튀지 않습니다."""
     measured = measure_loudness(path, target_lufs, true_peak_db)
     temporary = path.with_suffix(".normalising.wav")
@@ -207,7 +214,7 @@ def normalise(path: Path, target_lufs: float, true_peak_db: float) -> None:
             f":measured_LRA={measured['input_lra']}"
             f":measured_thresh={measured['input_thresh']}"
             ":linear=true",
-            "-ar", str(SAMPLE_RATE), "-c:a", "pcm_s16le", str(temporary),
+            "-ar", str(SAMPLE_RATE), "-ac", str(channels), "-c:a", "pcm_s16le", str(temporary),
         ],
         check=True,
     )
@@ -225,8 +232,8 @@ def main() -> int:
         raise SystemExit("--duration 또는 사양의 duration_seconds가 필요합니다.")
 
     print(f"사운드 베드를 렌더링합니다: {duration:.3f}초, 레이어 {len(spec.get('layers', []))}개")
-    write_wave(args.output, render_bed(spec, float(duration)))
-    normalise(args.output, args.target_lufs, args.true_peak_db)
+    write_wave(args.output, render_bed(spec, float(duration)), args.channels)
+    normalise(args.output, args.target_lufs, args.true_peak_db, args.channels)
     print(f"완료: {args.output}")
     return 0
 

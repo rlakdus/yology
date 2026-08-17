@@ -1,0 +1,21 @@
+{
+  "age_group": "20대",
+  "situation": "심야 공부",
+  "is_fabricated": false,
+  "duration_min": 2.0,
+  "peak_hr": 116.0,
+  "expected_hr": 77.5,
+  "excess_bpm": 38.5,
+  "steps_5m": 9,
+  "hrv_ms": null,
+  "hrr_slope": -1.2,
+  "arousal": "지속성",
+  "peak_z": 3.52,
+  "score": 6.52,
+  "evidence": "기대78(기준선76+활동+1) 대비 실제116 → 초과 +38bpm (z=3.5); 직전5분 정지(걸음<20); 급발현 +37bpm; 지속성 각성(회복 -1.2bpm/분, 119까지만 하강); 야간",
+  "event_id": "event_001",
+  "start": "2026-03-22T01:21:20+09:00",
+  "end": "2026-03-22T01:23:20+09:00",
+  "peak_at": "2026-03-22T01:22:32+09:00",
+  "time_basis": "ui_normalized"
+}

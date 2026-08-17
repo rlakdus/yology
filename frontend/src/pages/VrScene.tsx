@@ -19,6 +19,7 @@ import {
 import { createRecordedHeartbeatSource } from "../heartbeat/heartbeatSource";
 import { playbackSeconds, useVrEvent } from "../data/vrEvent";
 import { useEventVideos } from "../vr/useEventVideos";
+import { useAmbienceAudio } from "../vr/useAmbienceAudio";
 import { useBreathingAudio } from "../vr/useBreathingAudio";
 import { useHeartbeatAudio } from "../vr/useHeartbeatAudio";
 import { useHeartbeatHaptics } from "../vr/useHeartbeatHaptics";
@@ -149,6 +150,14 @@ const VrScene = () => {
     getArousal: () => toneRef.current,
     getPresence: () => breathingPresenceRef.current * breathingGain,
   });
+  // 룸 톤은 프리루드부터 깔린다. 심박보다 먼저 공간에 들어와 있어야 하기 때문에
+  // 재생 진행도가 아니라 장면에 머무는 동안 계속 유지된다.
+  const { start: startAmbience, stop: stopAmbience } = useAmbienceAudio({
+    src: event?.ambience?.src ?? null,
+    gain: event?.ambience?.gain ?? 1,
+    loop: event?.ambience?.loop ?? true,
+    getPresence: () => 1,
+  });
 
   const enterPhase = useCallback((next: ExperiencePhase) => {
     phaseRef.current = next;
@@ -170,12 +179,13 @@ const VrScene = () => {
     setLeaving(true);
     stopHeartbeat();
     stopBreathing();
+    stopAmbience();
     stopHaptics();
     resetVideos();
     void xrStore.getState().session?.end().catch(() => undefined);
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
     exitTimerRef.current = window.setTimeout(() => navigate(-1), 600);
-  }, [leaving, navigate, resetVideos, stopBreathing, stopHaptics, stopHeartbeat]);
+  }, [leaving, navigate, resetVideos, stopAmbience, stopBreathing, stopHaptics, stopHeartbeat]);
 
   const abort = useCallback(() => {
     completeExit();
@@ -186,13 +196,14 @@ const VrScene = () => {
     setRetrying(false);
     stopHeartbeat();
     stopBreathing();
+    stopAmbience();
     stopHaptics();
     resetVideos();
     void xrStore.getState().session?.end().catch(() => undefined);
     leadInBeatCountRef.current = 0;
     enterPhase("waiting");
     setPlaybackError(message);
-  }, [enterPhase, resetVideos, stopBreathing, stopHaptics, stopHeartbeat]);
+  }, [enterPhase, resetVideos, stopAmbience, stopBreathing, stopHaptics, stopHeartbeat]);
 
   const markPlaybackStarted = useCallback(() => {
     mediaStartPendingRef.current = false;
@@ -265,12 +276,14 @@ const VrScene = () => {
     }
 
     startHeartbeat();
+    startAmbience();
   }, [
     enterPhase,
     firstSourceBpm,
     primaryVideo,
     resetVideos,
     sourceStats,
+    startAmbience,
     startHeartbeat,
     videos.ready,
     vrSupported,
@@ -290,6 +303,7 @@ const VrScene = () => {
     );
     resetVideos();
     startHeartbeat();
+    startAmbience();
     if (vrSupported) void xrStore.enterVR().catch(() => undefined);
 
     if (!primaryVideo) {
@@ -307,6 +321,7 @@ const VrScene = () => {
     primaryVideo,
     resetVideos,
     sourceStats,
+    startAmbience,
     startHeartbeat,
     videos.ready,
     vrSupported,

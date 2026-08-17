@@ -17,7 +17,9 @@ events/student/event_NNN/
     └── generation.json    # 모델·옵션·입출력 해시
 ```
 
-GPU 작업 설정은 같은 번호로 `gpu360/jobs/student/event_NNN.json`에 둔다. 이벤트 ID는 영구 식별자이고, 이름 변경은 `slug`와 표시 문구에 반영한다. `event_001`의 정식 slug는 `interview-result`, 표시명은 `면접 결과 확인`이다.
+GPU 작업 설정은 같은 번호로 `gpu360/jobs/student/event_NNN.json`에 둔다. 이벤트 ID는 영구 식별자이고, 이름 변경은 `slug`와 표시 문구에 반영한다. `event_001`의 정식 slug는 `night-study`, 표시명은 `심야 공부`다.
+
+`event_001`은 녹화 영상이 없는 생체신호 기반 추정 장면이라 GPU 작업 설정이 없다. 360° 공간은 미리 생성한 정지 파노라마 `panorama/night_study_360.generated.png`와 그 깊이 맵으로만 구성한다.
 
 ## 시간 매칭 규칙
 
@@ -39,7 +41,7 @@ python scripts/export_all_event_assets.py
 
 | 이벤트 | 표시명 | UI 최고점 | 데이터 상태 |
 | --- | --- | --- | --- |
-| `event_001` | 면접 결과 확인 | `2026-04-12 14:25 +09:00` | 원본 데이터 대기 |
+| `event_001` | 심야 공부 | `2026-03-22 01:22 +09:00` | 에피소드 매칭 완료 (he-1) |
 | `event_002` | 대학 입학 후 첫 콘서트 | `2026-05-15 19:42 +09:00` | 없음 |
 | `event_003` | 몽골 승마 체험 | `2026-07-25 16:18 +09:00` | 매칭 완료 |
 | `event_004` | 영화 관람 | `2026-08-12 20:31 +09:00` | 원본 데이터 대기 |

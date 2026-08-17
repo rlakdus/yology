@@ -1,69 +1,72 @@
 {
   "event_id": "event_001",
-  "slug": "interview-result",
-  "title": "면접 결과 확인",
-  "subtitle": "결과를 열어보던 순간의 긴장과 안도",
+  "slug": "night-study",
+  "title": "심야 공부",
+  "subtitle": "새벽 1시, 책상 앞에서 가라앉지 않던 박동",
   "persona": "student",
-  "emotion": "anticipation_relief",
-  "description": "면접 결과를 확인하며 긴장과 안도가 교차하고 심박이 크게 상승했던 순간",
-  "location": "Campus",
+  "emotion": "sustained_arousal",
+  "description": "새벽 1시 21분, 앉은 채로 심박이 78에서 116으로 급발현하고 좀처럼 내려오지 않았던 순간",
+  "location": "Home",
   "icon": "graduation-cap",
-  "start_time": "2026-04-12T14:17:21+09:00",
-  "end_time": "2026-04-12T14:27:21+09:00",
-  "vr_scene": "interview_result_check",
+  "start_time": "2026-03-22T01:21:20+09:00",
+  "end_time": "2026-03-22T01:23:20+09:00",
+  "vr_scene": "night_study_room",
   "display": {
-    "month": "2026.04",
-    "peak_at": "2026-04-12T14:25:00+09:00",
+    "month": "2026.03",
+    "peak_at": "2026-03-22T01:22:32+09:00",
     "timezone": "Asia/Seoul",
     "date_basis": "ui_configured"
   },
   "availability": {
-    "anomaly_ready": false,
-    "source_video_ready": true,
+    "anomaly_ready": true,
+    "source_video_ready": false,
     "panorama_ready": true,
     "vr_ready": false
   },
   "view": {
     "anchor_frame_seconds": 0,
-    "initial_yaw_deg": 0,
-    "initial_pitch_deg": 0
+    "initial_yaw_deg": -72,
+    "initial_pitch_deg": -6
   },
   "source_mapping": {
-    "status": "awaiting_source_data",
+    "status": "recorded_episode_no_scene_record",
     "person": "he",
-    "vitals_file": "data/output/export_he_vitals.csv",
-    "source_window_start": "2026-08-12T15:00:00+09:00",
-    "source_window_end": "2026-08-12T15:10:00+09:00",
-    "source_peak_at": "2026-08-12T15:07:39+09:00",
-    "display_peak_at": "2026-04-12T14:25:00+09:00"
+    "episode_id": "he-1",
+    "vitals_file": "persona/data/student_episodes.csv",
+    "source_window_start": "2026-07-22T01:21:20+09:00",
+    "source_window_end": "2026-07-22T01:23:20+09:00",
+    "source_peak_at": "2026-07-22T01:22:32+09:00",
+    "display_peak_at": "2026-03-22T01:22:32+09:00"
   },
   "experience": {
     "intro": {
       "guidance_lines": [
-        "숨을 고르고, 결과를 확인하던 순간의 빠른 박동에 귀 기울여 봅니다.",
-        "여덟 번의 박동을 따라가면, 그때의 긴장과 안도가 천천히 돌아옵니다."
+        "불 꺼진 방에서 스탠드 하나만 켜 두었던 새벽을 떠올려 봅니다.",
+        "여덟 번의 박동을 따라가면, 그때 좀처럼 가라앉지 않던 긴장이 돌아옵니다."
       ],
       "lead_in_beats": 8
     },
     "heartbeat": {
-      "source_baseline_bpm": 89,
-      "cooldown_seconds": 8
+      "source_baseline_bpm": 78,
+      "cooldown_seconds": 20
     },
     "breathing": {
       "enabled": false
     }
   },
-  "assets": [
-    {
-      "file": "source/interview-result.original.mov",
-      "taken_at": "2026-04-12T14:22:21+09:00",
-      "source_taken_at": "2026-08-12T15:05:00+09:00"
-    }
-  ],
-  "panorama_video": {
-    "file": "panorama/interview-result-360.mp4",
-    "projection": "equirectangular",
-    "fallback_image_file": null,
-    "yaw_offset_deg": 0.0
+  "assets": [],
+  "ambience": {
+    "file": "audio/night-study-ambience.wav",
+    "gain": 1.0,
+    "loop": true,
+    "source_note": "Procedurally synthesised late-night room tone; not a recording. Heartbeat is generated live from sensor.json and is deliberately absent here."
+  },
+  "panorama": {
+    "file": "panorama/night_study_360.generated.png",
+    "depth": "panorama/night_study_360.generated.png.depth.png",
+    "generated": true,
+    "mode": "scenario_hypothesis",
+    "anchor_yaw_deg": 0,
+    "source_note": "Fully AI-generated scenario hypothesis based on the student persona's representative physiological event; not a recorded location. The depth map is Depth Anything V2 Small output with its left/right wrap step removed by scripts/repair_equirect_depth_seam.py."
   }
 }

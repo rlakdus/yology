@@ -70,6 +70,6 @@
     "file": "panorama/mongolia-horse-riding-360.mp4",
     "projection": "equirectangular",
     "fallback_image_file": "panorama/mongolia-horse-360.generated.png",
-    "yaw_offset_deg": -25.0
+    "yaw_offset_deg": 0.0
   }
 }

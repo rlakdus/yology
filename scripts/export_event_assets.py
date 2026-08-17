@@ -251,6 +251,35 @@ def export_panorama_video(metadata: dict, event_dir: Path, target_dir: Path) -> 
     }
 
 
+def export_ambience(metadata: dict, event_dir: Path, target_dir: Path) -> dict | None:
+    """Copy an optional looping room tone.
+
+    The bed carries no heartbeat: that is synthesised live from ``sensor.json`` so it
+    follows playback progress. This layer only has to sit underneath it, so it loops
+    seamlessly and never reacts to the timeline.
+    """
+    entry = metadata.get("ambience")
+    if not isinstance(entry, dict) or not entry.get("file"):
+        return None
+
+    relative = Path(entry["file"])
+    source = event_dir / relative
+    if not is_usable(source):
+        print(f"  ! 앰비언스를 찾을 수 없어 제외: {entry['file']}")
+        return None
+
+    destination = target_dir / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+
+    return {
+        "src": relative.as_posix(),
+        "gain": float(entry.get("gain", 1.0)),
+        "loop": bool(entry.get("loop", True)),
+        "source_note": str(entry.get("source_note", "")),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--persona", required=True, help="페르소나 식별자 (예: caregiver)")
@@ -279,6 +308,7 @@ def main():
     media = build_media(metadata, event_dir, target_dir)
     panorama = export_panorama(metadata, event_dir, target_dir)
     panorama_video = export_panorama_video(metadata, event_dir, target_dir)
+    ambience = export_ambience(metadata, event_dir, target_dir)
 
     start = parse_time(metadata.get("start_time"))
     end = parse_time(metadata.get("end_time"))
@@ -315,6 +345,7 @@ def main():
         "anomaly": anomaly,
         "panorama": panorama,
         "panorama_video": panorama_video,
+        "ambience": ambience,
         "media": media,
         "chats": read_chats(event_dir),
         "sensor": sensor,
@@ -335,6 +366,8 @@ def main():
         written.add(target_dir / panorama_video["src"])
         if panorama_video["fallback_image"]:
             written.add(target_dir / panorama_video["fallback_image"])
+    if ambience:
+        written.add(target_dir / ambience["src"])
     for entry in media:
         written.add(target_dir / entry["src"])
         for sidecar_path in (entry["depth"], entry["fill"]):
@@ -346,6 +379,18 @@ def main():
             stale.unlink()
         except OSError:
             print(f"  ! 지난 파일을 지우지 못했습니다 (사용 중일 수 있음): {stale.name}")
+
+    # 파일을 걷어내면 빈 폴더가 남는다. 이벤트가 자산 종류를 바꿀 때(영상 -> 정지
+    # 파노라마) 쓰지 않는 source/ 같은 폴더가 계속 보이지 않도록 깊은 쪽부터 지운다.
+    for folder in sorted(
+        (path for path in target_dir.rglob("*") if path.is_dir()),
+        key=lambda path: len(path.parts),
+        reverse=True,
+    ):
+        try:
+            folder.rmdir()
+        except OSError:
+            pass  # 내용이 남아 있거나 잠긴 폴더는 그대로 둔다.
 
     images = sum(1 for entry in media if entry["kind"] == "image")
     videos = sum(1 for entry in media if entry["kind"] == "video")

@@ -61,6 +61,13 @@ export type VrEvent = {
     fallback_image: string | null;
     yaw_offset_deg: number;
   } | null;
+  /** 재생 진행도와 무관하게 깔리는 룸 톤. 심박은 여기 없고 실시간 합성된다. */
+  ambience: {
+    src: string;
+    gain: number;
+    loop: boolean;
+    source_note: string;
+  } | null;
   media: VrMedia[];
   chats: string[];
   sensor: {
@@ -116,6 +123,15 @@ export const PLAYBACK = {
  * pitch만 85°로 제한한다. 파노라마가 없는 이벤트도 기존 배경 셸 덕분에 안전하다.
  */
 export const LOOK = { yawDeg: 180, pitchDeg: 85 };
+
+/**
+ * 서 있는 눈높이. 단위는 미터.
+ *
+ * 카메라가 이 높이에 있으므로 파노라마 구도 이 높이를 중심으로 놓아야 한다. 구를
+ * 원점에 두면 눈이 구 중심에서 1.6m 위로 벗어나 파노라마가 다시 투영되고, 반지름이
+ * 가까운 곳(2m대)에서는 수평선이 수십 도 아래로 기울어진다.
+ */
+export const EYE_HEIGHT = 1.6;
 
 /**
  * 카메라 미세 이동. 단위는 미터.
@@ -292,6 +308,9 @@ export const useVrEvent = (persona?: string, eventId?: string) => {
                   ? `${base}/${payload.panorama_video.fallback_image}`
                   : null,
               }
+            : null,
+          ambience: payload.ambience
+            ? { ...payload.ambience, src: `${base}/${payload.ambience.src}` }
             : null,
           media: payload.media.map((entry) => ({
             ...entry,

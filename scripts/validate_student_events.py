@@ -66,7 +66,11 @@ def main() -> int:
         peak_at = display.get("peak_at")
         peak_time = parse_ui_time(peak_at, f"{label}.display.peak_at", errors)
         require(display.get("timezone") == "Asia/Seoul", f"{label}: timezone 불일치", errors)
-        require(display.get("date_basis") == "ui_configured", f"{label}: UI 설정 날짜 기준이 아닙니다", errors)
+        # UI 시각의 출처는 둘 중 하나여야 한다. ui_configured는 원본 시각을 옮겨 붙인
+        # 것이고, source_actual은 원본 시각을 그대로 쓴 것이다. 어느 쪽이든 아래의
+        # provenance 검사가 표시 시각을 원본까지 되짚을 수 있어야 통과한다.
+        date_basis = display.get("date_basis")
+        require(date_basis in ("ui_configured", "source_actual"), f"{label}: 알 수 없는 날짜 기준 {date_basis!r}", errors)
         require(display.get("month") == peak_at[:7].replace("-", "."), f"{label}: 표시 월과 peak_at이 다릅니다", errors)
 
         start = metadata.get("start_time")
@@ -97,6 +101,9 @@ def main() -> int:
             if source_peak and peak_time:
                 expected_offset = int((peak_time - source_peak).total_seconds())
                 require(provenance.get("timeline_offset_seconds") == expected_offset, f"{event_dir.name}/provenance.json: timeline_offset_seconds 불일치", errors)
+                # source_actual이라고 선언했으면 옮겨 붙인 시각이 남아 있으면 안 된다.
+                if date_basis == "source_actual":
+                    require(expected_offset == 0, f"{label}: source_actual인데 UI 시각이 원본과 다릅니다", errors)
 
         anomaly_path = event_dir / "anomaly.json"
         sensor_path = event_dir / "sensor.json"
@@ -108,23 +115,48 @@ def main() -> int:
                 require(anomaly.get("time_basis") == "ui_normalized", f"{event_dir.name}/anomaly.json: UI 시간축이 아닙니다", errors)
             if sensor_path.is_file():
                 sensor = read_json(sensor_path)
-                timestamps = sensor.get("heart_rate_timestamps") or []
                 values = sensor.get("heart_rate") or []
+                # 심박 계열의 시각은 두 형태로 온다. 표본마다 시각이 붙어 있거나,
+                # (heart_rate_timestamps) 구간만 선언하고 계열을 그 안에 균등 배치한다
+                # (episode_start/episode_end). 프론트의 sampleAt이 후자를 그대로 쓴다.
+                # 어느 쪽이든 지켜야 하는 것은 하나다. UI가 정점이라고 말하는 시각에
+                # 실제 최고 심박이 있어야 한다.
+                timestamps = sensor.get("heart_rate_timestamps")
+                if timestamps is None:
+                    window = (
+                        parse_ui_time(sensor.get("episode_start"), f"{event_dir.name}/sensor.episode_start", errors),
+                        parse_ui_time(sensor.get("episode_end"), f"{event_dir.name}/sensor.episode_end", errors),
+                    )
+                    if all(window) and len(values) > 1:
+                        span = (window[1] - window[0]) / (len(values) - 1)
+                        timestamps = [(window[0] + span * index).isoformat() for index in range(len(values))]
+                    else:
+                        timestamps = []
+                        require(False, f"{event_dir.name}/sensor.json: 심박 시각도 구간도 없습니다", errors)
                 require(len(timestamps) == len(values), f"{event_dir.name}/sensor.json: 시각·값 개수 불일치", errors)
                 require(peak_at in timestamps, f"{event_dir.name}/sensor.json: UI peak 시각이 없습니다", errors)
                 if peak_at in timestamps and values:
                     require(values[timestamps.index(peak_at)] == max(values), f"{event_dir.name}/sensor.json: UI peak와 최고 심박이 다릅니다", errors)
 
-        panorama = metadata.get("panorama_video") or {}
-        panorama_file = event_dir / panorama.get("file", "") if panorama.get("file") else None
-        require(panorama_ready == bool(panorama_file and panorama_file.is_file() and panorama_file.stat().st_size > 0), f"{label}: panorama_ready와 영상 파일 상태가 다릅니다", errors)
+        # 360° 환경은 영상으로도, 정지 파노라마로도 준비될 수 있다. 정지 파노라마만
+        # 있는 이벤트를 미준비로 재는 것은 VR 씬이 실제로 서는지와 어긋난다.
+        panorama_files = [
+            event_dir / entry["file"]
+            for key in ("panorama_video", "panorama")
+            if isinstance(entry := metadata.get(key), dict) and entry.get("file")
+        ]
+        require(panorama_ready == any(path.is_file() and path.stat().st_size > 0 for path in panorama_files), f"{label}: panorama_ready와 파노라마 파일 상태가 다릅니다", errors)
         require(vr_ready == (source_ready and anomaly_ready and panorama_ready), f"{label}: vr_ready 계산이 다릅니다", errors)
 
         job_path = JOBS / f"{event_id}.json"
         if job_path.is_file():
             job = read_json(job_path)
             require(job.get("event") == f"student/{event_id}", f"{job_path.relative_to(ROOT)}: event 경로 불일치", errors)
-            require(job.get("view") == metadata.get("view"), f"{job_path.relative_to(ROOT)}: 초기 VR 시점 불일치", errors)
+            # 영상 파노라마 이벤트에서만 job의 view가 메타데이터를 정한다(run_pipeline이
+            # metadata["view"]를 job에서 덮어쓴다). 정지 파노라마로 바뀐 이벤트의 view는
+            # 시작 시선을 고르는 값이고 남아 있는 영상 job이 정할 것이 아니다.
+            if metadata.get("panorama_video"):
+                require(job.get("view") == metadata.get("view"), f"{job_path.relative_to(ROOT)}: 초기 VR 시점 불일치", errors)
             require((ROOT / job.get("source", "")).is_file(), f"{job_path.relative_to(ROOT)}: 원본 영상이 없습니다", errors)
 
         expected_catalog.append({
@@ -143,7 +175,7 @@ def main() -> int:
             "available": source_ready or anomaly_ready,
         })
 
-    require("interview-result" in seen_slugs, "event_001의 interview-result slug가 없습니다", errors)
+    require("night-study" in seen_slugs, "event_001의 night-study slug가 없습니다", errors)
     require("exam-interview" not in seen_slugs, "이전 exam-interview slug가 남아 있습니다", errors)
 
     for catalog_path in CATALOGS:

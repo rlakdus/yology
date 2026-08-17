@@ -3,21 +3,21 @@
   "timezone": "Asia/Seoul",
   "events": [
     {
-      "id": "interview-result",
+      "id": "night-study",
       "eventId": "event_001",
       "persona": "student",
-      "title": "면접 결과 확인",
-      "subtitle": "결과를 열어보던 순간의 긴장과 안도",
-      "description": "면접 결과를 확인하며 긴장과 안도가 교차하고 심박이 크게 상승했던 순간",
-      "location": "Campus",
+      "title": "심야 공부",
+      "subtitle": "새벽 1시, 책상 앞에서 가라앉지 않던 박동",
+      "description": "새벽 1시 21분, 앉은 채로 심박이 78에서 116으로 급발현하고 좀처럼 내려오지 않았던 순간",
+      "location": "Home",
       "icon": "graduation-cap",
-      "month": "2026.04",
-      "peakAt": "2026-04-12T14:25:00+09:00",
-      "time": "14:25",
+      "month": "2026.03",
+      "peakAt": "2026-03-22T01:22:32+09:00",
+      "time": "01:22",
       "availability": {
-        "anomaly_ready": false,
-        "source_video_ready": true,
-        "panorama_ready": false,
+        "anomaly_ready": true,
+        "source_video_ready": false,
+        "panorama_ready": true,
         "vr_ready": false
       },
       "available": true
@@ -37,7 +37,7 @@
       "availability": {
         "anomaly_ready": false,
         "source_video_ready": true,
-        "panorama_ready": false,
+        "panorama_ready": true,
         "vr_ready": false
       },
       "available": true
@@ -77,7 +77,7 @@
       "availability": {
         "anomaly_ready": false,
         "source_video_ready": true,
-        "panorama_ready": false,
+        "panorama_ready": true,
         "vr_ready": false
       },
       "available": true
