@@ -1,0 +1,111 @@
+{
+  "status": "complete",
+  "completed_at": "2026-08-17T03:57:50.732050+00:00",
+  "model": {
+    "name": "Beyond the Frame (Argus)",
+    "repository": "https://github.com/Red-Fairy/argus-code.git",
+    "commit": "4e3b77b97a62d06664003669782657390c7cc6b3",
+    "checkpoint": "official-argus-unet"
+  },
+  "source": {
+    "file": "events/student/event_004/source/favorite-movie.original.mov",
+    "sha256": "84082238a4538b908c727a21345b40aefeb0fd563d125bc3da5c2f8251f3e294",
+    "duration_seconds": 5.605,
+    "fps": "33800/1121",
+    "fps_float": 30.151650312221232,
+    "frames": 169,
+    "width": 1920,
+    "height": 1080,
+    "video_codec": "h264"
+  },
+  "preparation": {
+    "source": "events/student/event_004/source/favorite-movie.original.mov",
+    "output": "gpu360/work/student/event_004/prepared/fixed-view.mp4",
+    "frames": 169,
+    "fps": 30.151650312221232,
+    "source_width": 1920,
+    "source_height": 1080,
+    "display_aspect_ratio": 1.7777777777777777,
+    "anchor_frame_seconds": 0.0,
+    "anchor_frame_index": 0,
+    "tracking_failures": 0,
+    "tracking_failure_ratio": 0.0,
+    "tracking_exclude_rect": null,
+    "common_crop": {
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080,
+      "valid_area_ratio": 1.0
+    },
+    "inverse_scale_range": [
+      1.0,
+      1.0
+    ],
+    "inverse_rotation_deg_range": [
+      0.0,
+      0.0
+    ],
+    "stabilization_mode": "identity_fixed_camera",
+    "zoom_removed": false,
+    "roll_removed": false,
+    "translation_preserved": true,
+    "source_orientation_metadata_applied": true,
+    "aspect_policy": "preserve",
+    "probe": {
+      "duration_seconds": 5.604935,
+      "fps": "3769/125",
+      "fps_float": 30.152,
+      "frames": 169,
+      "width": 1920,
+      "height": 1080,
+      "video_codec": "mpeg4"
+    }
+  },
+  "view": {
+    "anchor_frame_seconds": 0,
+    "initial_yaw_deg": 0,
+    "initial_pitch_deg": 0
+  },
+  "generation": {
+    "width": 1024,
+    "height": 512,
+    "batch_frames": 25,
+    "blend_frames": 4,
+    "reset_batch_conditioning": true,
+    "guidance_scale": 3.0,
+    "inference_steps": 25,
+    "fixed_fov_deg": 90,
+    "camera_motion_prediction": false,
+    "rotation_during_inference": false,
+    "roll_pitch_yaw": "fixed_zero",
+    "full_sampling": true,
+    "preserve_source_timeline": true,
+    "generated_region": "outside_recorded_front_view"
+  },
+  "enhancement": {
+    "enabled": true,
+    "scale": 2,
+    "width": 2048,
+    "height": 1024,
+    "noise_augmentation": 150,
+    "solver_mode": "fast",
+    "steps": 15
+  },
+  "composite": {
+    "recorded_front_preserved": true,
+    "edge_feather": 0.05,
+    "seam_blend": 0.01,
+    "freeze_generated_surroundings": false
+  },
+  "output": {
+    "file": "events/student/event_004/panorama/favorite-movie-360.mp4",
+    "sha256": "29f6fd2700badbbdca49990b759e4bf8811ccb55eca0169a19f1ba89c84d392c",
+    "width": 2048,
+    "height": 1024,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": "original_aac",
+    "faststart": true
+  }
+}

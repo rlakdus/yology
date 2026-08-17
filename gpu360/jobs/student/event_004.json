@@ -10,6 +10,7 @@
     "height": 512,
     "batch_frames": 25,
     "blend_frames": 4,
+    "reset_batch_conditioning": true,
     "guidance_scale": 3.0,
     "inference_steps": 25
   },

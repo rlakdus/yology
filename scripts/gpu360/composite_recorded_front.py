@@ -218,7 +218,7 @@ def main() -> int:
         "-video_size", f"{args.width}x{args.height}",
         "-framerate", args.fps, "-i", "pipe:0",
         "-i", str(args.audio_source),
-        "-map", "0:v:0", "-map", "1:a?",
+        "-map", "0:v:0", "-map", "1:a:0?",
         "-c:v", "libx264", "-profile:v", "high", "-preset", "medium",
         "-crf", "18", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k",
