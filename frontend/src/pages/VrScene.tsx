@@ -25,12 +25,20 @@ import { useHeartbeatAudio } from "../vr/useHeartbeatAudio";
 import { useHeartbeatHaptics } from "../vr/useHeartbeatHaptics";
 import "../styles/vrScene.css";
 
-const xrStore = createXRStore();
+const xrStore = createXRStore({
+  // 중심 시야의 선명도는 유지하면서 주변부와 XR 프레임버퍼의 GPU 부하를 낮춘다.
+  foveation: 1,
+  frameBufferScaling: "mid",
+});
 
 const UI_INTERVAL = 100;
 const INTRO_SECONDS = 4.2;
-const DEFAULT_LEAD_IN_BEATS = 8;
-const DEFAULT_COOLDOWN_SECONDS = 8;
+const DEFAULT_LEAD_IN_BEATS = 4;
+const DEFAULT_CAMERA_FOV = 55;
+const PANORAMA_VIDEO_CAMERA_FOV = 65;
+/** 마지막 프레임에서 검은 화면까지 넘어가는 시간. 이후 퇴장 페이드까지 합쳐 1초 이내다. */
+const EXIT_TO_BLACK_SECONDS = 0.55;
+const EXIT_NAVIGATION_DELAY_MS = 250;
 const NEUTRAL_COOLDOWN_BPM = 72;
 
 type ExperiencePhase = HeartbeatPreludePhase;
@@ -113,7 +121,6 @@ const VrScene = () => {
     1,
     Math.round(event?.experience?.intro?.lead_in_beats ?? DEFAULT_LEAD_IN_BEATS),
   );
-  const cooldownSeconds = heartbeatConfig?.cooldown_seconds ?? DEFAULT_COOLDOWN_SECONDS;
   const breathingEnabled = event?.experience?.breathing?.enabled ?? false;
   const breathingGain = Math.min(1, Math.max(0, event?.experience?.breathing?.gain ?? 0.8));
 
@@ -166,13 +173,19 @@ const VrScene = () => {
     setPhase(next);
   }, []);
 
-  const resetVideos = useCallback(() => {
+  const pauseVideos = useCallback(() => {
     videos.elements.forEach((video) => {
       video.pause();
+    });
+  }, [videos.elements]);
+
+  const resetVideos = useCallback(() => {
+    pauseVideos();
+    videos.elements.forEach((video) => {
       if (video.readyState > 0) video.currentTime = 0;
     });
     primingPromiseRef.current = null;
-  }, [videos.elements]);
+  }, [pauseVideos, videos.elements]);
 
   const completeExit = useCallback(() => {
     if (leaving) return;
@@ -184,7 +197,7 @@ const VrScene = () => {
     resetVideos();
     void xrStore.getState().session?.end().catch(() => undefined);
     if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
-    exitTimerRef.current = window.setTimeout(() => navigate(-1), 600);
+    exitTimerRef.current = window.setTimeout(() => navigate(-1), EXIT_NAVIGATION_DELAY_MS);
   }, [leaving, navigate, resetVideos, stopAmbience, stopBreathing, stopHaptics, stopHeartbeat]);
 
   const abort = useCallback(() => {
@@ -342,9 +355,10 @@ const VrScene = () => {
     if (phaseRef.current === "cooldown" || leaving) return;
     cooldownStartBpmRef.current = targetBpmRef.current;
     cooldownStartBreathingRef.current = breathingPresenceRef.current;
-    resetVideos();
+    // 되감지 않고 현재 프레임에서 멈춘다. 검은 베일이 이 마지막 장면 위로 짧게 닫힌다.
+    pauseVideos();
     enterPhase("cooldown");
-  }, [enterPhase, leaving, resetVideos]);
+  }, [enterPhase, leaving, pauseVideos]);
 
   useEffect(() => {
     if (!primaryVideo) return;
@@ -388,7 +402,7 @@ const VrScene = () => {
         return;
       }
 
-      const progress = Math.min(1, elapsedSeconds / cooldownSeconds);
+      const progress = Math.min(1, elapsedSeconds / EXIT_TO_BLACK_SECONDS);
       targetBpmRef.current = mix(
         cooldownStartBpmRef.current,
         NEUTRAL_COOLDOWN_BPM,
@@ -404,7 +418,6 @@ const VrScene = () => {
     return () => window.clearInterval(timer);
   }, [
     completeExit,
-    cooldownSeconds,
     enterPhase,
     event,
     experienceBpmAt,
@@ -430,13 +443,16 @@ const VrScene = () => {
   if (!event) return <div className="vr-scene-message">이벤트 자료를 불러오는 중입니다…</div>;
 
   const running = phase === "vr";
-  const canStop = phase === "prelude" || running;
 
   return (
     <div className={`vr-scene${leaving ? " is-leaving" : ""}`}>
       <Canvas
         className="vr-scene-canvas"
-        camera={{ position: [0, 1.6, 0], fov: 55 }}
+        gl={{ antialias: false, powerPreference: "high-performance" }}
+        camera={{
+          position: [0, 1.6, 0],
+          fov: event.panorama_video ? PANORAMA_VIDEO_CAMERA_FOV : DEFAULT_CAMERA_FOV,
+        }}
       >
         <color attach="background" args={["#000000"]} />
         <XR store={xrStore}>
@@ -456,7 +472,10 @@ const VrScene = () => {
                 phaseProgress={phaseProgress}
                 pulse={pulseRef}
               />
-              <ImmersiveStopControl visible={canStop} onStop={running ? beginCooldown : abort} />
+              <ImmersiveStopControl
+                visible={!leaving}
+                onStop={running ? beginCooldown : abort}
+              />
             </Suspense>
           </SceneErrorBoundary>
         </XR>
@@ -472,7 +491,10 @@ const VrScene = () => {
         <div className="vr-spatial-prompt">
           {playbackError && <p role="alert">{playbackError}</p>}
           <button onClick={playbackError ? retryPlayback : beginPrelude}>
-            {playbackError ? "탭하여 이어가기" : "심장박동 느끼기"}
+            {!playbackError && <span className="vr-spatial-prompt-hint">click here</span>}
+            <span>
+              {playbackError ? "탭하여 이어가기" : "심장박동 느끼기"}
+            </span>
           </button>
         </div>
       )}
@@ -481,16 +503,15 @@ const VrScene = () => {
         <p className="vr-scene-floating-error">장면을 불러오지 못했습니다. {sceneError}</p>
       )}
 
-      {canStop && (
-        <button
-          className="vr-scene-stop-icon"
-          onClick={running ? beginCooldown : abort}
-          aria-label="체험 종료"
-          title="체험 종료"
-        >
-          <Square size={16} aria-hidden="true" />
-        </button>
-      )}
+      <button
+        className="vr-scene-stop-icon"
+        onClick={running ? beginCooldown : abort}
+        aria-label="VR 종료하기"
+        title="VR 종료하기"
+      >
+        <Square size={15} aria-hidden="true" />
+        <span>VR 종료하기</span>
+      </button>
     </div>
   );
 };

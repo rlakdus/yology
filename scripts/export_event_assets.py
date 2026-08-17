@@ -243,11 +243,16 @@ def export_panorama_video(metadata: dict, event_dir: Path, target_dir: Path) -> 
     if projection != "equirectangular":
         raise ValueError(f"Unsupported panorama video projection: {projection}")
 
+    playback_rate = float(entry.get("playback_rate", 1.0))
+    if not 0.25 <= playback_rate <= 4:
+        raise ValueError(f"Unsupported panorama video playback rate: {playback_rate}")
+
     return {
         "src": relative.as_posix(),
         "projection": projection,
         "fallback_image": fallback_relative.as_posix() if fallback_relative else None,
         "yaw_offset_deg": float(entry.get("yaw_offset_deg", 0)),
+        "playback_rate": playback_rate,
     }
 
 

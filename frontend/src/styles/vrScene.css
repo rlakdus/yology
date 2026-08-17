@@ -3,7 +3,7 @@
   inset: 0;
   overflow: hidden;
   background: #000;
-  transition: opacity .6s ease;
+  transition: opacity .25s ease;
 }
 
 .vr-scene.is-leaving {
@@ -58,7 +58,15 @@
 .vr-scene-stop-icon {
   right: 20px;
   bottom: 20px;
-  border-radius: 50%;
+  display: flex;
+  width: auto;
+  padding: 0 14px;
+  gap: 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: .02em;
+  white-space: nowrap;
 }
 
 .vr-spatial-back:hover,
@@ -98,6 +106,9 @@
 }
 
 .vr-spatial-prompt button {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
   border: 0;
   padding: 11px 8px;
   color: rgba(242, 245, 248, .9);
@@ -108,6 +119,13 @@
   text-shadow: 0 2px 18px rgba(0, 0, 0, 1);
   pointer-events: auto;
   animation: vr-prompt-breathe 2.6s ease-in-out infinite;
+}
+
+.vr-spatial-prompt-hint {
+  color: rgba(242, 245, 248, .55);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .16em;
 }
 
 .vr-scene-floating-error {

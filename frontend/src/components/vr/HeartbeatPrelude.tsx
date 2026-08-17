@@ -27,7 +27,7 @@ const viewerPosition = new Vector3();
 
 const DEFAULT_GUIDANCE: [string, string] = [
   "잠시 숨을 고르고, 몸 안에 남은 박동에 귀 기울여 봅니다.",
-  "여덟 번의 박동을 따라가면, 그 순간의 공간이 천천히 열립니다.",
+  "네 번의 박동을 따라가면, 그 순간의 공간이 천천히 열립니다.",
 ];
 
 const clamp = (value: number, low = 0, high = 1) =>

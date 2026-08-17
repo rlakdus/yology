@@ -42,9 +42,9 @@
     "intro": {
       "guidance_lines": [
         "불 꺼진 방에서 스탠드 하나만 켜 두었던 새벽을 떠올려 봅니다.",
-        "여덟 번의 박동을 따라가면, 그때 좀처럼 가라앉지 않던 긴장이 돌아옵니다."
+        "네 번의 박동을 따라가면, 그때 좀처럼 가라앉지 않던 긴장이 돌아옵니다."
       ],
-      "lead_in_beats": 8
+      "lead_in_beats": 4
     },
     "heartbeat": {
       "source_baseline_bpm": 78,

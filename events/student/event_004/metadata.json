@@ -41,9 +41,9 @@
     "intro": {
       "guidance_lines": [
         "호흡을 고르고, 어두운 상영관에서 이어지던 박동을 느껴봅니다.",
-        "여덟 번의 박동을 따라가면, 기억 속 장면이 천천히 열립니다."
+        "네 번의 박동을 따라가면, 기억 속 장면이 천천히 열립니다."
       ],
-      "lead_in_beats": 8
+      "lead_in_beats": 4
     },
     "heartbeat": {
       "source_baseline_bpm": 89,
@@ -64,6 +64,7 @@
     "file": "panorama/favorite-movie-360.mp4",
     "projection": "equirectangular",
     "fallback_image_file": "panorama/favorite-movie-360.background.png",
-    "yaw_offset_deg": 0.0
+    "yaw_offset_deg": 0.0,
+    "playback_rate": 0.85
   }
 }

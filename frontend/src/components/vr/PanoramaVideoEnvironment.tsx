@@ -49,15 +49,18 @@ const PanoramaVideoEnvironment = ({
     next.generateMipmaps = false;
     next.wrapS = RepeatWrapping;
     next.wrapT = ClampToEdgeWrapping;
-    next.anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy());
+    // 360 영상은 구 안쪽을 거의 정면으로 샘플링한다. 높은 이방성 필터링은
+    // 체감 화질 차이보다 모바일 VR GPU의 샘플링 비용을 더 키운다.
+    next.anisotropy = Math.min(2, gl.capabilities.getMaxAnisotropy());
     return next;
   }, [gl, video]);
 
   const material = useMemo(() => new MeshBasicMaterial({
     map: texture,
     side: BackSide,
-    transparent: true,
-    opacity: 0,
+    // 화면 전체를 덮는 구를 transparent로 그리면 양안 전체 픽셀에 알파
+    // 블렌딩이 발생한다. 프레임 준비 여부는 mesh.visible로 전환한다.
+    transparent: false,
     depthWrite: false,
     toneMapped: false,
   }), [texture]);
@@ -76,7 +79,7 @@ const PanoramaVideoEnvironment = ({
 
     const hasFrame = video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
       && video.error === null;
-    material.opacity = hasFrame ? 1 : 0;
+    mesh.visible = hasFrame;
     material.color.setScalar(1 - playback.tone.current * 0.08);
 
     if (hasFrame !== liveRef.current) {
@@ -109,7 +112,7 @@ const PanoramaVideoEnvironment = ({
       renderOrder={-10}
       frustumCulled={false}
     >
-      <sphereGeometry args={[PANORAMA_RADIUS, 128, 64]} />
+      <sphereGeometry args={[PANORAMA_RADIUS, 64, 32]} />
     </mesh>
   );
 };

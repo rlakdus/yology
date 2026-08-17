@@ -60,6 +60,7 @@ export type VrEvent = {
     projection: "equirectangular";
     fallback_image: string | null;
     yaw_offset_deg: number;
+    playback_rate?: number;
   } | null;
   /** 재생 진행도와 무관하게 깔리는 룸 톤. 심박은 여기 없고 실시간 합성된다. */
   ambience: {

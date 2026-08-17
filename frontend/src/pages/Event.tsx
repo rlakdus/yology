@@ -1,5 +1,6 @@
 import "../styles/event.css";
 
+import { useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -314,6 +315,12 @@ const Event = () => {
 
   const location =
     useLocation();
+
+  // /moment의 스크롤 위치를 이어받지 않고 상세 페이지를 항상 맨 위에서 시작한다.
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [location.key]);
 
 
   /* ========================================

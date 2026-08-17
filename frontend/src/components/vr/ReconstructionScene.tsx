@@ -24,6 +24,8 @@ export type PlaybackRefs = {
 
 /** 심박 pulse가 사그라드는 속도 (1/초). */
 const PULSE_DECAY = 6;
+/** 짧은 파노라마 영상의 시작과 끝에 적용할 오디오 전환 시간. */
+const PANORAMA_AUDIO_FADE_SECONDS = 0.5;
 
 interface ReconstructionSceneProps {
   event: VrEvent;
@@ -53,6 +55,24 @@ const ReconstructionScene = ({
   // 아래 컴포넌트들이 항상 갱신된 진행도를 읽도록 여기서 시계를 먼저 돌린다.
   useFrame((_, delta) => {
     playback.pulse.current = Math.max(0, playback.pulse.current - PULSE_DECAY * delta);
+
+    if (panoramaVideo) {
+      const duration = panoramaVideo.duration;
+      const fadeMediaSeconds = PANORAMA_AUDIO_FADE_SECONDS
+        * Math.max(0.01, panoramaVideo.playbackRate);
+      const fadeIn = panoramaVideo.currentTime / fadeMediaSeconds;
+      const fadeOut = Number.isFinite(duration) && duration > 0
+        ? (duration - panoramaVideo.currentTime) / fadeMediaSeconds
+        : 1;
+      const volume = running
+        ? Math.max(0, Math.min(1, fadeIn, fadeOut))
+        : 0;
+
+      // 프라이밍 중에는 0을 유지하고, 실제 재생 시간의 앞뒤 0.5초에서만 볼륨을 바꾼다.
+      if (Math.abs(panoramaVideo.volume - volume) > 0.001) {
+        panoramaVideo.volume = volume;
+      }
+    }
 
     if (running && seconds > 0) {
       const videoDuration = panoramaVideo?.duration;
